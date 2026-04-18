@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: c51fd1beca22c93418336ffaeadfad92
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333204
+  packageName: Low Poly Sci-Fi Turrets Demo
+  packageVersion: 1.0
+  assetPath: Assets/Low Poly Sci-Fi Turrets Demo/Model/Platform_1.fbx
+  uploadId: 797094
 ModelImporter:
-  serializedVersion: 22103
+  serializedVersion: 24200
   internalIDToNameTable: []
   externalObjects:
   - first:
@@ -21,8 +28,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -45,6 +50,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 0
     importBlendShapes: 0
     importCameras: 0
@@ -62,6 +68,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 1
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 1
     secondaryUVAngleDistortion: 8
@@ -111,10 +120,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 333204
-  packageName: Low Poly Sci-Fi Turrets Demo
-  packageVersion: 1.0
-  assetPath: Assets/Low Poly Sci-Fi Turrets Demo/Model/Platform_1.fbx
-  uploadId: 797094
