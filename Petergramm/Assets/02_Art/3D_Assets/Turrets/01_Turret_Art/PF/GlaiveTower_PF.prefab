@@ -11,8 +11,11 @@ GameObject:
   - component: {fileID: 2992188676676456712}
   - component: {fileID: 2173470788935491245}
   - component: {fileID: 4165072517714733671}
+  - component: {fileID: 5088720136459396911}
+  - component: {fileID: -8590238159075027369}
+  - component: {fileID: -1697053616333253135}
   m_Layer: 0
-  m_Name: RapidFireCannon_2
+  m_Name: GlaiveTower_PF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b2eeb922027d6104790c0dd8c53c239d, type: 2}
+  - {fileID: 2100000, guid: c4f493add515c2342b1dd330469396b1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -91,6 +94,57 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5088720136459396911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2507857462180137906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dddcad2800f9d344ea101a8697911cf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.TowerHealth
+  towerRuntime: {fileID: -8590238159075027369}
+  currentHp: 0
+  maxHp: 0
+--- !u!114 &-8590238159075027369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2507857462180137906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1badb4846dc8a4240a185d10cfb19941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.TowerRuntime
+  towerBase: {fileID: 11400000, guid: 044b36270763b4047891fd55d7126bf1, type: 2}
+  currentStats:
+    maxHp: 0
+    damage: 0
+    range: 0
+    attacksPerSecond: 0
+  currentEffects:
+    additionalTargets: 0
+    slowPercent: 0
+    bounceCount: 0
+  appliedUpgrades: []
+--- !u!114 &-1697053616333253135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2507857462180137906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fae365ec9dc90c40b0a39bdf06abec0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.RuntTime.TowerAttack
+  towerRuntime: {fileID: -8590238159075027369}
 --- !u!1 &3859366670126457164
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +249,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 9359234e1495fb64eae2e8f9138d88fd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b2eeb922027d6104790c0dd8c53c239d, type: 2}
+      objectReference: {fileID: 2100000, guid: c4f493add515c2342b1dd330469396b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 9359234e1495fb64eae2e8f9138d88fd, type: 3}
       propertyPath: m_Name
       value: Head
@@ -281,7 +335,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 9359234e1495fb64eae2e8f9138d88fd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b2eeb922027d6104790c0dd8c53c239d, type: 2}
+      objectReference: {fileID: 2100000, guid: c4f493add515c2342b1dd330469396b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 9359234e1495fb64eae2e8f9138d88fd, type: 3}
       propertyPath: m_Name
       value: Head

@@ -17,6 +17,9 @@ namespace _01_Scripts._01_Tower.Data
       BounceCount
    }
 
+   
+   //Hier nutze ich structs da diese nur value types sind
+   //und mehr sollen die auch nicht sein dazu auch noch viel billiger
    [Serializable]
    public struct TowerStats
    {
