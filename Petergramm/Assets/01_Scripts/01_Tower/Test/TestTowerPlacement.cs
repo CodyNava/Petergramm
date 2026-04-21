@@ -21,9 +21,9 @@ namespace _01_Scripts._01_Tower.Test
       [Button]
       private void TestTowerPlacing()
       {
-         Dictionary<Vector3, GridTileData> gridCoords = gridData.PlacementCoords;
+         Dictionary<Vector3Int, GridTileData> gridCoords = gridData.PlacementCoords;
 
-         foreach (KeyValuePair<Vector3, GridTileData> pair in gridCoords)
+         foreach (KeyValuePair<Vector3Int, GridTileData> pair in gridCoords)
          {
             if (pair.Value.isOccupied) return;
             GameObject spawnedTower = Instantiate(towerPrefab[0], pair.Key, Quaternion.identity);   
@@ -38,9 +38,9 @@ namespace _01_Scripts._01_Tower.Test
       private void DeleteAllTower()
       {
          
-         Dictionary<Vector3, GridTileData> gridCoords = gridData.PlacementCoords;
+         Dictionary<Vector3Int, GridTileData> gridCoords = gridData.PlacementCoords;
 
-         foreach (KeyValuePair<Vector3, GridTileData> pair in gridCoords)
+         foreach (KeyValuePair<Vector3Int, GridTileData> pair in gridCoords)
          {
             if (!pair.Value.isOccupied) return;
             
