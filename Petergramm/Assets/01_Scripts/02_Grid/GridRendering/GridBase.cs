@@ -17,14 +17,14 @@ namespace _01_Scripts._02_Grid.GridRendering
       [SerializeField] private Color32 squareColor;
       [SerializeField] private Mesh gridMesh;
       
-      private List<Vector3> _squareCoord;
+      private List<Vector3Int> _squareCoord;
       private Vector3[] _vertices;
       private int[] _triangles;
       private Vector3 _gridStartPos;
       
       //Getter
       //these are the coords where tower and other placeable object are to be placed on
-      public IReadOnlyList<Vector3> SquareCoords => _squareCoord;
+      public IReadOnlyList<Vector3Int> SquareCoords => _squareCoord;
 
       private void OnValidate()
       {
@@ -41,7 +41,7 @@ namespace _01_Scripts._02_Grid.GridRendering
          { Gizmos.DrawSphere(t + _gridStartPos, 0.1f); }
          
          Gizmos.color = squareColor;
-         foreach (Vector3 t in _squareCoord) 
+         foreach (Vector3Int t in _squareCoord) 
          { Gizmos.DrawCube(t + _gridStartPos, new Vector3(squareSize, 0.1f, squareSize)); }
          
       }
@@ -89,12 +89,12 @@ namespace _01_Scripts._02_Grid.GridRendering
       [Button]
       private void CalculateSquareCoords()
       {
-         _squareCoord = new List<Vector3>();
-         for (int y = 0; y < ySize; y++)
+         _squareCoord = new List<Vector3Int>();
+         for (var y = 1; y < ySize; y++)
          {
-            for (int x = 0; x < xSize; x++)
+            for (var x = 1; x < xSize; x++)
             {
-               Vector3 center = new Vector3(x + 0.5f, 0f, y + 0.5f);
+               Vector3Int center = new Vector3Int(x , 0, y );
                _squareCoord.Add(center);
                
             }
