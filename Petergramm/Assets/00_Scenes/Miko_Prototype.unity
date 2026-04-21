@@ -626,7 +626,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2894196073985041954, guid: 309a44090c67f2b4093333abfd2dc1fa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.5
+      value: 16.5
       objectReference: {fileID: 0}
     - target: {fileID: 2894196073985041954, guid: 309a44090c67f2b4093333abfd2dc1fa, type: 3}
       propertyPath: m_LocalPosition.y
@@ -634,7 +634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2894196073985041954, guid: 309a44090c67f2b4093333abfd2dc1fa, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.5
+      value: 11.5
       objectReference: {fileID: 0}
     - target: {fileID: 2894196073985041954, guid: 309a44090c67f2b4093333abfd2dc1fa, type: 3}
       propertyPath: m_LocalRotation.w
@@ -708,7 +708,7 @@ MonoBehaviour:
   squareColor:
     serializedVersion: 2
     rgba: 906034967
-  gridMesh: {fileID: 1231857399}
+  gridMesh: {fileID: 1233339469}
 --- !u!23 &432079138
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -765,7 +765,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 432079136}
-  m_Mesh: {fileID: 1231857399}
+  m_Mesh: {fileID: 1233339469}
 --- !u!4 &432079140
 Transform:
   m_ObjectHideFlags: 0
@@ -1583,7 +1583,7 @@ Transform:
   - {fileID: 304649662}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &1231857399
+--- !u!43 &1233339469
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
