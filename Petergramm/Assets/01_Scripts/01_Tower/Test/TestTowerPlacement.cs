@@ -1,55 +1,116 @@
+using System;
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace _01_Scripts._01_Tower.Test
 {
-   public class TestTowerPlacement : MonoBehaviour
-   {
-    
-      [SerializeField] private List<GameObject> towerPrefab = new();
-      [SerializeField] private GridData gridData;
+    public class TestTowerPlacement : MonoBehaviour
+    {
+        [SerializeField] private List<GameObject> towerPrefab = new();
+        [SerializeField] private GridData gridData;
 
-      
-      //TODO Change logik to click on tile and place x tower 
-      //(gridData.TryGetValue(COORD, out GridTileData tile) && !tile.isOccupied)
-      //would be how you get the right tile - COORD needs to be the location you clicked on
-      //or use a drag and drop methode where you dont need to click on a tile rather
-      //add the tower to the dict by the coord where the tower was placed.
-      
-      [Button]
-      private void TestTowerPlacing()
-      {
-         Dictionary<Vector3Int, GridTileData> gridCoords = gridData.PlacementCoords;
 
-         foreach (KeyValuePair<Vector3Int, GridTileData> pair in gridCoords)
-         {
-            if (pair.Value.isOccupied) return;
-            GameObject spawnedTower = Instantiate(towerPrefab[0], pair.Key, Quaternion.identity);   
-            
-            pair.Value.isOccupied = true;
-            pair.Value.occupant = spawnedTower;
-         } 
-      }
+        private bool _isDragging;
+        private GameObject _draggingTower;
+        private GridTileData _tile;
+        private Vector3Int _gridCoord = Vector3Int.zero;
 
-      //TODO Change logik to click on tile and Sell/destroy x tower 
-      [Button]
-      private void DeleteAllTower()
-      {
-         
-         Dictionary<Vector3Int, GridTileData> gridCoords = gridData.PlacementCoords;
+        private void Update()
+        {
+            RayForTowerPosition();
 
-         foreach (KeyValuePair<Vector3Int, GridTileData> pair in gridCoords)
-         {
-            if (!pair.Value.isOccupied) return;
-            
-            Destroy(pair.Value.occupant.gameObject);
-            pair.Value.isOccupied = false;
-            pair.Value.occupant = null;
-         } 
-      }
-      
-      
-   }
+            if (_tile == null) return;
+
+            TowerPlacement();
+
+            //TowerDestroy
+            if (_tile.isOccupied && Mouse.current.rightButton.isPressed && Keyboard.current.leftShiftKey.isPressed)
+            {
+                DestroyTower(_gridCoord);
+            }
+        }
+
+        private void RayForTowerPosition()
+        {
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerMask.GetMask("Grid")))
+            {
+                Vector3 hitPoint = hit.point;
+                int x = Mathf.RoundToInt(hitPoint.x);
+                int z = Mathf.RoundToInt(hitPoint.z);
+
+                _gridCoord = new Vector3Int(x, 0, z);
+
+                if (gridData.placementCoords.ContainsKey(_gridCoord))
+                {
+                    _tile = gridData.placementCoords[_gridCoord];
+                }
+            }
+        }
+
+        private void TowerPlacement()
+        {
+            if (!_isDragging) return;
+
+            if (Mouse.current.rightButton.isPressed)
+            {
+                DespawnTower();
+            }
+
+            if (!_tile.isOccupied)
+            {
+                Vector3 snapPosition = new Vector3(_gridCoord.x, _gridCoord.y, _gridCoord.z);
+                _draggingTower.transform.position = snapPosition;
+
+                if (Mouse.current.leftButton.isPressed)
+                {
+                    PlaceTower(_gridCoord);
+                }
+            }
+        }
+
+        public void SpawnTower()
+        {
+            _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
+            _isDragging = true;
+        }
+
+        private void DespawnTower()
+        {
+            Destroy(_draggingTower);
+            _draggingTower = null;
+            _isDragging = false;
+        }
+
+
+        private void PlaceTower(Vector3Int gridCoord)
+        {
+            var placementCoords = gridData.PlacementCoords[gridCoord];
+            _draggingTower.transform.position = gridCoord;
+            placementCoords.isOccupied = true;
+            placementCoords.occupant = _draggingTower;
+
+            if (!Keyboard.current.leftShiftKey.isPressed)
+            {
+                _isDragging = false;
+                _draggingTower = null;
+                return;
+            }
+
+            _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
+        }
+
+        private void DestroyTower(Vector3Int gridCoord)
+        {
+            var placementCoords = gridData.PlacementCoords[gridCoord];
+            Destroy(placementCoords.occupant.gameObject);
+            placementCoords.isOccupied = false;
+            placementCoords.occupant = null;
+        }
+    }
 }
