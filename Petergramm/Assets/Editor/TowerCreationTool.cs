@@ -15,8 +15,12 @@ namespace Editor
         public float range;
         public float attacksPerSecond;
 
+        private TowerBaseSO _createdTowerBase;
+        private TowerAttackSO _createdAttackData;
+        private ProjectileSO _createdProjectile;
+
         private readonly List<string> _warnings = new();
-        private bool _activeWarning;
+        private bool _hasErrors;
 
         [MenuItem("Creation Tools/Tower Creation")]
         public static void ShowWindow()
@@ -36,8 +40,8 @@ namespace Editor
             EditorGUILayout.Space();
             if (GUILayout.Button("Create Tower"))
             {
-                _activeWarning = CheckValidInput();
-                if (!_activeWarning)
+                _hasErrors = CheckValidInput();
+                if (!_hasErrors)
                 {
                     AssetDatabase.CreateFolder("Assets/03_SO/Tower", towerName);
                     AssetDatabase.CreateFolder("Assets/04_Prefabs/Tower", towerName);
@@ -49,7 +53,7 @@ namespace Editor
                 }
             }
 
-            if (_activeWarning)
+            if (_hasErrors)
             {
                 ShowWarning(_warnings);
             }
@@ -59,57 +63,50 @@ namespace Editor
 
         private void CreateTower()
         {
-            var newTowerBase = CreateInstance<TowerBaseSO>();
+            _createdTowerBase = CreateInstance<TowerBaseSO>();
 
             var tempTower = new GameObject();
             var towerPrefab =
                 PrefabUtility.SaveAsPrefabAsset(tempTower, $"Assets/04_Prefabs/Tower/{towerName}/{towerName}.prefab");
             DestroyImmediate(tempTower);
 
-            AssetDatabase.CreateAsset(newTowerBase, $"Assets/03_SO/Tower/{towerName}/{towerName}.asset");
-            newTowerBase.towerName = towerName;
-            newTowerBase.icon = icon;
-            newTowerBase.towerPrefab = towerPrefab;
-            newTowerBase.baseStats.maxHp = hitPoints;
-            newTowerBase.baseStats.damage = damage;
-            newTowerBase.baseStats.range = range;
-            newTowerBase.baseStats.attacksPerSecond = attacksPerSecond;
+            AssetDatabase.CreateAsset(_createdTowerBase, $"Assets/03_SO/Tower/{towerName}/{towerName}.asset");
+            _createdTowerBase.towerName = towerName;
+            _createdTowerBase.icon = icon;
+            _createdTowerBase.towerPrefab = towerPrefab;
+            _createdTowerBase.baseStats.maxHp = hitPoints;
+            _createdTowerBase.baseStats.damage = damage;
+            _createdTowerBase.baseStats.range = range;
+            _createdTowerBase.baseStats.attacksPerSecond = attacksPerSecond;
         }
 
         private void CreateProjectile()
         {
-            var newTowerProjectile = CreateInstance<ProjectileSO>();
+            _createdProjectile = CreateInstance<ProjectileSO>();
 
             var tempProjectile = new GameObject();
             var projectilePrefab = PrefabUtility.SaveAsPrefabAsset(tempProjectile,
                 $"Assets/04_Prefabs/Tower/{towerName}/{towerName}Projectile.prefab");
             DestroyImmediate(tempProjectile);
 
-            AssetDatabase.CreateAsset(newTowerProjectile,
+            AssetDatabase.CreateAsset(_createdProjectile,
                 $"Assets/03_SO/Tower/{towerName}/{towerName}Projectile.asset");
-            newTowerProjectile.projectilePrefab = projectilePrefab;
+            _createdProjectile.projectilePrefab = projectilePrefab;
         }
 
         private void CreateAttackData()
         {
-            var newTowerAttack = CreateInstance<TowerAttackSO>();
-            AssetDatabase.CreateAsset(newTowerAttack, $"Assets/03_SO/Tower/{towerName}/{towerName}AttackData.asset");
+            _createdAttackData = CreateInstance<TowerAttackSO>();
+            AssetDatabase.CreateAsset(_createdAttackData,
+                $"Assets/03_SO/Tower/{towerName}/{towerName}AttackData.asset");
         }
 
         private void AddConnections()
         {
-            var tower = AssetDatabase.LoadAssetAtPath<TowerBaseSO>($"Assets/03_SO/Tower/{towerName}/{towerName}.asset");
-            var towerAttackData =
-                AssetDatabase.LoadAssetAtPath<TowerAttackSO>(
-                    $"Assets/03_SO/Tower/{towerName}/{towerName}AttackData.asset");
-            var towerProjectile =
-                AssetDatabase.LoadAssetAtPath<ProjectileSO>(
-                    $"Assets/03_SO/Tower/{towerName}/{towerName}Projectile.asset");
-
-            tower.attackData = towerAttackData;
-            towerAttackData.projectile = towerProjectile;
+            _createdTowerBase.attackData = _createdAttackData;
+            _createdAttackData.projectile = _createdProjectile;
         }
-
+        
         #endregion
 
         #region InputChecks
