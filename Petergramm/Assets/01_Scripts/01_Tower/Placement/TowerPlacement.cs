@@ -17,6 +17,8 @@ namespace _01_Scripts._01_Tower.Placement
         private GridTileData _tile;
         private Vector3Int _gridCoord = Vector3Int.zero;
 
+        
+        private void Start() => cam = Camera.main;
         private void Update()
         {
             RayForTowerPosition();
