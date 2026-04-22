@@ -667,6 +667,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7428893754825551975}
   - component: {fileID: 8306857860835709841}
+  - component: {fileID: 3146787243758925424}
+  - component: {fileID: 3347657414576742145}
   m_Layer: 0
   m_Name: Ghost_Simple
   m_TagString: Untagged
@@ -713,6 +715,43 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3146787243758925424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6940083340875247145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d15c950a5c3de4981840f77176c093, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.EnemyHealth
+  enemyRuntime: {fileID: 3347657414576742145}
+  currentHp: 0
+  maxHp: 0
+--- !u!114 &3347657414576742145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6940083340875247145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e18613450875b545b1c33dfe78f03c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.EnemyRuntime
+  enemyBase: {fileID: 11400000, guid: 45ea1372ff3046a4aa08aac300ed461b, type: 2}
+  currentStats:
+    maxHp: 0
+    damage: 0
+    movement:
+      movementType: 0
+      moveSpeed: 0
+    armor:
+      armorType: 0
+      armor: 0
 --- !u!1 &7059464663329818607
 GameObject:
   m_ObjectHideFlags: 0

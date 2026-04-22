@@ -16,12 +16,10 @@ namespace _01_Scripts._01_Tower.RuntTime
             float attacksPerSecond = this.towerRuntime.CurrentStats.attacksPerSecond;
 
             if (attacksPerSecond <= 0f) return;
-        
-            float attackInterval = 1f / attacksPerSecond;
-
+            
             if (this._cd <= 0f)
             {
-                this._cd = attackInterval;
+                this._cd = attacksPerSecond;
                 this.Fire();
             }
         }
