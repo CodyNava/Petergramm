@@ -5,6 +5,7 @@ namespace Editor
 {
     public class TowerBalancingTool : EditorWindow
     {
+        //todo: erweitern um DamageType
         public TowerBaseSO towerPrefab;
         public string towerName;
         public float hitPoints;
@@ -13,7 +14,7 @@ namespace Editor
         public float attacksPerSecond;
 
 
-        [MenuItem("Tools/Tower Balancing")]
+        [MenuItem("Balancing Tools/Tower Balancing")]
         public static void ShowWindow()
         {
             GetWindow(typeof(TowerBalancingTool));
@@ -32,7 +33,6 @@ namespace Editor
 
                 EditorGUILayout.Space();
                 EditorGUI.indentLevel = 1;
-              
                 
                 towerName = EditorGUILayout.TextField("Name", towerName);
                 hitPoints = EditorGUILayout.FloatField("HitPoints", hitPoints);
