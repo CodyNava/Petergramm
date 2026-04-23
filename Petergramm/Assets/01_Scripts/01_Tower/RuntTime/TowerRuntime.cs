@@ -23,7 +23,7 @@ namespace _01_Scripts._01_Tower.RuntTime
       public List<TowerUpgradeSO> AppliedUpgrades => this.appliedUpgrades;
 
       private void Awake() { this.ReApplyRuntimeValues(); }
-
+      
       public void Initialize(TowerBaseSO newTowerBase)
       {
          this.towerBase = newTowerBase;

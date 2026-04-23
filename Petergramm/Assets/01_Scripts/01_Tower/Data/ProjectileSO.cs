@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace _01_Scripts._01_Tower.Data
@@ -6,6 +7,7 @@ namespace _01_Scripts._01_Tower.Data
    public class ProjectileSO : ScriptableObject
    {
       public GameObject projectilePrefab;
-      public float speed;
+      [NonSerialized] public byte DamageType;
+      public byte speed;
    }
 }

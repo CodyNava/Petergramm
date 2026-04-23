@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: GlaiveTowerAttack
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.TowerAttackSO
   projectile: {fileID: 11400000, guid: 3a4d1c9cd0fb74442a44a364b9f9203f, type: 2}
+  damageType: 2
   baseProjectileCount: 1

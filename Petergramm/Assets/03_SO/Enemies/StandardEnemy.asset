@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41e2ea4833a85a541985a119eddf7ef8, type: 3}
   m_Name: StandardEnemy
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Data.EnemyBaseSO
+  damageRules: {fileID: 11400000, guid: 31aff3d577dd1dd439a38d726ae9032d, type: 2}
   prefab: {fileID: 6940083340875247145, guid: e81c6f8e5f3f77548851719ab31cfcfd, type: 3}
   name: GhostyBoi
   passives: []
