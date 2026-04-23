@@ -11,14 +11,14 @@ namespace Editor
         public string towerName;
         public Sprite icon;
         public float maxHitPoints;
-        public float damage;
+        public short damage;
         public float range;
         public float attacksPerSecond;
         public TowerEffectType towerEffect;
         public int effectCount;
         public TowerUpgradeSO upgrade;
 
-        public float projectileSpeed;
+        public byte projectileSpeed;
 
         private TowerBaseSO _createdTowerBase;
         private TowerAttackSO _createdAttackData;
@@ -49,7 +49,7 @@ namespace Editor
             maxHitPoints = EditorGUILayout.Slider(new GUIContent("Maximum HP",
                 "The maximum amount of hit points this tower is supposed to have in-game.\n" +
                 "<b>This value CANNOT be 0.</b>"), maxHitPoints, 0f, 100f);
-            damage = EditorGUILayout.Slider(new GUIContent("Damage",
+            damage = (short)EditorGUILayout.Slider(new GUIContent("Damage",
                 "The Damage amount this tower is supposed to deal per shot.\n" +
                 "<b>This value CANNOT be 0.</b>"), damage, 0f, 20f);
             range = EditorGUILayout.Slider(new GUIContent("Attack Range",
@@ -104,7 +104,7 @@ namespace Editor
 
             #region ProjectileSettings
 
-            projectileSpeed =
+            projectileSpeed =(byte)
                 EditorGUILayout.Slider(
                     new GUIContent("Projectile Speed",
                         "The speed at which the projectile travels. \n<b>This value CANNOT be 0.</b>"), projectileSpeed,

@@ -9,7 +9,7 @@ namespace Editor
         public TowerBaseSO towerPrefab;
         public string towerName;
         public float hitPoints;
-        public float damage;
+        public short damage;
         public float range;
         public float attacksPerSecond;
 
@@ -36,7 +36,7 @@ namespace Editor
                 
                 towerName = EditorGUILayout.TextField("Name", towerName);
                 hitPoints = EditorGUILayout.FloatField("HitPoints", hitPoints);
-                damage = EditorGUILayout.FloatField("Damage", damage);
+                damage = (short)EditorGUILayout.FloatField("Damage", damage);
                 range = EditorGUILayout.FloatField("Range", range);
                 attacksPerSecond = EditorGUILayout.Slider("Attacks per Second", attacksPerSecond, 0f, 5f);
                 
