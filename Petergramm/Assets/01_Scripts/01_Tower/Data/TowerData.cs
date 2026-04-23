@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 
 namespace _01_Scripts._01_Tower.Data
 {
@@ -17,6 +18,12 @@ namespace _01_Scripts._01_Tower.Data
       BounceCount
    }
 
+   public enum TowerDamageType
+   {
+      Pierce,
+      Normal,
+      Impact,
+   }
    
    //Hier nutze ich structs da diese nur value types sind
    //und mehr sollen die auch nicht sein dazu auch noch viel billiger
@@ -24,7 +31,7 @@ namespace _01_Scripts._01_Tower.Data
    public struct TowerStats
    {
       public float maxHp;
-      public float damage;
+      public short damage;
       public float range;
       public float attacksPerSecond;
    }

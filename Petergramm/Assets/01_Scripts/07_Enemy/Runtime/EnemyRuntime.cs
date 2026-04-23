@@ -11,6 +11,7 @@ namespace _01_Scripts._07_Enemy.Runtime
         
         //Getter
         public EnemyStats  CurrentStats => this.currentStats;
+        public EnemyBaseSO EnemyBase => enemyBase;
         private void Start() => ApplyStats();
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created

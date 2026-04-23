@@ -20,7 +20,7 @@ MonoBehaviour:
     damage: 20
     range: 15
     attacksPerSecond: 1
-  attackData: {fileID: 11400000, guid: c526ab00e5c6f354cb9db1359268b5af, type: 2}
+  attackData: {fileID: 11400000, guid: aee90e410f85b6b458a8d60653f543a5, type: 2}
   innateEffects:
   - effectType: 1
     value: 50

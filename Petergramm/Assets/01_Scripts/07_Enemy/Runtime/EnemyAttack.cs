@@ -7,7 +7,8 @@ namespace _01_Scripts._07_Enemy.Runtime
     {
         [SerializeField] private EnemyRuntime enemyRuntime;
         private float _cd;
-        void Update()
+
+        private void Update()
         {
             this._cd -= Time.deltaTime;
             float attacksPerSecond = this.enemyRuntime.CurrentStats.attacksPerSecond;

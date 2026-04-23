@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: IceTowerAttack
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.TowerAttackSO
   projectile: {fileID: 11400000, guid: f83903a41318b6945ba3d4005db6c8bc, type: 2}
+  damageType: 1
   baseProjectileCount: 2

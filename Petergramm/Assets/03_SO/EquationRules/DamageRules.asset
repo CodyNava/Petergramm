@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c25e2cca666b984aa0bb91758afc945, type: 3}
+  m_Name: DamageRules
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._08_GlobalManager.DamageRules.DamageEquationDataSO
+  rows:
+  - damageType: 0
+    modifiers:
+    - armorTypes: 0
+      multiplier: 1.3
+    - armorTypes: 1
+      multiplier: 0.9
+    - armorTypes: 2
+      multiplier: 0.5
+  - damageType: 1
+    modifiers:
+    - armorTypes: 0
+      multiplier: 1
+    - armorTypes: 1
+      multiplier: 1.2
+    - armorTypes: 2
+      multiplier: 0.9
+  - damageType: 2
+    modifiers:
+    - armorTypes: 0
+      multiplier: 0.65
+    - armorTypes: 1
+      multiplier: 1
+    - armorTypes: 2
+      multiplier: 1.3

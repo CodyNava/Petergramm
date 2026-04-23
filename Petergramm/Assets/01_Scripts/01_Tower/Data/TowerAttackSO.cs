@@ -6,6 +6,7 @@ namespace _01_Scripts._01_Tower.Data
    public class TowerAttackSO : ScriptableObject
    {
       public ProjectileSO projectile;
-      public int baseProjectileCount = 1;
+      public TowerDamageType damageType;
+      public int baseProjectileCount;
    }
 }
