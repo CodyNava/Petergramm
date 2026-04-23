@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _01_Scripts._01_Tower.Data;
+using _01_Scripts._01_Tower.RuntTime;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,13 +16,17 @@ namespace Editor
         public float attacksPerSecond;
         public TowerEffectType towerEffect;
         public int effectCount;
-        
+        public TowerUpgradeSO upgrade;
+
         public float projectileSpeed;
-        
+
         private TowerBaseSO _createdTowerBase;
         private TowerAttackSO _createdAttackData;
         private ProjectileSO _createdProjectile;
+        private readonly List<TowerUpgradeSO> _upgrades = new();
 
+        private bool _showUpgrades;
+        private bool _newUpgrades;
         private readonly List<string> _warnings = new();
         private bool _hasErrors;
 
@@ -34,13 +39,14 @@ namespace Editor
         private void OnGUI()
         {
             #region TowerSettings
+
             towerName = EditorGUILayout.TextField(new GUIContent("Tower Name",
                 "The name the tower is supposed to have in-game.\n" +
                 "<b>This field cannot be left empty</b>"), towerName);
-            icon = EditorGUILayout.ObjectField(new GUIContent("Icon", 
+            icon = EditorGUILayout.ObjectField(new GUIContent("Icon",
                 "The icon the tower is supposed to have in-game.\n" +
                 "<b>This field cannot be left empty</b>"), icon, typeof(Sprite), false) as Sprite;
-            maxHitPoints = EditorGUILayout.Slider(new GUIContent("Maximum HP", 
+            maxHitPoints = EditorGUILayout.Slider(new GUIContent("Maximum HP",
                 "The maximum amount of hit points this tower is supposed to have in-game.\n" +
                 "<b>This value CANNOT be 0.</b>"), maxHitPoints, 0f, 100f);
             damage = EditorGUILayout.Slider(new GUIContent("Damage",
@@ -52,17 +58,58 @@ namespace Editor
             attacksPerSecond = EditorGUILayout.Slider(new GUIContent("Attacks per Second",
                 "How many attacks this tower is supposed to do per second.\n" +
                 "<b>This value CANNOT be 0.</b>"), attacksPerSecond, 0f, 5f);
-            towerEffect = (TowerEffectType)EditorGUILayout.EnumPopup(new GUIContent("Tower Effect", 
+            towerEffect = (TowerEffectType)EditorGUILayout.EnumPopup(new GUIContent("Tower Effect",
                 "The Initial effect this tower is supposed to have.\n" +
                 "<b>Additional Targets:</b> This tower can attack multiple enemies at once.\n" +
                 "<b>Slow Percent:</b> This tower slows enemies on attack.\n" +
                 "<b>Bounce Count:</b> This towers projectile bounces in between enemies."), towerEffect);
             effectCount = EditorGUILayout.IntSlider(new GUIContent("Effect amount",
-                    "How many times the effect can occur/How strong the effect is."), effectCount, 0, 5);
+                "How many times the effect can occur/How strong the effect is."), effectCount, 0, 5);
+            _showUpgrades = EditorGUILayout.Foldout(_showUpgrades, "Upgrades");
+
+            if (_showUpgrades)
+            {
+                if (_upgrades.Count != 0)
+                {
+                    EditorGUILayout.BeginVertical();
+                    foreach (var item in _upgrades)
+                    {
+                        EditorGUILayout.HelpBox(item.upgradeName, MessageType.None);
+                    }
+                    EditorGUILayout.EndVertical();
+                }
+
+                if (!_newUpgrades)
+                {
+                    if (GUILayout.Button("Add Upgrade"))
+                    {
+                        _newUpgrades = true;
+                    }
+                }
+
+                if (_newUpgrades)
+                {
+                    upgrade = EditorGUILayout.ObjectField(new GUIContent("Upgrade Type",
+                            "Choose one of the upgrades to add it to your tower"),
+                        upgrade, typeof(TowerUpgradeSO), false) as TowerUpgradeSO;
+                    if (GUILayout.Button("Finish Upgrade"))
+                    {
+                        _upgrades.Add(upgrade);
+                        _newUpgrades = false;
+                    }
+                }
+            }
+
             #endregion
-            
+
             #region ProjectileSettings
-            projectileSpeed = EditorGUILayout.Slider(new GUIContent("Projectile Speed", "The speed at which the projectile travels. \n<b>This value CANNOT be 0.</b>"), projectileSpeed, 0f, 3f);
+
+            projectileSpeed =
+                EditorGUILayout.Slider(
+                    new GUIContent("Projectile Speed",
+                        "The speed at which the projectile travels. \n<b>This value CANNOT be 0.</b>"), projectileSpeed,
+                    0f, 3f);
+
             #endregion
 
             EditorGUILayout.Space();
@@ -94,7 +141,12 @@ namespace Editor
             _createdTowerBase = CreateInstance<TowerBaseSO>();
 
             var tempTower = new GameObject();
-            var towerPrefab = PrefabUtility.SaveAsPrefabAsset(tempTower, $"Assets/04_Prefabs/Tower/{towerName}/{towerName}.prefab");
+            tempTower.AddComponent<TowerRuntime>();
+            tempTower.AddComponent<TowerHealth>();
+            tempTower.AddComponent<TowerAttack>();
+            
+            var towerPrefab =
+                PrefabUtility.SaveAsPrefabAsset(tempTower, $"Assets/04_Prefabs/Tower/{towerName}/{towerName}.prefab");
             DestroyImmediate(tempTower);
 
             AssetDatabase.CreateAsset(_createdTowerBase, $"Assets/03_SO/Tower/{towerName}/{towerName}.asset");
@@ -105,7 +157,19 @@ namespace Editor
             _createdTowerBase.baseStats.damage = damage;
             _createdTowerBase.baseStats.range = range;
             _createdTowerBase.baseStats.attacksPerSecond = attacksPerSecond;
-            _createdTowerBase.innateEffects.Add(new TowerEffectModifier(){effectType = towerEffect, value = effectCount});
+            _createdTowerBase.innateEffects.Add(new TowerEffectModifier()
+                { effectType = towerEffect, value = effectCount });
+
+            foreach (var towerUpgrade in _upgrades)
+            {
+                CreateInstance<TowerUpgradeSO>();
+                _createdTowerBase.availableUpgrades.Add(towerUpgrade);
+            }
+
+            var runtime = towerPrefab.GetComponent<TowerRuntime>();
+            var towerAsset = AssetDatabase.LoadAssetAtPath<TowerBaseSO>($"Assets/03_SO/Tower/{towerName}/{towerName}.asset");
+            runtime.TowerBase = towerAsset;
+            PrefabUtility.SavePrefabAsset(towerPrefab);
         }
 
         private void CreateProjectile()
@@ -135,7 +199,7 @@ namespace Editor
             _createdTowerBase.attackData = _createdAttackData;
             _createdAttackData.projectile = _createdProjectile;
         }
-        
+
         #endregion
 
         #region InputChecks
