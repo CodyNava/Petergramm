@@ -7,14 +7,17 @@ namespace Editor
 {
     public class TowerCreationTool : EditorWindow
     {
-        //todo: erweitern um DamageType
         public string towerName;
         public Sprite icon;
-        public float hitPoints;
+        public float maxHitPoints;
         public float damage;
         public float range;
         public float attacksPerSecond;
-
+        public TowerEffectType towerEffect;
+        public int effectCount;
+        
+        public float projectileSpeed;
+        
         private TowerBaseSO _createdTowerBase;
         private TowerAttackSO _createdAttackData;
         private ProjectileSO _createdProjectile;
@@ -30,12 +33,37 @@ namespace Editor
 
         private void OnGUI()
         {
-            towerName = EditorGUILayout.TextField("Tower Name", towerName);
-            icon = EditorGUILayout.ObjectField("Icon", icon, typeof(Sprite), false) as Sprite;
-            hitPoints = EditorGUILayout.FloatField("HitPoints", hitPoints);
-            damage = EditorGUILayout.FloatField("Damage", damage);
-            range = EditorGUILayout.FloatField("Range", range);
-            attacksPerSecond = EditorGUILayout.FloatField("Attacks per Second", attacksPerSecond);
+            #region TowerSettings
+            towerName = EditorGUILayout.TextField(new GUIContent("Tower Name",
+                "The name the tower is supposed to have in-game.\n" +
+                "<b>This field cannot be left empty</b>"), towerName);
+            icon = EditorGUILayout.ObjectField(new GUIContent("Icon", 
+                "The icon the tower is supposed to have in-game.\n" +
+                "<b>This field cannot be left empty</b>"), icon, typeof(Sprite), false) as Sprite;
+            maxHitPoints = EditorGUILayout.Slider(new GUIContent("Maximum HP", 
+                "The maximum amount of hit points this tower is supposed to have in-game.\n" +
+                "<b>This value CANNOT be 0.</b>"), maxHitPoints, 0f, 100f);
+            damage = EditorGUILayout.Slider(new GUIContent("Damage",
+                "The Damage amount this tower is supposed to deal per shot.\n" +
+                "<b>This value CANNOT be 0.</b>"), damage, 0f, 20f);
+            range = EditorGUILayout.Slider(new GUIContent("Attack Range",
+                "The range in which the tower can attack the enemies.\n" +
+                "<b>This value CANNOT be 0.</b>"), range, 0f, 5f);
+            attacksPerSecond = EditorGUILayout.Slider(new GUIContent("Attacks per Second",
+                "How many attacks this tower is supposed to do per second.\n" +
+                "<b>This value CANNOT be 0.</b>"), attacksPerSecond, 0f, 5f);
+            towerEffect = (TowerEffectType)EditorGUILayout.EnumPopup(new GUIContent("Tower Effect", 
+                "The Initial effect this tower is supposed to have.\n" +
+                "<b>Additional Targets:</b> This tower can attack multiple enemies at once.\n" +
+                "<b>Slow Percent:</b> This tower slows enemies on attack.\n" +
+                "<b>Bounce Count:</b> This towers projectile bounces in between enemies."), towerEffect);
+            effectCount = EditorGUILayout.IntSlider(new GUIContent("Effect amount",
+                    "How many times the effect can occur/How strong the effect is."), effectCount, 0, 5);
+            #endregion
+            
+            #region ProjectileSettings
+            projectileSpeed = EditorGUILayout.Slider(new GUIContent("Projectile Speed", "The speed at which the projectile travels. \n<b>This value CANNOT be 0.</b>"), projectileSpeed, 0f, 3f);
+            #endregion
 
             EditorGUILayout.Space();
             if (GUILayout.Button("Create Tower"))
@@ -66,18 +94,18 @@ namespace Editor
             _createdTowerBase = CreateInstance<TowerBaseSO>();
 
             var tempTower = new GameObject();
-            var towerPrefab =
-                PrefabUtility.SaveAsPrefabAsset(tempTower, $"Assets/04_Prefabs/Tower/{towerName}/{towerName}.prefab");
+            var towerPrefab = PrefabUtility.SaveAsPrefabAsset(tempTower, $"Assets/04_Prefabs/Tower/{towerName}/{towerName}.prefab");
             DestroyImmediate(tempTower);
 
             AssetDatabase.CreateAsset(_createdTowerBase, $"Assets/03_SO/Tower/{towerName}/{towerName}.asset");
             _createdTowerBase.towerName = towerName;
             _createdTowerBase.icon = icon;
             _createdTowerBase.towerPrefab = towerPrefab;
-            _createdTowerBase.baseStats.maxHp = hitPoints;
+            _createdTowerBase.baseStats.maxHp = maxHitPoints;
             _createdTowerBase.baseStats.damage = damage;
             _createdTowerBase.baseStats.range = range;
             _createdTowerBase.baseStats.attacksPerSecond = attacksPerSecond;
+            _createdTowerBase.innateEffects.Add(new TowerEffectModifier(){effectType = towerEffect, value = effectCount});
         }
 
         private void CreateProjectile()
@@ -92,6 +120,7 @@ namespace Editor
             AssetDatabase.CreateAsset(_createdProjectile,
                 $"Assets/03_SO/Tower/{towerName}/{towerName}Projectile.asset");
             _createdProjectile.projectilePrefab = projectilePrefab;
+            _createdProjectile.speed = projectileSpeed;
         }
 
         private void CreateAttackData()
@@ -124,7 +153,7 @@ namespace Editor
                 _warnings.Add("Missing Tower Icon");
             }
 
-            if (hitPoints <= 0)
+            if (maxHitPoints <= 0)
             {
                 _warnings.Add("Invalid Tower Hp");
             }
@@ -142,6 +171,11 @@ namespace Editor
             if (attacksPerSecond <= 0)
             {
                 _warnings.Add("Invalid Attacks Per Second");
+            }
+
+            if (projectileSpeed <= 0)
+            {
+                _warnings.Add("Invalid Projectile Speed");
             }
 
             return _warnings.Count != 0;
