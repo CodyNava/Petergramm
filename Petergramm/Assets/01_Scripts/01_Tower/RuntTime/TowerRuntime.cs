@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _01_Scripts._01_Tower.Data;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace _01_Scripts._01_Tower.RuntTime
       [SerializeField] private List<TowerUpgradeSO> appliedUpgrades = new();
 
       //Getter
-      public TowerBaseSO TowerBase => this.towerBase;
+      public TowerBaseSO TowerBase { get => this.towerBase; set => this.towerBase = value; }
       public TowerStats CurrentStats => this.currentStats;
       public TowerEffectValues CurrentEffects => this.currentEffects;
       public List<TowerUpgradeSO> AppliedUpgrades => this.appliedUpgrades;
@@ -53,7 +54,7 @@ namespace _01_Scripts._01_Tower.RuntTime
 
       public void ReApplyRuntimeValues()
       {
-         if (this.towerBase == null) return;
+         if (!this.towerBase) return;
 
          this.currentStats = this.towerBase.baseStats;
          this.currentEffects.Reset();
@@ -100,7 +101,7 @@ namespace _01_Scripts._01_Tower.RuntTime
          {
             case TowerStatType.MaxHp: this.currentStats.maxHp += totalBonus; break;
 
-            case TowerStatType.Damage: this.currentStats.damage += totalBonus; break;
+            case TowerStatType.Damage: this.currentStats.damage += (short)totalBonus; break;
 
             case TowerStatType.Range: this.currentStats.range += totalBonus; break;
 
