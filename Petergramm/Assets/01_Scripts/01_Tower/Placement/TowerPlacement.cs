@@ -1,16 +1,15 @@
-using System;
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
-using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace _01_Scripts._01_Tower.Test
+namespace _01_Scripts._01_Tower.Placement
 {
     public class TestTowerPlacement : MonoBehaviour
     {
         [SerializeField] private List<GameObject> towerPrefab = new();
         [SerializeField] private GridData gridData;
+        [SerializeField] private Camera cam;
 
 
         private bool _isDragging;
@@ -18,6 +17,8 @@ namespace _01_Scripts._01_Tower.Test
         private GridTileData _tile;
         private Vector3Int _gridCoord = Vector3Int.zero;
 
+        
+        private void Start() => cam = Camera.main;
         private void Update()
         {
             RayForTowerPosition();
@@ -36,7 +37,9 @@ namespace _01_Scripts._01_Tower.Test
         private void RayForTowerPosition()
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            if (!cam) return;
+            
+            Ray ray = cam.ScreenPointToRay(mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerMask.GetMask("Grid")))
             {
