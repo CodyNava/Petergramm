@@ -22,13 +22,21 @@ namespace _01_Scripts._01_Tower.RuntTime
       public TowerEffectValues CurrentEffects => this.currentEffects;
       public List<TowerUpgradeSO> AppliedUpgrades => this.appliedUpgrades;
 
-      private void Awake() { this.ReApplyRuntimeValues(); }
+      private void Awake() { this.ReApplyRuntimeValues(); CreateAttackRangeCollider(); }
       
       public void Initialize(TowerBaseSO newTowerBase)
       {
          this.towerBase = newTowerBase;
          this.appliedUpgrades.Clear();
          this.ReApplyRuntimeValues();
+      }
+      
+      private void CreateAttackRangeCollider()
+      {
+         var rangeCollider = this.gameObject.AddComponent<SphereCollider>();
+         rangeCollider.radius = 0.5f + currentStats.range;
+         rangeCollider.isTrigger = true;
+         
       }
 
       public bool TryAddUpgrade(TowerUpgradeSO upgrade)

@@ -1,3 +1,4 @@
+using System.Collections;
 using _01_Scripts._07_Enemy.Data;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace _01_Scripts._07_Enemy.Runtime
         //Getter
         public EnemyStats  CurrentStats => this.currentStats;
         public EnemyBaseSO EnemyBase => enemyBase;
-        private void Start() => ApplyStats();
+        private void Awake() => ApplyStats();
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         private void ApplyStats()
@@ -25,5 +26,6 @@ namespace _01_Scripts._07_Enemy.Runtime
              currentStats.range = enemyBase.stats.range;
         }
         
+       
     }
 }

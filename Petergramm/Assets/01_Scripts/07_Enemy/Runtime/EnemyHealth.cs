@@ -1,5 +1,6 @@
 using System;
 using _01_Scripts._01_Tower.Data;
+using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._01_Tower.RuntTime;
 using _01_Scripts._07_Enemy.Data;
 using _01_Scripts._08_GlobalManager.DamageRules;
@@ -11,20 +12,22 @@ namespace _01_Scripts._07_Enemy.Runtime
    {
       [SerializeField] private EnemyRuntime enemyRuntime;
       [SerializeField] private float currentHp, maxHp;
-      private void Start() => RefreshHp(true);
+      private void Start() => RefreshHp();
 
-      private void RefreshHp(bool fillCurrentHp)
+      private void RefreshHp()
       {
          if (!this.enemyRuntime) return;
-
+         
          this.maxHp = enemyRuntime.CurrentStats.maxHp;
-         this.currentHp = fillCurrentHp ? this.maxHp : Mathf.Min(this.currentHp, this.maxHp);
+         this.currentHp = maxHp;
       }
 
-      private void OnCollisionEnter(Collision other)
+      private void OnTriggerEnter(Collider other)
       {
+         if (!other.CompareTag("Projectile")) return;
          var projectileData = other.gameObject.GetComponent<ProjectileRuntime>();
          CalculateDamage(projectileData.Damage, (TowerDamageType)projectileData.DamageType);
+         Destroy(other.gameObject);
       }
 
       private void CalculateDamage(short damage, TowerDamageType damageType)

@@ -15,9 +15,10 @@ namespace _01_Scripts._07_Enemy.Runtime
 
             if (attacksPerSecond <= 0f) return;
 
+            float attackInterval = 1f / attacksPerSecond;
             if (this._cd <= 0f)
             {
-                this._cd = attacksPerSecond;
+                this._cd = attackInterval;
                 this.Attack();
             }
         }

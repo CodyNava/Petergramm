@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cacd05f3854ae141bfaa8da39970930, type: 3}
   m_Name: GlaiveTower
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.TowerBaseSO
-  towerName: MultiTower
+  towerName: Glaive
   icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   towerPrefab: {fileID: 2507857462180137906, guid: 4b4461f01395c5e44a0db5e4e2876a1a, type: 3}
   baseStats:
     maxHp: 100
-    damage: 8
+    damage: 1
     range: 7
-    attacksPerSecond: 0.5
+    attacksPerSecond: 2
   attackData: {fileID: 11400000, guid: 09f4f858f464bdc43997c0529b7b0f98, type: 2}
   innateEffects:
   - effectType: 2

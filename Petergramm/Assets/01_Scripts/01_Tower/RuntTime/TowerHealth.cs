@@ -7,8 +7,11 @@ namespace _01_Scripts._01_Tower.RuntTime
       [SerializeField] private TowerRuntime towerRuntime;
       [SerializeField] private float currentHp, maxHp;
 
-      private void OnValidate()=>
+      private void OnValidate()
+      {
+         if  (this.towerRuntime) return;
          towerRuntime = this.GetComponent<TowerRuntime>();
+      }
       private void Start() => this.RefreshHp(true);
 
       private void RefreshHp(bool fillCurrentHp)
