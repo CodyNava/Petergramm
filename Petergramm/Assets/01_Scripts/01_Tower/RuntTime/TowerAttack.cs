@@ -56,9 +56,9 @@ namespace _01_Scripts._01_Tower.RuntTime
         }
 
         
-        private void SpawnProjectiles(GameObject projectilePrefab)
+        private GameObject SpawnProjectiles(GameObject projectilePrefab)
         {
-            Instantiate(projectilePrefab, _projSpawnTransform.position, this.transform.rotation);
+            return Instantiate(projectilePrefab, _projSpawnTransform.position, this.transform.rotation);
         }
 
         private void GiveProjectileTarget(Transform target, ProjectileRuntime projectileRuntime)
@@ -109,11 +109,13 @@ namespace _01_Scripts._01_Tower.RuntTime
             int bounceCount = effects.bounceCount;
             var damageType = attackData.projectile.DamageType = (byte)attackData.damageType;
             
-            var projectileRuntime = attackData.projectile.projectilePrefab.GetComponent<ProjectileRuntime>();
             
-            ApplyStatsToProjectiles(attackData, stats, projectileRuntime);
-            GiveProjectileTarget(_targets[0].transform, projectileRuntime);
-            SpawnProjectiles(attackData.projectile.projectilePrefab);
+            
+            var projectileObject = SpawnProjectiles(attackData.projectile.projectilePrefab);
+            var projectileData = projectileObject.GetComponent<ProjectileRuntime>();
+            
+            ApplyStatsToProjectiles(attackData, stats, projectileData);
+            GiveProjectileTarget(_targets[0].transform, projectileData);
             
             Debug.Log($"{this.name} DMG {stats.damage}, Range {stats.range}, DmgType {damageType} ");
             Debug.Log($"{this.name} projectileCount {projectileCount}, additionalTargets {additionalTargets}, " +
