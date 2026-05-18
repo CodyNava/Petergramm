@@ -8,7 +8,8 @@ namespace _01_Scripts._01_Tower.Data
       MaxHp,
       Damage,
       Range,
-      AttacksPerSecond
+      AttacksPerSecond,
+      Energy
    }
 
    public enum TowerEffectType
@@ -34,6 +35,7 @@ namespace _01_Scripts._01_Tower.Data
       public short damage;
       public float range;
       public float attacksPerSecond;
+      public float energy;
    }
 
    [Serializable]

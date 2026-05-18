@@ -114,6 +114,8 @@ namespace _01_Scripts._01_Tower.RuntTime
             case TowerStatType.Range: this.currentStats.range += totalBonus; break;
 
             case TowerStatType.AttacksPerSecond: this.currentStats.attacksPerSecond += totalBonus; break;
+            
+            case TowerStatType.Energy: this.currentStats.energy -= totalBonus; break;
          }
       }
 
