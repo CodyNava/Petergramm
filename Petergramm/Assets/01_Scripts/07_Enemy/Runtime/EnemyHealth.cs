@@ -35,7 +35,8 @@ namespace _01_Scripts._07_Enemy.Runtime
          var finalDamage = enemyRuntime.EnemyBase.damageRules.GetFinalDamage(
             damage,
             damageType,
-            enemyRuntime.CurrentStats.armor.armorType
+            enemyRuntime.CurrentStats.armor.armorType,
+            enemyRuntime.CurrentStats.armor
          );
          
          TakeDamage(finalDamage);

@@ -33,4 +33,4 @@ MonoBehaviour:
       moveSpeed: 5
     armor:
       armorType: 1
-      armor: 5
+      armorValue: 55

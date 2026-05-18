@@ -25,9 +25,9 @@ namespace _01_Scripts._08_GlobalManager.DamageRules
          return 1f;
       }
 
-      public float GetFinalDamage(float baseDamage, TowerDamageType damageType, EnemyArmorTypes armorType)
+      public float GetFinalDamage(float baseDamage, TowerDamageType damageType, EnemyArmorTypes armorType, EnemyArmor armor)
       {
-         return baseDamage * GetMultiplier(damageType, armorType);
+         return baseDamage * GetMultiplier(damageType, armorType) / (1 + armor.armorValue / 100) ;
       }
 
 

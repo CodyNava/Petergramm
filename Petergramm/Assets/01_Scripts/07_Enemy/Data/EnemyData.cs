@@ -78,6 +78,6 @@ namespace _01_Scripts._07_Enemy.Data
    public struct EnemyArmor
    {
       public EnemyArmorTypes  armorType;
-      public float armor;
+      public float armorValue;
    }
 }
