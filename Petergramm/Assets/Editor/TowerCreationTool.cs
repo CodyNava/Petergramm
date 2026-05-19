@@ -15,6 +15,7 @@ namespace Editor
         public short damage;
         public float range;
         public float attacksPerSecond;
+        public float energyUsage;
         public TowerEffectType towerEffect;
         public int effectCount;
         public TowerUpgradeSO upgrade;
@@ -59,6 +60,9 @@ namespace Editor
             attacksPerSecond = EditorGUILayout.Slider(new GUIContent("Attacks per Second",
                 "How many attacks this tower is supposed to do per second.\n" +
                 "<b>This value CANNOT be 0.</b>"), attacksPerSecond, 0f, 5f);
+            energyUsage = EditorGUILayout.Slider(new GUIContent("Energy Usage",
+                "How much energy does this tower require to keep running.\n" +
+                "<bThis value CANNOT be 0.</b>"), energyUsage, 0f, 10f);
             towerEffect = (TowerEffectType)EditorGUILayout.EnumPopup(new GUIContent("Tower Effect",
                 "The Initial effect this tower is supposed to have.\n" +
                 "<b>Additional Targets:</b> This tower can attack multiple enemies at once.\n" +
@@ -158,6 +162,7 @@ namespace Editor
             _createdTowerBase.baseStats.damage = damage;
             _createdTowerBase.baseStats.range = range;
             _createdTowerBase.baseStats.attacksPerSecond = attacksPerSecond;
+            _createdTowerBase.baseStats.energy = energyUsage;
             _createdTowerBase.innateEffects.Add(new TowerEffectModifier()
                 { effectType = towerEffect, value = effectCount });
 
@@ -236,6 +241,11 @@ namespace Editor
             if (attacksPerSecond <= 0)
             {
                 _warnings.Add("Invalid Attacks Per Second");
+            }
+
+            if (energyUsage <= 0)
+            {
+                _warnings.Add("Invalid Energy Usage");
             }
 
             if (projectileSpeed <= 0)
