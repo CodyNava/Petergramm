@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace _01_Scripts._01_Tower.Projectiles
@@ -10,15 +11,22 @@ namespace _01_Scripts._01_Tower.Projectiles
         [SerializeField] private byte damageType;
         [SerializeField] private short damage;
         private float _refreshRate;
+        private byte _bounceCount;
+        private byte _slowPercent;
         [SerializeField] private Transform _target;
+        
 
         public short Damage => damage;
         public byte DamageType => damageType;
-        public void ApplyStats(byte type, byte speed, short dmg)
+        public byte SlowPercent => _slowPercent;
+        public byte BounceCount => _bounceCount;
+        public void ApplyStats(byte type, byte speed, short dmg, byte bounces, byte slow)
         {
             damageType = type;
             flySpeed = speed;
             damage = dmg;
+            _bounceCount = bounces;
+            _slowPercent = slow;
         }
 
         private void Update()

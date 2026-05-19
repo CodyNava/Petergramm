@@ -27,6 +27,7 @@ namespace _01_Scripts._07_Enemy.Runtime
          if (!other.CompareTag("Projectile")) return;
          var projectileData = other.gameObject.GetComponent<ProjectileRuntime>();
          CalculateDamage(projectileData.Damage, (TowerDamageType)projectileData.DamageType);
+         enemyRuntime.ApplySlow(projectileData.SlowPercent);
          Destroy(other.gameObject);
       }
 
@@ -50,6 +51,8 @@ namespace _01_Scripts._07_Enemy.Runtime
          this.currentHp = 0;
          this.Die();
       }
+
+      
 
       private void Die() => Destroy(this.gameObject);
    }

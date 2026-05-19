@@ -16,7 +16,7 @@ MonoBehaviour:
   maxStacks: 2
   statModifiers:
   - statType: 3
-    additiveValue: -10
+    additiveValue: 0
   effectModifiers:
   - effectType: 0
     addPerStack: 1

@@ -115,7 +115,9 @@ namespace _01_Scripts._01_Tower.RuntTime
 
             case TowerStatType.AttacksPerSecond: this.currentStats.attacksPerSecond += totalBonus; break;
             
-            case TowerStatType.Energy: this.currentStats.energy -= totalBonus; break;
+            case TowerStatType.Energy: this.currentStats.energy -= (int)totalBonus; break;
+            
+            case TowerStatType.BaseProjectileAmount: this.currentStats.baseProjectileAmount += (int)totalBonus; break;
          }
       }
 
@@ -123,8 +125,8 @@ namespace _01_Scripts._01_Tower.RuntTime
       {
          switch (modifierEffectType)
          {
-            case TowerEffectType.AdditionalTargets:
-               this.currentEffects.additionalTargets += Mathf.RoundToInt(totalBonus); break;
+            case TowerEffectType.ExtraProjectileAmount:
+               this.currentEffects.projectileAmount += Mathf.RoundToInt(totalBonus); break;
 
             case TowerEffectType.SlowPercent: this.currentEffects.slowPercent += totalBonus; break;
 

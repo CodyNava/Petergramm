@@ -97,6 +97,9 @@ namespace _01_Scripts._01_Tower.Placement
             _draggingTower.transform.position = gridCoord;
             placementCoords.isOccupied = true;
             placementCoords.occupant = _draggingTower;
+            
+            //todo energy needs to increase based on towers energy stat
+            //todo and a energy global stat is needed
 
             if (!Keyboard.current.leftShiftKey.isPressed)
             {

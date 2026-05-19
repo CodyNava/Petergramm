@@ -9,12 +9,13 @@ namespace _01_Scripts._01_Tower.Data
       Damage,
       Range,
       AttacksPerSecond,
-      Energy
+      Energy,
+      BaseProjectileAmount
    }
 
    public enum TowerEffectType
    {
-      AdditionalTargets,
+      ExtraProjectileAmount,
       SlowPercent,
       BounceCount
    }
@@ -35,7 +36,8 @@ namespace _01_Scripts._01_Tower.Data
       public short damage;
       public float range;
       public float attacksPerSecond;
-      public float energy;
+      public int energy;
+      public int baseProjectileAmount;
    }
 
    [Serializable]
@@ -63,13 +65,13 @@ namespace _01_Scripts._01_Tower.Data
    [Serializable]
    public class TowerEffectValues
    {
-      public int additionalTargets;
+      public int projectileAmount;
       public float slowPercent;
       public int bounceCount;
 
       public void Reset()
       {
-         this.additionalTargets = 0;
+         this.projectileAmount = 0;
          this.slowPercent = 0;
          this.bounceCount = 0;
       }
