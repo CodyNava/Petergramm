@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using _01_Scripts._07_Enemy.Data;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace _01_Scripts._07_Enemy.Runtime
     public class EnemyRuntime : MonoBehaviour
     {
 
+   
         [SerializeField] private EnemyBaseSO enemyBase;
         [SerializeField] private EnemyStats currentStats;
 
@@ -14,7 +16,11 @@ namespace _01_Scripts._07_Enemy.Runtime
         //Getter
         public EnemyStats  CurrentStats => this.currentStats;
         public EnemyBaseSO EnemyBase => enemyBase;
-        private void Awake() => ApplyStats();
+
+        private void Awake()
+        {
+            ApplyStats();
+        }
         
         private void ApplyStats()
         {
@@ -40,7 +46,8 @@ namespace _01_Scripts._07_Enemy.Runtime
             //this.currentStats.movement.moveSpeed /= slow;
             _slowed = true;
         }
+
+
         
-       
     }
 }

@@ -17,9 +17,9 @@ MonoBehaviour:
   towerPrefab: {fileID: 2549582001120558232, guid: 309a44090c67f2b4093333abfd2dc1fa, type: 3}
   baseStats:
     maxHp: 100
-    damage: 10
-    range: 12
-    attacksPerSecond: 0.75
+    damage: 3
+    range: 5
+    attacksPerSecond: 2
     energy: 2
     baseProjectileAmount: 1
   attackData: {fileID: 11400000, guid: c526ab00e5c6f354cb9db1359268b5af, type: 2}
