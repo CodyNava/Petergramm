@@ -1,4 +1,5 @@
 using System;
+using _01_Scripts._08_GlobalManager.Pooling;
 using TMPro;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace _01_Scripts._01_Tower.Projectiles
         private byte _bounceCount;
         private byte _slowPercent;
         [SerializeField] private Transform _target;
-        [SerializeField] private ProjectilePooling projectilePooling;
+       // [SerializeField] private ProjectilePooling projectilePooling;
 
      
 
@@ -25,14 +26,13 @@ namespace _01_Scripts._01_Tower.Projectiles
 
         private void OnValidate()
         {
-            projectilePooling = GetComponentInParent<ProjectilePooling>();
+           // projectilePooling = GetComponentInParent<ProjectilePooling>();
         }
 
         public void ReturnToPool()
         {
-         
-            projectilePooling.ReturnToPool(this);
-            
+            GenericPool<ProjectileRuntime>.ReturnToPool(this);
+            this.gameObject.SetActive(false);
         }
 
 

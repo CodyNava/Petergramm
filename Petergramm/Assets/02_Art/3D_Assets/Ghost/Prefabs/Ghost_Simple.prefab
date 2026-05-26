@@ -755,7 +755,7 @@ MonoBehaviour:
       moveSpeed: 0
     armor:
       armorType: 0
-      armor: 0
+      armorValue: 0
 --- !u!54 &6728422432431982376
 Rigidbody:
   m_ObjectHideFlags: 0

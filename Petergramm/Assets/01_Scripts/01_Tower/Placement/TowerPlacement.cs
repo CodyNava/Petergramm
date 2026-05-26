@@ -21,6 +21,7 @@ namespace _01_Scripts._01_Tower.Placement
         private void Start() => cam = Camera.main;
         private void Update()
         {
+            if (!_isDragging) return;
             RayForTowerPosition();
 
             if (_tile == null) return;

@@ -18,7 +18,7 @@ MonoBehaviour:
   baseStats:
     maxHp: 100
     damage: 3
-    range: 5
+    range: 10
     attacksPerSecond: 2
     energy: 2
     baseProjectileAmount: 1

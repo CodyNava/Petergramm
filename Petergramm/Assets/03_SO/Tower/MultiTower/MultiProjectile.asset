@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: MultiProjectile
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.ProjectileSO
   projectilePrefab: {fileID: 7441440908871300343, guid: 052f0d9a551166b458c44593c6566808, type: 3}
-  speed: 55
+  speed: 10
