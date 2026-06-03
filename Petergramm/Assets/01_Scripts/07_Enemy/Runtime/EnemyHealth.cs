@@ -29,8 +29,6 @@ namespace _01_Scripts._07_Enemy.Runtime
          var projectileData = other.gameObject.GetComponent<ProjectileRuntime>();
          CalculateDamage(projectileData.Damage, (TowerDamageType)projectileData.DamageType);
          enemyRuntime.ApplySlow(projectileData.SlowPercent);
-         projectileData.ReturnToPool();
-         other.gameObject.SetActive(false);
       }
 
       private void CalculateDamage(short damage, TowerDamageType damageType)

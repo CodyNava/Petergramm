@@ -1,6 +1,3 @@
-using System;
-using _01_Scripts._08_GlobalManager.Pooling;
-using TMPro;
 using UnityEngine;
 
 namespace _01_Scripts._01_Tower.Projectiles
@@ -13,7 +10,7 @@ namespace _01_Scripts._01_Tower.Projectiles
         private float _refreshRate;
         private byte _bounceCount;
         private byte _slowPercent;
-        [SerializeField] private Transform _target;
+        private Transform _target;
        // [SerializeField] private ProjectilePooling projectilePooling;
 
      
@@ -23,19 +20,13 @@ namespace _01_Scripts._01_Tower.Projectiles
         public byte DamageType => damageType;
         public byte SlowPercent => _slowPercent;
         public byte BounceCount => _bounceCount;
+        public Transform Target => _target;
 
         private void OnValidate()
         {
            // projectilePooling = GetComponentInParent<ProjectilePooling>();
         }
-
-        public void ReturnToPool()
-        {
-            GenericPool<ProjectileRuntime>.ReturnToPool(this);
-            this.gameObject.SetActive(false);
-        }
-
-
+        
         public void ApplyStats(byte type, byte speed, short dmg, byte bounces, byte slow)
         {
             damageType = type;
@@ -45,7 +36,7 @@ namespace _01_Scripts._01_Tower.Projectiles
             _slowPercent = slow;
         }
 
-        private void Update()
+        protected void Refresh()
         {
             _refreshRate -= Time.deltaTime;
             if (_refreshRate > 0) return;
@@ -67,13 +58,7 @@ namespace _01_Scripts._01_Tower.Projectiles
 
         private void MoveToTarget()
         {
-            if (!_target)
-            {
-                //todo ask for new target
-                ReturnToPool();
-                return;
-            }
-
+            
             this.transform.position = Vector3.MoveTowards(this.transform.position, _target.position, flySpeed / 100f);
 
             //TODO Tracking einbauen, am besten nicht jeden tick sondern eher sonder 10 mal pro sec o.ä

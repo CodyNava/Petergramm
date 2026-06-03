@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _01_Scripts._01_Tower.Data;
 using _01_Scripts._01_Tower.Projectiles;
+using _01_Scripts._01_Tower.Projectiles.UniqueProjectiles;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using _01_Scripts._08_GlobalManager.Pooling;
 using NaughtyAttributes;
@@ -12,9 +13,7 @@ namespace _01_Scripts._01_Tower.RuntTime
     public class TowerAttack : MonoBehaviour
     {
         [SerializeField] private TowerRuntime towerRuntime;
-        [SerializeField] private ProjectilePooling projectilePooling;
         [SerializeField] private Transform _projSpawnTransform;
-        [SerializeField] private SphereCollider _rangeCollider;
         [SerializeField] private List<GameObject> _targets;
         private float _cd;
 
@@ -63,7 +62,19 @@ namespace _01_Scripts._01_Tower.RuntTime
 
         private ProjectileRuntime SpawnProjectiles(TowerAttackSO attackData)
         {
-            var projectileObject = GenericPool<ProjectileRuntime>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
+            ProjectileRuntime projectileObject;
+            switch (attackData.projectileType)
+            {
+                case TowerProjectileType.Basketball:
+                   projectileObject = GenericPool<BasketballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
+                break;
+                case TowerProjectileType.Baseball:
+                   projectileObject = GenericPool<BaseballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
+                break;
+                default:
+                    projectileObject = GenericPool<ProjectileRuntime>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
+                    break;
+            }
             
             projectileObject.gameObject.transform.position = _projSpawnTransform.position;
             projectileObject.gameObject.SetActive(true);

@@ -6,8 +6,8 @@ namespace _01_Scripts._08_GlobalManager.Pooling
 {
     public static class GenericPool<T> where T : MonoBehaviour
     {
-        private static readonly List<T> FreshPool = new List<T>();
-        private static readonly HashSet<T> GravePool = new HashSet<T>();
+        private static readonly List<T> FreshPool = new();
+        private static readonly HashSet<T> GravePool = new();
 
         
 
@@ -32,7 +32,7 @@ namespace _01_Scripts._08_GlobalManager.Pooling
         public static void ReturnToPool(T obj)
         {
             FreshPool.Add(obj);
-            GravePool.Remove(obj); //o(1) ?
+            GravePool.Remove(obj);
             Debug.Log("Capacity" + FreshPool.Capacity);
             Debug.Log("Grave" + GravePool.Count);
         }

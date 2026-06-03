@@ -9,5 +9,6 @@ namespace _01_Scripts._01_Tower.Data
       public ProjectileSO projectile;
       public TowerDamageType damageType;
       public int baseProjectileCount;
+      public TowerProjectileType projectileType;
    }
 }

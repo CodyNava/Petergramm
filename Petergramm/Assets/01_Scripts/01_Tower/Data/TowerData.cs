@@ -27,6 +27,12 @@ namespace _01_Scripts._01_Tower.Data
       Impact,
    }
    
+   public enum TowerProjectileType
+   {
+      Basketball,
+      Baseball
+   }
+   
    //Hier nutze ich structs da diese nur value types sind
    //und mehr sollen die auch nicht sein dazu auch noch viel billiger
    [Serializable]
@@ -39,6 +45,8 @@ namespace _01_Scripts._01_Tower.Data
       public int energy;
       public int baseProjectileAmount;
    }
+
+   
 
    [Serializable]
    public struct TowerStatModifier
