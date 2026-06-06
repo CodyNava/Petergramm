@@ -23,12 +23,12 @@ namespace _01_Scripts._01_Tower.RuntTime
             _projSpawnTransform = this.GetComponentInChildren<Transform>().GetChild(0).GetChild(0).transform;
         }
 
-        private void OnDrawGizmos()
-        {
-            Handles.color = new Color(1, 0, 0, 0.1f);
-            Handles.DrawSolidDisc(this.transform.position, this.transform.up,
-                0.5f + towerRuntime.CurrentStats.range);
-        }
+       // private void OnDrawGizmos()
+       // {
+       //     Handles.color = new Color(1, 0, 0, 0.1f);
+       //     Handles.DrawSolidDisc(this.transform.position, this.transform.up,
+       //         0.5f + towerRuntime.CurrentStats.range);
+       // }
 
         private void Update()
         {

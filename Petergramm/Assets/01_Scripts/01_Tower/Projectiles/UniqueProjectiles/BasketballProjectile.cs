@@ -9,7 +9,7 @@ namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
         private void Update()
         {
             Refresh();
-            if (!Target && isActiveAndEnabled) ReturnToPool();
+           // if (!Target) ReturnToPool();
         }
 
         private void ReturnToPool()
@@ -20,7 +20,7 @@ namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.gameObject == Target) return;
+          if (!other.CompareTag("Enemy")) return;
             ReturnToPool();
         }
     }

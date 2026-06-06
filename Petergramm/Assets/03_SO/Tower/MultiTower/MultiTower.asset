@@ -19,8 +19,8 @@ MonoBehaviour:
     maxHp: 100
     damage: 3
     range: 10
-    attacksPerSecond: 2
-    energy: 2
+    attacksPerSecond: 1
+    energy: 1
     baseProjectileAmount: 1
   attackData: {fileID: 11400000, guid: c526ab00e5c6f354cb9db1359268b5af, type: 2}
   innateEffects:

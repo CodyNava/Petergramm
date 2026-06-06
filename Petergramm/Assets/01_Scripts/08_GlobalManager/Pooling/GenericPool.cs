@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using _01_Scripts._01_Tower.Projectiles;
 using UnityEngine;
 
 namespace _01_Scripts._08_GlobalManager.Pooling
@@ -8,9 +7,7 @@ namespace _01_Scripts._08_GlobalManager.Pooling
     {
         private static readonly List<T> FreshPool = new();
         private static readonly HashSet<T> GravePool = new();
-
         
-
         public static T GetFromPool(GameObject obj)
         {
             if (FreshPool.Count == 0)
@@ -33,8 +30,11 @@ namespace _01_Scripts._08_GlobalManager.Pooling
         {
             FreshPool.Add(obj);
             GravePool.Remove(obj);
-            Debug.Log("Capacity" + FreshPool.Capacity);
-            Debug.Log("Grave" + GravePool.Count);
+        }
+
+        public static int ReturnPoolCount()
+        {
+            return FreshPool.Count + GravePool.Count;
         }
     }
 }
