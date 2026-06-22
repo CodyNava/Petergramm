@@ -7,6 +7,13 @@ using UnityEngine;
 
 namespace Editor
 {
+    enum Page
+    {
+        Tower,
+        Projectile,
+        Upgrade
+    }
+
     public class TowerCreationTool : EditorWindow
     {
         //General Stats
@@ -20,7 +27,7 @@ namespace Editor
         public int energyUsage;
         public TowerEffectType towerEffect;
         public int effectCount;
-        
+
         //Projectile Settings
         public TowerProjectileType projectileType;
         public int projectileAmount;
@@ -28,33 +35,73 @@ namespace Editor
 
         //Upgrade Settings
         public TowerUpgradeSO upgrade;
-        
+
         private bool _showUpgrades;
         private bool _newUpgrades;
+
+        //Editor Window
+        private Page _currentPage;
 
         //For Creation
         private TowerBaseSO _createdTowerBase;
         private TowerAttackSO _createdAttackData;
         private ProjectileSO _createdProjectile;
         private readonly List<TowerUpgradeSO> _upgrades = new();
-        
+
         //Warnings
         private readonly List<string> _warnings = new();
         private bool _hasErrors;
 
         [MenuItem("Creation Tools/Tower Creation")]
-        public static void ShowWindow()
+        public static void ShowMyEditor()
         {
-            GetWindow(typeof(TowerCreationTool));
+            var window = GetWindow<TowerCreationTool>();
+            window.titleContent = new GUIContent("Tower Creation");
+
+            window.minSize = new Vector2(450, 200);
+            window.maxSize = new Vector2(1920, 720);
         }
 
         private void OnGUI()
         {
-            TowerSetup();
-            TowerUpgradeSetup();
-            ProjectileSetup();
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginVertical();
 
+            if (GUILayout.Button("Tower Settings"))
+            {
+                _currentPage = Page.Tower;
+            }
+
+            if (GUILayout.Button("Projectile Settings"))
+            {
+                _currentPage = Page.Projectile;
+            }
+
+            if (GUILayout.Button("Upgrade Settings"))
+            {
+                _currentPage = Page.Upgrade;
+            }
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.BeginVertical();
+
+            switch (_currentPage)
+            {
+                case Page.Tower:
+                    TowerSetup();
+                    break;
+                case Page.Projectile:
+                    ProjectileSetup();
+                    break;
+                case Page.Upgrade:
+                    TowerUpgradeSetup();
+                    break;
+            }
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
+
             if (GUILayout.Button("Create Tower"))
             {
                 _hasErrors = CheckValidInput();
@@ -75,7 +122,7 @@ namespace Editor
                 ShowWarning(_warnings);
             }
         }
-        
+
         private void TowerSetup()
         {
             towerName = EditorGUILayout.TextField(new GUIContent("Tower Name",
@@ -122,19 +169,19 @@ namespace Editor
                     "How many times the effect can occur/How strong the effect is."),
                 effectCount, 0, 5);
         }
-        
+
         private void ProjectileSetup()
         {
             projectileType = (TowerProjectileType)EditorGUILayout.EnumPopup(new GUIContent("Projectile Type",
-                "The type of projectile this tower shoots.\n" +
-                "<b>Basketball:</b> .\n" +
-                "<b>Baseball:</b> .\n"),
+                    "The type of projectile this tower shoots.\n" +
+                    "<b>Basketball:</b> .\n" +
+                    "<b>Baseball:</b> .\n"),
                 projectileType);
             projectileAmount = EditorGUILayout.IntSlider(new GUIContent("Projectile Amount",
                     "How many projectiles this tower fires per attack.\n" +
                     "<b>This value cannot be 0.</b>"),
                 projectileAmount, 0, 10);
-            
+
             projectileSpeed = (byte)
                 EditorGUILayout.Slider(
                     new GUIContent("Projectile Speed",
@@ -180,7 +227,7 @@ namespace Editor
                 }
             }
         }
-        
+
         #region Creation
 
         private void CreateTower()
@@ -228,7 +275,9 @@ namespace Editor
 
             AssetDatabase.CreateAsset(_createdProjectile,
                 $"Assets/03_SO/Tower/{towerName}/{towerName}Projectile.asset");
-            _createdProjectile.projectilePrefab = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/04_Prefabs/Projectiles/{projectileType.ToString()}.prefab");
+            _createdProjectile.projectilePrefab =
+                AssetDatabase.LoadAssetAtPath<GameObject>(
+                    $"Assets/04_Prefabs/Projectiles/{projectileType.ToString()}.prefab");
             _createdProjectile.speed = projectileSpeed;
         }
 
