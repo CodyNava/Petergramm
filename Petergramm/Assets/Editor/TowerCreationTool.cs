@@ -17,24 +17,24 @@ namespace Editor
     public class TowerCreationTool : EditorWindow
     {
         //General Stats
-        public string towerName;
-        public Sprite icon;
-        public float maxHitPoints;
-        public short damage;
-        public TowerDamageType damageType;
-        public float range;
-        public float attacksPerSecond;
-        public int energyUsage;
-        public TowerEffectType towerEffect;
-        public int effectCount;
+        [SerializeField] private string towerName;
+        [SerializeField] private Sprite icon;
+        [SerializeField] private float maxHitPoints;
+        [SerializeField] private short damage;
+        [SerializeField] private TowerDamageType damageType;
+        [SerializeField] private float range;
+        [SerializeField] private float attacksPerSecond;
+        [SerializeField] private int energyUsage;
+        [SerializeField] private TowerEffectType towerEffect;
+        [SerializeField] private int effectCount;
 
         //Projectile Settings
-        public TowerProjectileType projectileType;
-        public int projectileAmount;
-        public byte projectileSpeed;
+        [SerializeField] private TowerProjectileType projectileType;
+        [SerializeField] private int projectileAmount;
+        [SerializeField] private float projectileSpeed;
 
         //Upgrade Settings
-        public TowerUpgradeSO upgrade;
+        [SerializeField] private TowerUpgradeSO upgrade;
 
         private bool _showUpgrades;
         private bool _newUpgrades;
@@ -51,7 +51,12 @@ namespace Editor
         //Warnings
         private readonly List<string> _warnings = new();
         private bool _hasErrors;
+        
+        private const string TowerSOPath = "Assets/03_SO/Tower";
+        private const string TowerPrefabPath = "Assets/04_Prefabs/Tower";
+        private const string ProjectilePath = "Assets/04_Prefabs/Projectiles";
 
+        #region Editor
         [MenuItem("Creation Tools/Tower Creation")]
         public static void ShowMyEditor()
         {
@@ -65,7 +70,7 @@ namespace Editor
         private void OnGUI()
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginVertical(GUILayout.Width(400));
 
             if (GUILayout.Button("Tower Settings"))
             {
@@ -107,8 +112,17 @@ namespace Editor
                 _hasErrors = CheckValidInput();
                 if (!_hasErrors)
                 {
-                    AssetDatabase.CreateFolder("Assets/03_SO/Tower", towerName);
-                    AssetDatabase.CreateFolder("Assets/04_Prefabs/Tower", towerName);
+                    var towerPath = $"{TowerSOPath}/{towerName}";
+                    if (!AssetDatabase.IsValidFolder(towerPath))
+                    {
+                        AssetDatabase.CreateFolder(TowerSOPath, towerName);
+                    }
+                    var prefabPath = $"{TowerPrefabPath}/{towerName}";
+                    if (!AssetDatabase.IsValidFolder(prefabPath))
+                    {
+                        AssetDatabase.CreateFolder(TowerPrefabPath, towerName);
+                    }
+                    
                     CreateTower();
                     CreateAttackData();
                     CreateProjectile();
@@ -122,7 +136,9 @@ namespace Editor
                 ShowWarning(_warnings);
             }
         }
+        #endregion
 
+        #region Setup
         private void TowerSetup()
         {
             towerName = EditorGUILayout.TextField(new GUIContent("Tower Name",
@@ -200,6 +216,10 @@ namespace Editor
                     EditorGUILayout.BeginVertical();
                     foreach (var item in _upgrades)
                     {
+                        if (item == null)
+                        {
+                            continue;
+                        }
                         EditorGUILayout.HelpBox(item.upgradeName, MessageType.None);
                     }
 
@@ -219,14 +239,18 @@ namespace Editor
                     upgrade = EditorGUILayout.ObjectField(new GUIContent("Upgrade Type",
                             "Choose one of the upgrades to add it to your tower"),
                         upgrade, typeof(TowerUpgradeSO), false) as TowerUpgradeSO;
-                    if (GUILayout.Button("Finish Upgrade"))
+                    if (upgrade != null)
                     {
-                        _upgrades.Add(upgrade);
-                        _newUpgrades = false;
+                        if (GUILayout.Button("Finish Upgrade"))
+                        {
+                            _upgrades.Add(upgrade);
+                            _newUpgrades = false;
+                        }
                     }
                 }
             }
         }
+        #endregion
 
         #region Creation
 
@@ -240,10 +264,10 @@ namespace Editor
             tempTower.AddComponent<TowerAttack>();
 
             var towerPrefab =
-                PrefabUtility.SaveAsPrefabAsset(tempTower, $"Assets/04_Prefabs/Tower/{towerName}/{towerName}.prefab");
+                PrefabUtility.SaveAsPrefabAsset(tempTower, $"{TowerPrefabPath}/{towerName}/{towerName}.prefab");
             DestroyImmediate(tempTower);
 
-            AssetDatabase.CreateAsset(_createdTowerBase, $"Assets/03_SO/Tower/{towerName}/{towerName}.asset");
+            AssetDatabase.CreateAsset(_createdTowerBase, $"{TowerSOPath}/{towerName}/{towerName}.asset");
             _createdTowerBase.towerName = towerName;
             _createdTowerBase.icon = icon;
             _createdTowerBase.towerPrefab = towerPrefab;
@@ -258,13 +282,12 @@ namespace Editor
 
             foreach (var towerUpgrade in _upgrades)
             {
-                CreateInstance<TowerUpgradeSO>();
                 _createdTowerBase.availableUpgrades.Add(towerUpgrade);
             }
 
             var runtime = towerPrefab.GetComponent<TowerRuntime>();
             var towerAsset =
-                AssetDatabase.LoadAssetAtPath<TowerBaseSO>($"Assets/03_SO/Tower/{towerName}/{towerName}.asset");
+                AssetDatabase.LoadAssetAtPath<TowerBaseSO>($"{TowerSOPath}/{towerName}/{towerName}.asset");
             runtime.TowerBase = towerAsset;
             PrefabUtility.SavePrefabAsset(towerPrefab);
         }
@@ -274,11 +297,11 @@ namespace Editor
             _createdProjectile = CreateInstance<ProjectileSO>();
 
             AssetDatabase.CreateAsset(_createdProjectile,
-                $"Assets/03_SO/Tower/{towerName}/{towerName}Projectile.asset");
+                $"{TowerSOPath}/{towerName}/{towerName}Projectile.asset");
             _createdProjectile.projectilePrefab =
                 AssetDatabase.LoadAssetAtPath<GameObject>(
-                    $"Assets/04_Prefabs/Projectiles/{projectileType.ToString()}.prefab");
-            _createdProjectile.speed = projectileSpeed;
+                    $"{ProjectilePath}/{projectileType.ToString()}.prefab");
+            _createdProjectile.speed = (byte)projectileSpeed;
         }
 
         private void CreateAttackData()
@@ -288,7 +311,7 @@ namespace Editor
             _createdAttackData.baseProjectileCount = projectileAmount;
             _createdAttackData.projectileType = projectileType;
             AssetDatabase.CreateAsset(_createdAttackData,
-                $"Assets/03_SO/Tower/{towerName}/{towerName}AttackData.asset");
+                $"{TowerSOPath}/{towerName}/{towerName}AttackData.asset");
         }
 
         private void AddConnections()
@@ -304,6 +327,10 @@ namespace Editor
         private bool CheckValidInput()
         {
             _warnings.Clear();
+            if (AssetDatabase.LoadAssetAtPath<TowerBaseSO>($"{TowerSOPath}/{towerName}/{towerName}.asset"))
+            {
+                _warnings.Add("Tower already exists.");
+            }
             if (string.IsNullOrWhiteSpace(towerName))
             {
                 _warnings.Add("Missing Tower Name");
@@ -342,6 +369,11 @@ namespace Editor
             if (projectileSpeed <= 0)
             {
                 _warnings.Add("Invalid Projectile Speed");
+            }
+
+            if (projectileAmount <= 0)
+            {
+                _warnings.Add("Invalid Projectile Amount");
             }
 
             return _warnings.Count != 0;
