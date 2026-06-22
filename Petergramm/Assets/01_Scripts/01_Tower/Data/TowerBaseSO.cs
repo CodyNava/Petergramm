@@ -11,7 +11,6 @@ namespace _01_Scripts._01_Tower.Data
       public GameObject towerPrefab;
       public TowerStats baseStats;
       public TowerAttackSO attackData;
-
       public List<TowerEffectModifier> innateEffects = new();
       public List<TowerUpgradeSO> availableUpgrades = new();
    }

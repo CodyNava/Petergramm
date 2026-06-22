@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0dc609779c5cca4d82e4f9b01d7843b, type: 3}
   m_Name: GlaiveProjectile
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.ProjectileSO
-  projectilePrefab: {fileID: 7441440908871300343, guid: 052f0d9a551166b458c44593c6566808, type: 3}
-  speed: 6
+  projectilePrefab: {fileID: 3169090002416453430, guid: 9b087ad3ee72dbd408584ba96bc2cc57, type: 3}
+  speed: 20

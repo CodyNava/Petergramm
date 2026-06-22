@@ -4,6 +4,7 @@ using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._01_Tower.RuntTime;
 using _01_Scripts._07_Enemy.Data;
 using _01_Scripts._08_GlobalManager.DamageRules;
+using _01_Scripts._08_GlobalManager.EnemyList;
 using UnityEngine;
 
 namespace _01_Scripts._07_Enemy.Runtime
@@ -27,7 +28,7 @@ namespace _01_Scripts._07_Enemy.Runtime
          if (!other.CompareTag("Projectile")) return;
          var projectileData = other.gameObject.GetComponent<ProjectileRuntime>();
          CalculateDamage(projectileData.Damage, (TowerDamageType)projectileData.DamageType);
-         Destroy(other.gameObject);
+         enemyRuntime.ApplySlow(projectileData.SlowPercent);
       }
 
       private void CalculateDamage(short damage, TowerDamageType damageType)
@@ -35,7 +36,6 @@ namespace _01_Scripts._07_Enemy.Runtime
          var finalDamage = enemyRuntime.EnemyBase.damageRules.GetFinalDamage(
             damage,
             damageType,
-            enemyRuntime.CurrentStats.armor.armorType,
             enemyRuntime.CurrentStats.armor
          );
          
@@ -50,7 +50,10 @@ namespace _01_Scripts._07_Enemy.Runtime
          this.currentHp = 0;
          this.Die();
       }
-
-      private void Die() => Destroy(this.gameObject);
+      private void Die()
+      {
+         EnemyList.RemoveEnemyFromList(this.gameObject);
+         this.gameObject.SetActive(false);
+      }
    }
 }

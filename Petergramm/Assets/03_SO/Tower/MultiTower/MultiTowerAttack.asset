@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: MultiTowerAttack
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.TowerAttackSO
   projectile: {fileID: 11400000, guid: 1b7debc7a8b1bc846b0f870f709f1de2, type: 2}
+  damageType: 0
   baseProjectileCount: 1
