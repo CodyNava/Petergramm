@@ -7,30 +7,77 @@ using UnityEngine;
 
 namespace _01_Scripts._02_Grid.GridData
 {
-   public class GridData : MonoBehaviour
-   {
+    public class GridData : MonoBehaviour
+    {
+        [SerializeField] private GridBase grid;
 
-      [SerializeField] private GridBase grid;
-      [SerializedDictionary("Coord", "TileData")] public SerializedDictionary<Vector3Int, GridTileData> placementCoords = new();
-      
-      public Dictionary<Vector3Int, GridTileData> PlacementCoords => placementCoords;
+        [SerializedDictionary("Coord", "TileData")]
+        public SerializedDictionary<Vector3Int, GridTileData> placementCoords = new();
 
-      [Button]
-      private void InitializeCoords()
-      {
-         placementCoords.Clear();
-         IReadOnlyList<Vector3Int> gridCoords = grid.SquareCoords;
-         
-         foreach (Vector3Int t in gridCoords) 
-            placementCoords.Add(t, new GridTileData());
-      }
-      
-   }
+        public Dictionary<Vector3Int, GridTileData> PlacementCoords => placementCoords;
 
-   [Serializable]
-   public class GridTileData
-   {
-      public bool isOccupied;
-      public GameObject occupant;
-   }
+        [Button]
+        private void InitializeCoords()
+        {
+            placementCoords.Clear();
+            IReadOnlyList<Vector3Int> gridCoords = grid.SquareCoords;
+
+            foreach (Vector3Int t in gridCoords)
+                placementCoords.Add(t, new GridTileData());
+        }
+
+        public bool IsValidCoord(Vector3Int coord)
+        {
+            return placementCoords.ContainsKey(coord);
+        }
+
+        public bool IsWalkable(Vector3Int coord)
+        {
+            return placementCoords.TryGetValue(coord, out GridTileData tileData)
+                   && !tileData.isOccupied;
+        }
+
+        public void ResetFlowData()
+        {
+            foreach (var (coord, tileData) in placementCoords)
+            {
+                tileData.flowDirection = Vector3Int.zero;
+                tileData.costToGoal = int.MaxValue;
+            }
+        }
+
+        public List<Vector3Int> GetNeighbours(Vector3Int coord)
+        {
+            List<Vector3Int> neighbours = new();
+            Vector3Int neighbourCoord = Vector3Int.zero;
+
+            // Upper
+            neighbourCoord = coord + new Vector3Int(0, 0, 1);
+            if (IsValidCoord(neighbourCoord)) neighbours.Add(neighbourCoord);
+
+            // Down
+            neighbourCoord = coord + new Vector3Int(0, 0, -1);
+            if (IsValidCoord(neighbourCoord)) neighbours.Add(neighbourCoord);
+
+            // Left
+            neighbourCoord = coord + new Vector3Int(-1, 0, 0);
+            if (IsValidCoord(neighbourCoord)) neighbours.Add(neighbourCoord);
+
+            // Right
+            neighbourCoord = coord + new Vector3Int(1, 0, 0);
+            if (IsValidCoord(neighbourCoord)) neighbours.Add(neighbourCoord);
+
+            return neighbours;
+        }
+    }
+
+    [Serializable]
+    public class GridTileData
+    {
+        public bool isOccupied;
+        public GameObject occupant;
+
+        public int costToGoal = int.MaxValue;
+        public Vector3Int flowDirection = Vector3Int.zero;
+    }
 }
