@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridRendering;
 using AYellowpaper.SerializedCollections;
 using NaughtyAttributes;
+using UnityEditor;
 using UnityEngine;
 
 namespace _01_Scripts._02_Grid.GridData
@@ -10,6 +11,9 @@ namespace _01_Scripts._02_Grid.GridData
     public class GridData : MonoBehaviour
     {
         [SerializeField] private GridBase grid;
+        [SerializeField] private Color color1;
+        [SerializeField] private Color color2;
+        [SerializeField] private float colorMultiply;
 
         [SerializedDictionary("Coord", "TileData")]
         public SerializedDictionary<Vector3Int, GridTileData> placementCoords = new();
@@ -79,10 +83,11 @@ namespace _01_Scripts._02_Grid.GridData
         {
             foreach (var coord in placementCoords)
             {
-                var newColor = new Color(0.1f , 0.1f, 0.1f, 0.1f);
+                
                 var coordFlow = coord.Value.costToGoal;
-                Gizmos.DrawWireCube(coord.Key + new Vector3Int(4,0,0), Vector3.one);
-                Gizmos.color = newColor * coordFlow;
+                Handles.color = Color.Lerp(color1, color2, coordFlow / colorMultiply)  ;
+                Handles.DrawSolidDisc(coord.Key , Vector3.up, 0.33f);
+                
                 
             }
         }

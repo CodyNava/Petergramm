@@ -3,7 +3,7 @@ using _01_Scripts._02_Grid.GridData;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace _01_Scripts._04_Pathfinding.FlowFieldBuilder
+namespace _01_Scripts._04_Pathfinding.FlowField
 {
     public class FlowFieldBuilder : MonoBehaviour
     {
