@@ -37,7 +37,7 @@ namespace _01_Scripts._03_Camera
             if (!isDragging)
                 return;
             var mouseDelta = InputManager.Input.Camera.MouseDelta.ReadValue<Vector2>();
-            var move = new Vector3(-mouseDelta.x, -mouseDelta.y, 0f);
+            var move = new Vector3(-mouseDelta.x, 0f, -mouseDelta.y);
             _camera.transform.position += move * panningSpeed * Time.deltaTime;
         }
 
