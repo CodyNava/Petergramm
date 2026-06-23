@@ -24,7 +24,6 @@ namespace _01_Scripts._01_Tower.Placement
 
         private void Update()
         {
-            if (!_isDragging) return;
             RayForTowerPosition();
 
             if (_tile == null) return;
@@ -32,7 +31,7 @@ namespace _01_Scripts._01_Tower.Placement
             TowerPlacement();
 
             //TowerDestroy
-            if (_tile.isOccupied && Mouse.current.rightButton.isPressed && Keyboard.current.leftShiftKey.isPressed)
+            if (Mouse.current.rightButton.isPressed)
             {
                 DestroyTower(_gridCoord);
             }
@@ -67,6 +66,7 @@ namespace _01_Scripts._01_Tower.Placement
             if (Mouse.current.rightButton.isPressed)
             {
                 DespawnTower();
+                return;
             }
 
             if (!_tile.isOccupied)
@@ -89,6 +89,7 @@ namespace _01_Scripts._01_Tower.Placement
 
         private void DespawnTower()
         {
+            if (!_draggingTower) return;
             Destroy(_draggingTower);
             _draggingTower = null;
             _isDragging = false;
@@ -119,6 +120,7 @@ namespace _01_Scripts._01_Tower.Placement
         private void DestroyTower(Vector3Int gridCoord)
         {
             var placementCoords = gridData.PlacementCoords[gridCoord];
+            if (!placementCoords.isOccupied) return;
             Destroy(placementCoords.occupant.gameObject);
             placementCoords.isOccupied = false;
             placementCoords.occupant = null;
