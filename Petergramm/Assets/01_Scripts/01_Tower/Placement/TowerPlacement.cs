@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
+using _01_Scripts._04_Pathfinding.FlowFieldBuilder;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,7 @@ namespace _01_Scripts._01_Tower.Placement
     {
         [SerializeField] private List<GameObject> towerPrefab = new();
         [SerializeField] private GridData gridData;
+        [SerializeField] private FlowFieldBuilder flowFieldBuilder;
         [SerializeField] private Camera cam;
 
 
@@ -17,8 +19,9 @@ namespace _01_Scripts._01_Tower.Placement
         private GridTileData _tile;
         private Vector3Int _gridCoord = Vector3Int.zero;
 
-        
+
         private void Start() => cam = Camera.main;
+
         private void Update()
         {
             if (!_isDragging) return;
@@ -39,7 +42,7 @@ namespace _01_Scripts._01_Tower.Placement
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             if (!cam) return;
-            
+
             Ray ray = cam.ScreenPointToRay(mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerMask.GetMask("Grid")))
@@ -98,7 +101,7 @@ namespace _01_Scripts._01_Tower.Placement
             _draggingTower.transform.position = gridCoord;
             placementCoords.isOccupied = true;
             placementCoords.occupant = _draggingTower;
-            
+
             //todo energy needs to increase based on towers energy stat
             //todo and a energy global stat is needed
 
@@ -110,6 +113,7 @@ namespace _01_Scripts._01_Tower.Placement
             }
 
             _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
+            flowFieldBuilder.BuildFlowField();
         }
 
         private void DestroyTower(Vector3Int gridCoord)
@@ -118,6 +122,7 @@ namespace _01_Scripts._01_Tower.Placement
             Destroy(placementCoords.occupant.gameObject);
             placementCoords.isOccupied = false;
             placementCoords.occupant = null;
+            flowFieldBuilder.BuildFlowField();
         }
     }
 }
