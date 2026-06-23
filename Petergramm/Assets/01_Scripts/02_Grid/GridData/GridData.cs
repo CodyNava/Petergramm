@@ -46,6 +46,11 @@ namespace _01_Scripts._02_Grid.GridData
             }
         }
 
+        public bool TryGetTileData(Vector3Int coord, out GridTileData tileData)
+        {
+            return placementCoords.TryGetValue(coord, out tileData);
+        }
+
         public List<Vector3Int> GetNeighbours(Vector3Int coord)
         {
             List<Vector3Int> neighbours = new();
