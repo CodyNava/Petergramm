@@ -107158,7 +107158,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 309a44090c67f2b4093333abfd2dc1fa, type: 3}
---- !u!43 &201908458
+--- !u!43 &198321117
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110509,11 +110509,11 @@ MonoBehaviour:
   xSize: 23
   ySize: 20
   squareSize: 0.8
-  debuggingOn: 1
+  debuggingOn: 0
   squareColor:
     serializedVersion: 2
     rgba: 385875967
-  gridMesh: {fileID: 201908458}
+  gridMesh: {fileID: 198321117}
 --- !u!23 &432079138
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -110570,7 +110570,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 432079136}
-  m_Mesh: {fileID: 201908458}
+  m_Mesh: {fileID: 198321117}
 --- !u!4 &432079140
 Transform:
   m_ObjectHideFlags: 0
