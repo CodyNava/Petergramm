@@ -670,7 +670,7 @@ GameObject:
   - component: {fileID: 3146787243758925424}
   - component: {fileID: 3347657414576742145}
   - component: {fileID: 6728422432431982376}
-  - component: {fileID: 8309934843971509816}
+  - component: {fileID: 5816165064847322413}
   m_Layer: 0
   m_Name: Ghost_Simple
   m_TagString: Enemy
@@ -783,8 +783,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 1
---- !u!65 &8309934843971509816
-BoxCollider:
+--- !u!136 &5816165064847322413
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -801,9 +801,11 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.3, y: 1.16, z: 0.3}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.05
+  m_Height: 1.2728162
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.36, z: 0}
 --- !u!1 &7059464663329818607
 GameObject:
   m_ObjectHideFlags: 0

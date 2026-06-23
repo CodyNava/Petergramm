@@ -25,6 +25,8 @@ MonoBehaviour:
   attackData: {fileID: 11400000, guid: c526ab00e5c6f354cb9db1359268b5af, type: 2}
   innateEffects:
   - effectType: 0
+    value: 3
+  - effectType: 2
     value: 4
   availableUpgrades:
   - {fileID: 11400000, guid: 12376d313d24ae74194b96984d2791ff, type: 2}

@@ -5,9 +5,10 @@ namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
 {
    public class BasketballProjectile : ProjectileRuntime
    {
-      private void Update()
+      private void FixedUpdate()
       {
          Refresh();
+         Detection();
          // if (!Target) ReturnToPool();
       }
 
@@ -17,9 +18,10 @@ namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
          GenericPool<BasketballProjectile>.ReturnToPool(this);
       }
 
-      private void OnTriggerEnter(Collider other)
+      private void Detection()
       {
-         if (!other.CompareTag("Enemy")) return;
+         if (!DetectCollisions()) return;
+         if (FindTargetToBounce()) return;
          ReturnToPool();
       }
    }
