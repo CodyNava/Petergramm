@@ -74,7 +74,21 @@ namespace _01_Scripts._02_Grid.GridData
 
             return neighbours;
         }
+        
+        public void OnDrawGizmos()
+        {
+            foreach (var coord in placementCoords)
+            {
+                var newColor = new Color(0.1f , 0.1f, 0.1f, 0.1f);
+                var coordFlow = coord.Value.costToGoal;
+                Gizmos.DrawWireCube(coord.Key + new Vector3Int(4,0,0), Vector3.one);
+                Gizmos.color = newColor * coordFlow;
+                
+            }
+        }
     }
+    
+    
 
     [Serializable]
     public class GridTileData
