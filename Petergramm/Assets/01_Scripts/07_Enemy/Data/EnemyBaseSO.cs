@@ -8,7 +8,7 @@ namespace _01_Scripts._07_Enemy.Data
    {
       public DamageEquationDataSO damageRules;
       public GameObject prefab;
-      public new string name;
+      public string enemyName;
       
       public EnemyPassive[] passives;
       public EnemyAbility[] abilities;
