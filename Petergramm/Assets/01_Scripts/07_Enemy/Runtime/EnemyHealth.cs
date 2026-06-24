@@ -1,9 +1,5 @@
-using System;
 using _01_Scripts._01_Tower.Data;
 using _01_Scripts._01_Tower.Projectiles;
-using _01_Scripts._01_Tower.RuntTime;
-using _01_Scripts._07_Enemy.Data;
-using _01_Scripts._08_GlobalManager.DamageRules;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using UnityEngine;
 
@@ -14,6 +10,11 @@ namespace _01_Scripts._07_Enemy.Runtime
       [SerializeField] private EnemyRuntime enemyRuntime;
       [SerializeField] private float currentHp, maxHp;
       private void Start() => RefreshHp();
+
+      private void OnValidate()
+      {
+         enemyRuntime = this.GetComponent<EnemyRuntime>();
+      }
 
       private void RefreshHp()
       {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using _01_Scripts._08_GlobalManager.DamageRules;
 using UnityEngine;
 
@@ -10,8 +11,8 @@ namespace _01_Scripts._07_Enemy.Data
       public GameObject prefab;
       public string enemyName;
       
-      public EnemyPassive[] passives;
-      public EnemyAbility[] abilities;
+      public List<EnemyPassive> passives = new();
+      public List<EnemyAbility> abilities = new();
       public EnemyStats stats;
    }
 }

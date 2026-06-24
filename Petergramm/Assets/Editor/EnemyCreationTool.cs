@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using _01_Scripts._07_Enemy.Data;
+using _01_Scripts._07_Enemy.Runtime;
+using _01_Scripts._08_GlobalManager.DamageRules;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,12 +11,19 @@ namespace Editor
     {
         //General Settings
         [SerializeField] private string enemyName;
+        [SerializeField] private GameObject enemyPrefab;
         [SerializeField] private int hitpoints;
         [SerializeField] private float damage;
         [SerializeField] private float range;
         [SerializeField] private float attacksPerSecond;
+        
+        //Movement Settings
         [SerializeField] private EnemyMovementTypes movement;
+        [SerializeField] private float movementSpeed;
+        
+        //Armor Settings
         [SerializeField] private EnemyArmorTypes armor;
+        [SerializeField] private float armorStrength;
 
         //Passive Settings
         [SerializeField] private EnemyPassiveTypes passive;
@@ -41,7 +50,7 @@ namespace Editor
         private Page _currentPage;
 
         //Warnings
-        private readonly List<string> _generalWarnings = new();
+        private readonly List<string> _allWaringins = new();
         private readonly List<string> _passiveWarnings = new();
         private readonly List<string> _abilityWarnings = new();
         private bool _hasErrors;
@@ -50,7 +59,6 @@ namespace Editor
         private const string EnemyPrefabPath = "Assets/04_Prefabs/Enemies";
 
         #region Editor
-
         [MenuItem("Creation Tools/Enemy Creation")]
         public static void ShowWindow()
         {
@@ -104,7 +112,7 @@ namespace Editor
             if (GUILayout.Button("Create Enemy"))
             {
                 CheckValidInput();
-                if (_generalWarnings.Count == 0)
+                if (_allWaringins.Count == 0)
                 {
                     var enemyPath = $"{EnemySOPath}/{enemyName}";
                     if (!AssetDatabase.IsValidFolder(enemyPath))
@@ -123,18 +131,51 @@ namespace Editor
                 }
                 else
                 {
-                    ShowWarning(_generalWarnings);
+                    ShowWarning(_allWaringins);
                 }
             }
         }
-
         #endregion
 
         #region Setup
-
         private void EnemySetup()
         {
-            throw new System.NotImplementedException();
+            enemyName = EditorGUILayout.TextField(new GUIContent("Enemy Name",
+                    "The name this enemy is supposed to have in-game.\n" +
+                    "<b>This field cannot be left empty.</b>"),
+                enemyName);
+            enemyPrefab = EditorGUILayout.ObjectField(new GUIContent("Enemy Prefab",
+                "The visual prefab for this enemy.\n" +
+                "<b>This cannot be left empty.</b>"),
+                enemyPrefab, typeof(GameObject), false) as GameObject;
+            hitpoints = EditorGUILayout.IntSlider(new GUIContent("Maxiumum HP",
+                    "The amount of hit points this enemy is supposed to have.\n" +
+                    "<b>This value cannot be 0.</b>"),
+                hitpoints, 0, 100);
+            damage = EditorGUILayout.Slider(new GUIContent("Damage",
+                    "The amoung of damage this enemy is supposed to deal.\n" +
+                    "<b>This value cannot be 0.</b>"),
+                damage, 0f, 100f);
+            range = EditorGUILayout.Slider(new GUIContent("Range",
+                    "The attack range of this enemy.\n" +
+                    "<b>This value cannot be 0.</b>"),
+                range, 0f, 50f);
+            attacksPerSecond = EditorGUILayout.Slider(new GUIContent("Attacks per Second",
+                    "How many attacks this enemy can do per second.\n" +
+                    "<b>This value cannot be 0.</b>"),
+                attacksPerSecond, 0f, 20f);
+            movement = (EnemyMovementTypes)EditorGUILayout.EnumPopup(new GUIContent("Movement Type",
+                "How is this enemy supposed to move."), movement);
+            movementSpeed = EditorGUILayout.Slider(new GUIContent("Movement Speed",
+                    "How fast is this enemy supposed to be moving?\n" +
+                    "<b>This value cannot be 0.</b>"),
+                movementSpeed, 0f, 10f);
+            armor = (EnemyArmorTypes)EditorGUILayout.EnumPopup(new GUIContent("Armor Type",
+                    "The type of armor the enemy is supposed to have."), armor);
+            armorStrength = EditorGUILayout.Slider(new GUIContent("Armor Strength",
+                    "The strength of the armor. A higher strength means less damage.\n" +
+                    "<b>This value cannot be 0.</b>"),
+                armorStrength, 0f, 10f);
         }
 
         private void PassivesSetup()
@@ -249,23 +290,58 @@ namespace Editor
                 }
             }
         }
-
         #endregion
 
         #region Creation
-
         private void CreateEnemy()
         {
-            throw new System.NotImplementedException();
-        }
+            _createdEnemyBase = CreateInstance<EnemyBaseSO>();
+            
+            var tempEnemy = new GameObject();
+            tempEnemy.AddComponent<EnemyRuntime>();
+            tempEnemy.AddComponent<EnemyAttack>();
+            tempEnemy.AddComponent<EnemyHealth>();
 
+            var enemyPreFab =
+                PrefabUtility.SaveAsPrefabAsset(tempEnemy, $"{EnemyPrefabPath}/{enemyName}/{enemyName}.prefab");
+            DestroyImmediate(tempEnemy);
+            
+            AssetDatabase.CreateAsset(_createdEnemyBase, $"{EnemySOPath}/{enemyName}/{enemyName}.asset");
+            _createdEnemyBase.enemyName = enemyName;
+            _createdEnemyBase.damageRules =
+                AssetDatabase.LoadAssetAtPath<DamageEquationDataSO>($"Assets/03_SO/EquationRules/DamageRules.asset");
+            _createdEnemyBase.prefab = enemyPreFab;
+            _createdEnemyBase.stats.maxHp = hitpoints;
+            _createdEnemyBase.stats.damage = damage;
+            _createdEnemyBase.stats.attacksPerSecond = attacksPerSecond;
+            _createdEnemyBase.stats.range = range;
+            var newMovement = new EnemyMovement{movementType =  movement, moveSpeed =  movementSpeed};
+            _createdEnemyBase.stats.movement = newMovement;
+            var newArmor = new EnemyArmor { armorType = armor, armorValue = armorStrength };
+            _createdEnemyBase.stats.armor = newArmor;
+
+            foreach (var pass in _passives)
+            {
+                _createdEnemyBase.passives.Add(pass);
+            }
+
+            foreach (var abilitie in _abilities)
+            {
+                _createdEnemyBase.abilities.Add(abilitie);
+            }
+
+            var runtime = enemyPreFab.GetComponent<EnemyRuntime>();
+            var enemyAsset = AssetDatabase.LoadAssetAtPath<EnemyBaseSO>($"{EnemySOPath}/{enemyName}/{enemyName}.asset");
+            runtime.EnemyBase = enemyAsset;
+            PrefabUtility.SavePrefabAsset(enemyPreFab);
+        }
         #endregion
 
         #region InputValidation
 
         private void CheckValidInput()
         {
-            _generalWarnings.Clear();
+            _allWaringins.Clear();
             _passiveWarnings.Clear();
             _abilityWarnings.Clear();
         }
