@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
-using _01_Scripts._04_Pathfinding.FlowFieldBuilder;
+using _01_Scripts._04_Pathfinding.FlowField;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -106,15 +106,16 @@ namespace _01_Scripts._01_Tower.Placement
             //todo energy needs to increase based on towers energy stat
             //todo and a energy global stat is needed
 
+
+            _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
+            flowFieldBuilder.BuildFlowField();
+            
             if (!Keyboard.current.leftShiftKey.isPressed)
             {
                 _isDragging = false;
                 _draggingTower = null;
-                return;
+                
             }
-
-            _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
-            flowFieldBuilder.BuildFlowField();
         }
 
         private void DestroyTower(Vector3Int gridCoord)
