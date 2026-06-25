@@ -16,11 +16,11 @@ namespace Editor
         [SerializeField] private float damage;
         [SerializeField] private float range;
         [SerializeField] private float attacksPerSecond;
-        
+
         //Movement Settings
         [SerializeField] private EnemyMovementTypes movement;
         [SerializeField] private float movementSpeed;
-        
+
         //Armor Settings
         [SerializeField] private EnemyArmorTypes armor;
         [SerializeField] private float armorStrength;
@@ -31,8 +31,9 @@ namespace Editor
 
         private bool _showPassives;
         private bool _newPassive;
+        private bool _passiveErrors;
 
-        //Abilitiy Settings
+        //Ability Settings
         [SerializeField] private EnemyAbilityTypes ability;
         [SerializeField] private float amount;
         [SerializeField] private float frequency;
@@ -40,6 +41,7 @@ namespace Editor
 
         private bool _showAbilities;
         private bool _newAbility;
+        private bool _abilityErrors;
 
         //For Creation
         private EnemyBaseSO _createdEnemyBase;
@@ -59,6 +61,7 @@ namespace Editor
         private const string EnemyPrefabPath = "Assets/04_Prefabs/Enemies";
 
         #region Editor
+
         [MenuItem("Creation Tools/Enemy Creation")]
         public static void ShowWindow()
         {
@@ -111,8 +114,8 @@ namespace Editor
             EditorGUILayout.Space();
             if (GUILayout.Button("Create Enemy"))
             {
-                CheckValidInput();
-                if (_allWaringins.Count == 0)
+                _hasErrors = CheckValidInput();
+                if (!_hasErrors)
                 {
                     var enemyPath = $"{EnemySOPath}/{enemyName}";
                     if (!AssetDatabase.IsValidFolder(enemyPath))
@@ -129,15 +132,18 @@ namespace Editor
                     CreateEnemy();
                     AssetDatabase.SaveAssets();
                 }
-                else
-                {
-                    ShowWarning(_allWaringins);
-                }
+            }
+
+            if (_hasErrors)
+            {
+                ShowWarning(_allWaringins);
             }
         }
+
         #endregion
 
         #region Setup
+
         private void EnemySetup()
         {
             enemyName = EditorGUILayout.TextField(new GUIContent("Enemy Name",
@@ -145,15 +151,15 @@ namespace Editor
                     "<b>This field cannot be left empty.</b>"),
                 enemyName);
             enemyPrefab = EditorGUILayout.ObjectField(new GUIContent("Enemy Prefab",
-                "The visual prefab for this enemy.\n" +
-                "<b>This cannot be left empty.</b>"),
+                    "The visual prefab for this enemy.\n" +
+                    "<b>This cannot be left empty.</b>"),
                 enemyPrefab, typeof(GameObject), false) as GameObject;
-            hitpoints = EditorGUILayout.IntSlider(new GUIContent("Maxiumum HP",
+            hitpoints = EditorGUILayout.IntSlider(new GUIContent("Maximum HP",
                     "The amount of hit points this enemy is supposed to have.\n" +
                     "<b>This value cannot be 0.</b>"),
                 hitpoints, 0, 100);
             damage = EditorGUILayout.Slider(new GUIContent("Damage",
-                    "The amoung of damage this enemy is supposed to deal.\n" +
+                    "The amount of damage this enemy is supposed to deal.\n" +
                     "<b>This value cannot be 0.</b>"),
                 damage, 0f, 100f);
             range = EditorGUILayout.Slider(new GUIContent("Range",
@@ -171,7 +177,7 @@ namespace Editor
                     "<b>This value cannot be 0.</b>"),
                 movementSpeed, 0f, 10f);
             armor = (EnemyArmorTypes)EditorGUILayout.EnumPopup(new GUIContent("Armor Type",
-                    "The type of armor the enemy is supposed to have."), armor);
+                "The type of armor the enemy is supposed to have."), armor);
             armorStrength = EditorGUILayout.Slider(new GUIContent("Armor Strength",
                     "The strength of the armor. A higher strength means less damage.\n" +
                     "<b>This value cannot be 0.</b>"),
@@ -211,8 +217,8 @@ namespace Editor
                         "How strong the effect of your passive is."), passiveStrength, 0f, 5f);
                     if (GUILayout.Button("Add Passive"))
                     {
-                        CheckValidInput();
-                        if (_passiveWarnings.Count == 0)
+                        _passiveErrors = CheckValidInput();
+                        if (!_passiveErrors)
                         {
                             var newPassive = new EnemyPassive
                             {
@@ -222,10 +228,11 @@ namespace Editor
                             _passives.Add(newPassive);
                             _newPassive = false;
                         }
-                        else
-                        {
-                            ShowWarning(_passiveWarnings);
-                        }
+                    }
+
+                    if (_passiveErrors)
+                    {
+                        ShowWarning(_passiveWarnings);
                     }
                 }
             }
@@ -261,16 +268,17 @@ namespace Editor
                     ability = (EnemyAbilityTypes)EditorGUILayout.EnumPopup(new GUIContent("Ability",
                         "Choose one ability for the enemy."), ability);
                     amount = EditorGUILayout.Slider(new GUIContent("Amount",
-                        "How many times the ability is triggered in a single use."),
+                            "How many times the ability is triggered in a single use."),
                         amount, 0f, 10f);
                     frequency = EditorGUILayout.Slider(new GUIContent("Frequency",
                         "How often the ability is cast."), frequency, 0f, 10f);
                     summonPrefab = EditorGUILayout.ObjectField(new GUIContent("Summon Type",
-                        "What monster is summoned by the ability"), summonPrefab, typeof(GameObject), false) as GameObject;
+                            "What monster is summoned by the ability"), summonPrefab, typeof(GameObject),
+                        false) as GameObject;
                     if (GUILayout.Button("Add Ability"))
                     {
-                        CheckValidInput();
-                        if (_abilityWarnings.Count == 0)
+                        _abilityErrors = CheckValidInput();
+                        if (!_abilityErrors)
                         {
                             var newAbility = new EnemyAbility
                             {
@@ -282,21 +290,24 @@ namespace Editor
                             _abilities.Add(newAbility);
                             _newAbility = false;
                         }
-                        else
-                        {
-                            ShowWarning(_abilityWarnings);
-                        }
+                        
+                    }
+                    if (_abilityErrors)
+                    {
+                        ShowWarning(_abilityWarnings);
                     }
                 }
             }
         }
+
         #endregion
 
         #region Creation
+
         private void CreateEnemy()
         {
             _createdEnemyBase = CreateInstance<EnemyBaseSO>();
-            
+
             var tempEnemy = new GameObject();
             tempEnemy.AddComponent<EnemyRuntime>();
             tempEnemy.AddComponent<EnemyAttack>();
@@ -305,7 +316,7 @@ namespace Editor
             var enemyPreFab =
                 PrefabUtility.SaveAsPrefabAsset(tempEnemy, $"{EnemyPrefabPath}/{enemyName}/{enemyName}.prefab");
             DestroyImmediate(tempEnemy);
-            
+
             AssetDatabase.CreateAsset(_createdEnemyBase, $"{EnemySOPath}/{enemyName}/{enemyName}.asset");
             _createdEnemyBase.enemyName = enemyName;
             _createdEnemyBase.damageRules =
@@ -315,7 +326,7 @@ namespace Editor
             _createdEnemyBase.stats.damage = damage;
             _createdEnemyBase.stats.attacksPerSecond = attacksPerSecond;
             _createdEnemyBase.stats.range = range;
-            var newMovement = new EnemyMovement{movementType =  movement, moveSpeed =  movementSpeed};
+            var newMovement = new EnemyMovement { movementType = movement, moveSpeed = movementSpeed };
             _createdEnemyBase.stats.movement = newMovement;
             var newArmor = new EnemyArmor { armorType = armor, armorValue = armorStrength };
             _createdEnemyBase.stats.armor = newArmor;
@@ -325,9 +336,9 @@ namespace Editor
                 _createdEnemyBase.passives.Add(pass);
             }
 
-            foreach (var abilitie in _abilities)
+            foreach (var item in _abilities)
             {
-                _createdEnemyBase.abilities.Add(abilitie);
+                _createdEnemyBase.abilities.Add(item);
             }
 
             var runtime = enemyPreFab.GetComponent<EnemyRuntime>();
@@ -335,15 +346,81 @@ namespace Editor
             runtime.EnemyBase = enemyAsset;
             PrefabUtility.SavePrefabAsset(enemyPreFab);
         }
+
         #endregion
 
         #region InputValidation
 
-        private void CheckValidInput()
+        private bool CheckValidInput()
         {
             _allWaringins.Clear();
             _passiveWarnings.Clear();
             _abilityWarnings.Clear();
+
+            if (AssetDatabase.LoadAssetAtPath<EnemyBaseSO>($"{EnemySOPath}/{enemyName}/{enemyName}.asset"))
+            {
+                _allWaringins.Add("Enemy already exists.");
+            }
+
+            if (string.IsNullOrWhiteSpace(enemyName))
+            {
+                _allWaringins.Add("Missing Enemy Name.");
+            }
+
+            if (enemyPrefab == null)
+            {
+                _allWaringins.Add("Missing Enemy Prefab.");
+            }
+
+            if (hitpoints <= 0)
+            {
+                _allWaringins.Add("Hit Points cannot be 0.");
+            }
+
+            if (damage <= 0)
+            {
+                _allWaringins.Add("Damage cannot be 0.");
+            }
+
+            if (range <= 0)
+            {
+                _allWaringins.Add("Range cannot be 0.");
+            }
+
+            if (attacksPerSecond <= 0)
+            {
+                _allWaringins.Add("AttacksPerSecond cannot be 0.");
+            }
+
+            if (movementSpeed <= 0)
+            {
+                _allWaringins.Add("Movement speed cannot be 0.");
+            }
+
+            if (armorStrength <= 0)
+            {
+                _allWaringins.Add("ArmorStrength cannot be 0.");
+            }
+
+            if (passiveStrength <= 0)
+            {
+                _allWaringins.Add("Passive Strength cannot be 0.");
+                _passiveWarnings.Add("Passive Strength cannot be 0.");
+            }
+
+            if (amount <= 0)
+            {
+                _allWaringins.Add("Ability Amount cannot be 0.");
+                _abilityWarnings.Add("Ability Amount cannot be 0.");
+            }
+
+            if (frequency <= 0)
+            {
+                _allWaringins.Add("Ability Frequency cannot be 0.");
+                _abilityWarnings.Add("Ability Frequency cannot be 0.");
+            }
+
+            return _allWaringins.Count != 0 || _passiveWarnings.Count != 0 || _abilityWarnings.Count != 0;
         }
 
         private void ShowWarning(List<string> warnings)
