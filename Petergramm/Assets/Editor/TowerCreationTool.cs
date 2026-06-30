@@ -11,7 +11,10 @@ namespace Editor
     {
         Tower,
         Projectile,
-        Upgrade
+        Upgrade,
+        Enemy,
+        Abilities,
+        Passives
     }
 
     public class TowerCreationTool : EditorWindow
@@ -322,7 +325,7 @@ namespace Editor
 
         #endregion
 
-        #region InputChecks
+        #region InputValidation
 
         private bool CheckValidInput()
         {
