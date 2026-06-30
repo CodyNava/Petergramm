@@ -22,6 +22,7 @@ namespace Editor
         //General Stats
         [SerializeField] private string towerName;
         [SerializeField] private Sprite icon;
+        [SerializeField] private GameObject towerBaseDesign;
         [SerializeField] private float maxHitPoints;
         [SerializeField] private short damage;
         [SerializeField] private TowerDamageType damageType;
@@ -148,6 +149,10 @@ namespace Editor
                     "The name the tower is supposed to have in-game.\n" +
                     "<b>This field cannot be left empty</b>"),
                 towerName);
+            towerBaseDesign = EditorGUILayout.ObjectField(new GUIContent("Tower Design",
+                "The design of the tower in-game.\n" + 
+                "<b>This field cannot be left empty.</b>"),
+                towerBaseDesign, typeof(GameObject), false) as GameObject;
             icon = EditorGUILayout.ObjectField(new GUIContent("Icon",
                     "The icon the tower is supposed to have in-game.\n" +
                     "<b>This field cannot be left empty</b>"),
@@ -265,6 +270,8 @@ namespace Editor
             tempTower.AddComponent<TowerRuntime>();
             tempTower.AddComponent<TowerHealth>();
             tempTower.AddComponent<TowerAttack>();
+            Instantiate(towerBaseDesign,  tempTower.transform);
+            
 
             var towerPrefab =
                 PrefabUtility.SaveAsPrefabAsset(tempTower, $"{TowerPrefabPath}/{towerName}/{towerName}.prefab");
