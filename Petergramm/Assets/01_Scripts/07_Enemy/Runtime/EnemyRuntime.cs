@@ -16,7 +16,11 @@ namespace _01_Scripts._07_Enemy.Runtime
 
         //Getter
         public EnemyStats CurrentStats => this.currentStats;
-        public EnemyBaseSO EnemyBase => enemyBase;
+        public EnemyBaseSO EnemyBase
+        {
+            get => enemyBase;
+            set => enemyBase = value;
+        }
 
         private void Awake()
         {

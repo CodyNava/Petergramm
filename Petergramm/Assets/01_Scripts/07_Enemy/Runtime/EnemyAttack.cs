@@ -8,6 +8,11 @@ namespace _01_Scripts._07_Enemy.Runtime
         [SerializeField] private EnemyRuntime enemyRuntime;
         private float _cd;
 
+        private void OnValidate()
+        {
+            enemyRuntime = this.GetComponent<EnemyRuntime>();
+        }
+
         private void Update()
         {
             this._cd -= Time.deltaTime;
