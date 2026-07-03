@@ -9,6 +9,7 @@ namespace _01_Scripts._07_Enemy.Runtime
    {
       [SerializeField] private EnemyRuntime enemyRuntime;
       [SerializeField] private float currentHp, maxHp;
+      [SerializeField] private Animator  animator;
       private void Start() => RefreshHp();
 
       private void OnValidate()
@@ -54,6 +55,12 @@ namespace _01_Scripts._07_Enemy.Runtime
       private void Die()
       {
          EnemyList.RemoveEnemyFromList(this.gameObject);
+         animator.SetTrigger("Died");
+        // this.gameObject.SetActive(false);
+      }
+      
+      public void DestroyOnAnimationEnd()
+      {
          this.gameObject.SetActive(false);
       }
    }
