@@ -32,6 +32,8 @@ namespace Editor
         [SerializeField] private TowerEffectType towerEffect;
         [SerializeField] private int effectCount;
 
+        private List<GameObject> _towerDesigns = new();
+
         //Projectile Settings
         [SerializeField] private TowerProjectileType projectileType;
         [SerializeField] private int projectileAmount;
@@ -149,10 +151,8 @@ namespace Editor
                     "The name the tower is supposed to have in-game.\n" +
                     "<b>This field cannot be left empty</b>"),
                 towerName);
-            towerBaseDesign = EditorGUILayout.ObjectField(new GUIContent("Tower Design",
-                "The design of the tower in-game.\n" + 
-                "<b>This field cannot be left empty.</b>"),
-                towerBaseDesign, typeof(GameObject), false) as GameObject;
+            _towerDesigns = FetchTowerDesigns();
+            TowerDesignField();
             icon = EditorGUILayout.ObjectField(new GUIContent("Icon",
                     "The icon the tower is supposed to have in-game.\n" +
                     "<b>This field cannot be left empty</b>"),
@@ -193,6 +193,21 @@ namespace Editor
                     "How many times the effect can occur/How strong the effect is."),
                 effectCount, 0, 5);
         }
+
+        private List<GameObject> FetchTowerDesigns()
+        {
+            var guids = AssetDatabase.FindAssets("t:GameObject", new[] { "Assets/04_Prefabs/Tower" });
+            var prefabs = new List<GameObject>();
+
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                prefabs.Add(prefab);
+            }
+            return prefabs;
+        }
+
 
         private void ProjectileSetup()
         {
@@ -397,6 +412,43 @@ namespace Editor
             }
         }
 
+        #endregion
+        
+        #region Misc
+
+        private void TowerDesignField()
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUI.enabled = false;
+            EditorGUILayout.ObjectField(new GUIContent("Tower Design"),
+                towerBaseDesign,
+                typeof(GameObject), false);
+            GUI.enabled = true;
+
+            if (GUILayout.Button(EditorGUIUtility.IconContent("d_pick"), GUILayout.Width(20)))
+            {
+                ShowTowerMenu();
+            }
+            
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void ShowTowerMenu()
+        {
+            var menu = new GenericMenu();
+
+            foreach (var tower in _towerDesigns)
+            {
+                menu.AddItem(new GUIContent(tower.name),
+                    tower == towerBaseDesign,
+                    () =>
+                    {
+                        towerBaseDesign = tower;
+                        Repaint();
+                    });
+            }
+            menu.ShowAsContext();
+        }
         #endregion
     }
 }
