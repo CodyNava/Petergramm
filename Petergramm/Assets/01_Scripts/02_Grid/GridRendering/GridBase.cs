@@ -120,5 +120,10 @@ namespace _01_Scripts._02_Grid.GridRendering
                 Mathf.RoundToInt(relativePos.z)
             );
         }
+
+        public void GridToWorld(Vector3Int gridCoord, out Vector3 worldPos)
+        {
+            worldPos = _gridStartPos + gridCoord;
+        }
     }
 }
