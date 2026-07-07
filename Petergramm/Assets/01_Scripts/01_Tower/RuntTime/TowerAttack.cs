@@ -30,7 +30,7 @@ namespace _01_Scripts._01_Tower.RuntTime
       private void OnValidate()
       {
          towerRuntime = this.GetComponent<TowerRuntime>();
-         _projSpawnTransform = this.GetComponentInChildren<Transform>().GetChild(0).transform;
+         _projSpawnTransform = this.GetComponentInChildren<Transform>().GetChild(0).GetChild(0).transform;
       }
 
       // private void OnDrawGizmos()
@@ -89,6 +89,22 @@ namespace _01_Scripts._01_Tower.RuntTime
                case TowerProjectileType.Baseball:
                   projectileObject =
                      GenericPool<BaseballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
+               break;
+               case TowerProjectileType.Football:
+                  projectileObject =
+                     GenericPool<FootballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
+               break;
+               case TowerProjectileType.Golfball:
+                  projectileObject =
+                     GenericPool<GolfballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
+               break;
+               case TowerProjectileType.Soccerball:
+                  projectileObject =
+                     GenericPool<SoccerballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
+                  break;
+               case TowerProjectileType.Tennisball:
+                  projectileObject =
+                     GenericPool<TennisballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
                break;
                default:
                   projectileObject =

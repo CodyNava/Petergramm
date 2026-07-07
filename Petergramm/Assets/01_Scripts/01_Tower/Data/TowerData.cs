@@ -30,7 +30,11 @@ namespace _01_Scripts._01_Tower.Data
    public enum TowerProjectileType
    {
       Basketball,
-      Baseball
+      Baseball,
+      Tennisball,
+      Soccerball,
+      Golfball,
+      Football
    }
    
    //Hier nutze ich structs da diese nur value types sind

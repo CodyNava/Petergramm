@@ -33,6 +33,8 @@ namespace _01_Scripts._01_Tower.RuntTime
          this.Die();
       }
 
+   
+
       private void Die() => Destroy(this.gameObject);
    }
 }
