@@ -39,6 +39,8 @@ namespace _01_Scripts._07_Enemy.Runtime
             currentStats.range = enemyBase.stats.range;
         }
 
+        
+
         public void ApplySlow(byte slow)
         {
             //todo needs duration etc (just a test case)

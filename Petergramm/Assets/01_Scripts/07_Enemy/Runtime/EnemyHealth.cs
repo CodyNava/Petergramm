@@ -10,7 +10,11 @@ namespace _01_Scripts._07_Enemy.Runtime
       [SerializeField] private EnemyRuntime enemyRuntime;
       [SerializeField] private float currentHp, maxHp;
       [SerializeField] private Animator  animator;
-      private void Start() => RefreshHp();
+      private void Start()
+      { 
+         RefreshHp();
+         RefreshRunAnimationBasedOnSpeed();
+      }
 
       private void OnValidate()
       {
@@ -31,6 +35,7 @@ namespace _01_Scripts._07_Enemy.Runtime
          var projectileData = other.gameObject.GetComponent<ProjectileRuntime>();
          CalculateDamage(projectileData.Damage, (TowerDamageType)projectileData.DamageType);
          enemyRuntime.ApplySlow(projectileData.SlowPercent);
+         RefreshRunAnimationBasedOnSpeed();
       }
 
       private void CalculateDamage(short damage, TowerDamageType damageType)
@@ -59,9 +64,9 @@ namespace _01_Scripts._07_Enemy.Runtime
         // this.gameObject.SetActive(false);
       }
       
-      public void DestroyOnAnimationEnd()
+      private void RefreshRunAnimationBasedOnSpeed()
       {
-         this.gameObject.SetActive(false);
+            animator.SetFloat("Speed", enemyRuntime.CurrentStats.movement.moveSpeed / 5f);
       }
    }
 }
