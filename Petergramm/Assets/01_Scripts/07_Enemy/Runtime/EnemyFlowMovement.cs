@@ -1,5 +1,5 @@
 using _01_Scripts._02_Grid.GridData;
-using _01_Scripts._02_Grid.GridRendering;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using UnityEngine;
 
 namespace _01_Scripts._07_Enemy.Runtime
@@ -7,15 +7,13 @@ namespace _01_Scripts._07_Enemy.Runtime
     public class EnemyFlowMovement : MonoBehaviour
     {
         [SerializeField] private EnemyRuntime enemyRuntime;
-        [SerializeField] private GridData gridData;
-        [SerializeField] private GridBase gridBase;
 
         private Vector3 _currentTargetWorldPosition;
 
         private void Start()
         {
-            gridBase.WorldToGrid(transform.position, out var gridCoord);
-            gridBase.GridToWorld(gridCoord, out _currentTargetWorldPosition);
+            GridToEnemyConnector.WorldToGrid(transform.position, out var gridCoord);
+            GridToEnemyConnector.GridToWorld(gridCoord, out _currentTargetWorldPosition);
             _currentTargetWorldPosition.y = transform.position.y;
         }
 
@@ -26,8 +24,8 @@ namespace _01_Scripts._07_Enemy.Runtime
 
         private void SetNextTarget()
         {
-            gridBase.WorldToGrid(transform.position, out var currentCoord);
-            if (gridData.TryGetTileData(currentCoord, out var tileData))
+            GridToEnemyConnector.WorldToGrid(transform.position, out var currentCoord);
+            if (GridToEnemyConnector.TryGetTileData(currentCoord, out var tileData))
             {
                 var flowDirection = tileData.flowDirection;
                 if (flowDirection != Vector3Int.zero)
