@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -20,9 +21,6 @@ namespace _01_Scripts._02_Grid.GridRendering
         [SerializeField] private Color32 squareColor;
         [SerializeField] private Mesh gridMesh;
 
-        [Header("Test World Pos")]
-        [SerializeField] private Vector3 testWorldPos;
-
         private List<Vector3Int> _squareCoord;
         private Vector3[] _vertices;
         private int[] _triangles;
@@ -36,6 +34,7 @@ namespace _01_Scripts._02_Grid.GridRendering
         {
             RenderGrid();
             CalculateSquareCoords();
+            GridToEnemyConnector.SetGridStartPos(_gridStartPos);
         }
 
         public void OnDrawGizmos()
@@ -108,22 +107,6 @@ namespace _01_Scripts._02_Grid.GridRendering
                     _squareCoord.Add(center);
                 }
             }
-        }
-
-        public void WorldToGrid(Vector3 worldPos, out Vector3Int gridCoord)
-        {
-            var relativePos = worldPos - _gridStartPos;
-
-            gridCoord = new Vector3Int(
-                Mathf.RoundToInt(relativePos.x),
-                0,
-                Mathf.RoundToInt(relativePos.z)
-            );
-        }
-
-        public void GridToWorld(Vector3Int gridCoord, out Vector3 worldPos)
-        {
-            worldPos = _gridStartPos + gridCoord;
         }
     }
 }

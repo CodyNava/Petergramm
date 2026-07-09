@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace _01_Scripts._04_Pathfinding.FlowField
             gridData.ResetFlowData();
             GenerateTileCosts();
             GenerateFlowDirection();
+            GridToEnemyConnector.SetGridPlacementCoords(gridData.PlacementCoords);
         }
 
         public void GenerateTileCosts()
