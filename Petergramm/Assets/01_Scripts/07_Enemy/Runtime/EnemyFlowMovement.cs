@@ -20,6 +20,7 @@ namespace _01_Scripts._07_Enemy.Runtime
         private void Update()
         {
             MoveTowardsTarget();
+            //Vector3Int test = GridToEnemyConnector.LowestCostCoordToSpawn();
         }
 
         private void SetNextTarget()
