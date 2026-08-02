@@ -27,7 +27,7 @@ namespace _01_Scripts._04_Pathfinding.FlowField
             BuildFlowField();
         }
 
-        public void GenerateTileCosts()
+        private void GenerateTileCosts()
         {
             Queue<Vector3Int> flowFieldQueue = new();
 
@@ -38,16 +38,13 @@ namespace _01_Scripts._04_Pathfinding.FlowField
             }
 
 
-            Vector3Int currentCoord;
-            int currentCost;
-
             while (flowFieldQueue.Count > 0)
             {
-                currentCoord = flowFieldQueue.Dequeue();
+                var currentCoord = flowFieldQueue.Dequeue();
 
                 if (gridData.TryGetTileData(currentCoord, out var currentTileData))
                 {
-                    currentCost = currentTileData.costToGoal;
+                    var currentCost = currentTileData.costToGoal;
                     foreach (var neighbour in gridData.GetNeighbours(currentCoord))
                     {
                         if (gridData.TryGetTileData(neighbour, out var neighbourTileData))
@@ -68,7 +65,7 @@ namespace _01_Scripts._04_Pathfinding.FlowField
             }
         }
 
-        public void GenerateFlowDirection()
+        private void GenerateFlowDirection()
         {
             foreach (var (key,coord) in gridData.placementCoords)
             {

@@ -10,17 +10,27 @@ namespace _01_Scripts._07_Enemy.Runtime
 
         private Vector3 _currentTargetWorldPosition;
 
+        private bool _reachedSpawnTarget = false;
+
         private void Start()
         {
-            GridToEnemyConnector.WorldToGrid(transform.position, out var gridCoord);
-            GridToEnemyConnector.GridToWorld(gridCoord, out _currentTargetWorldPosition);
-            _currentTargetWorldPosition.y = transform.position.y;
+            //GridToEnemyConnector.WorldToGrid(transform.position, out var gridCoord);
         }
 
         private void Update()
         {
+            if (!_reachedSpawnTarget)
+            {
+                GridToEnemyConnector.GridToWorld(GridToEnemyConnector.LowestCostCoordToSpawn(),
+                    out _currentTargetWorldPosition);
+                _currentTargetWorldPosition.y = transform.position.y;
+                if (transform.position == _currentTargetWorldPosition)
+                {
+                    _reachedSpawnTarget = true;
+                }
+            }
+
             MoveTowardsTarget();
-            //Vector3Int test = GridToEnemyConnector.LowestCostCoordToSpawn();
         }
 
         private void SetNextTarget()

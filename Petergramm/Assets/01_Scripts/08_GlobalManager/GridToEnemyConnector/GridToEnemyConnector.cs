@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
-using _01_Scripts._02_Grid.GridRendering;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
@@ -11,7 +9,6 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
         public static Vector3 GridStartPos;
         public static Dictionary<Vector3Int, GridTileData> GridPlacementCoords;
 
-        //GridBase Usage
         public static void SetGridStartPos(Vector3 gridStartPos)
             => GridStartPos = gridStartPos;
 
@@ -31,6 +28,11 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
             worldPos = GridStartPos + gridCoord;
         }
 
+        private static bool IsValidCoord(Vector3Int coord)
+        {
+            return GridPlacementCoords.ContainsKey(coord);
+        }
+
         //GridData Usage
         public static void SetGridPlacementCoords(Dictionary<Vector3Int, GridTileData> gridPlacementCoords)
             => GridPlacementCoords = gridPlacementCoords;
@@ -47,18 +49,18 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
             int lowestCost = int.MaxValue;
             foreach (var (key, value) in GridPlacementCoords)
             {
-                if (key.x < 1)
+                if (key.x > 1 || !IsValidCoord(key))
                 {
                     continue;
                 }
 
-                Debug.Log(key);
-/*
-                if (value.costToGoal < lowestCost)
+                if (lowestCost > value.costToGoal)
                 {
+                    Debug.Log($"New Lowest Cost Coord: {key}");
+                    Debug.Log($"New Lowest Cost: {value.costToGoal}");
+                    lowestCost = value.costToGoal;
                     lowestCostCoord = key;
                 }
-  */
             }
 
             return lowestCostCoord;
