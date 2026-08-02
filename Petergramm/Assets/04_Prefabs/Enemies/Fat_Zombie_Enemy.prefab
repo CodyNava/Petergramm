@@ -1154,6 +1154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5d392c6322ed84bbcd1343c297b993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._06_General.DestroyOnAnimationEnd
+  bodyToDisable: {fileID: 0}
 --- !u!1 &7999536874265372124
 GameObject:
   m_ObjectHideFlags: 0

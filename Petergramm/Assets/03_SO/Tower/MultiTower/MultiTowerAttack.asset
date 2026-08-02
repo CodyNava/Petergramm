@@ -15,4 +15,4 @@ MonoBehaviour:
   projectile: {fileID: 11400000, guid: 1b7debc7a8b1bc846b0f870f709f1de2, type: 2}
   damageType: 0
   baseProjectileCount: 1
-  projectileType: 1
+  projectileType: 0

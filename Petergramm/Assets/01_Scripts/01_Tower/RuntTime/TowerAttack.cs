@@ -4,9 +4,7 @@ using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._01_Tower.Projectiles.UniqueProjectiles;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using _01_Scripts._08_GlobalManager.Pooling;
-using NaughtyAttributes;
 using Unity.Profiling;
-using UnityEditor;
 using UnityEngine;
 
 namespace _01_Scripts._01_Tower.RuntTime
@@ -126,9 +124,8 @@ namespace _01_Scripts._01_Tower.RuntTime
       {
          _targets.Clear();
          var r = towerRuntime.CurrentStats.range;
-         var cel = EnemyList.Enemies;
          var pos = transform.position;
-         foreach (var enemy in cel)
+         foreach (var enemy in EnemyList.Enemies)
          {
             if (!enemy) continue;
             if (Distance(pos, enemy.transform.position).magnitude > r) continue;
@@ -139,7 +136,7 @@ namespace _01_Scripts._01_Tower.RuntTime
       private void LookAtEnemy()
       {
          if (_targets.Count <= 0) return;
-
+         
          this.transform.LookAt(_targets[0].transform.position);
       }
 

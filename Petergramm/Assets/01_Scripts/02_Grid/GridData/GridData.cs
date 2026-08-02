@@ -80,18 +80,18 @@ namespace _01_Scripts._02_Grid.GridData
             return neighbours;
         }
         
-        public void OnDrawGizmos()
-        {
-            foreach (var coord in placementCoords)
-            {
-                var startPos = GridToEnemyConnector.GridStartPos;
-                var coordFlow = coord.Value.costToGoal;
-                Handles.color = Color.Lerp(color1, color2, coordFlow / colorMultiply)  ;
-                Handles.DrawSolidDisc(startPos + coord.Key , Vector3.up, 0.33f);
-                
-                
-            }
-        }
+       // public void OnDrawGizmos()
+       // {
+       //     foreach (var coord in placementCoords)
+       //     {
+       //         var startPos = GridToEnemyConnector.GridStartPos;
+       //         var coordFlow = coord.Value.costToGoal;
+       //         Handles.color = Color.Lerp(color1, color2, coordFlow / colorMultiply)  ;
+       //         Handles.DrawSolidDisc(startPos + coord.Key , Vector3.up, 0.33f);
+       //         
+       //         
+       //     }
+       // }
     }
     
     

@@ -1658,6 +1658,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5d392c6322ed84bbcd1343c297b993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._06_General.DestroyOnAnimationEnd
+  bodyToDisable: {fileID: 7619439018793699494}
+  bodyToReset: {fileID: 5929822474759400861}
 --- !u!1 &6046495820567480034
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,6 +2037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyFlowMovement
   enemyRuntime: {fileID: 5667754049060962061}
+  _stopMovement: 0
 --- !u!1 &7673739775419941426
 GameObject:
   m_ObjectHideFlags: 0

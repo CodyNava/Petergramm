@@ -56,8 +56,8 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
 
                 if (lowestCost > value.costToGoal)
                 {
-                    Debug.Log($"New Lowest Cost Coord: {key}");
-                    Debug.Log($"New Lowest Cost: {value.costToGoal}");
+                   // Debug.Log($"New Lowest Cost Coord: {key}");
+                   // Debug.Log($"New Lowest Cost: {value.costToGoal}");
                     lowestCost = value.costToGoal;
                     lowestCostCoord = key;
                 }

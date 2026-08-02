@@ -2,47 +2,54 @@ using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
 using _01_Scripts._04_Pathfinding.FlowField;
 using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace _01_Scripts._01_Tower.Placement
 {
-    public class TestTowerPlacement : MonoBehaviour
-    {
-        [SerializeField] private List<GameObject> towerPrefab = new();
-        [SerializeField] private GridData gridData;
-        [SerializeField] private FlowFieldBuilder flowFieldBuilder;
-        [SerializeField] private Camera cam;
+   public class TestTowerPlacement : MonoBehaviour
+   {
+      [SerializeField] private List<GameObject> towerPrefab = new();
+      [SerializeField] private GridData gridData;
+      [SerializeField] private FlowFieldBuilder flowFieldBuilder;
+      [SerializeField] private Camera cam;
 
-        private bool _isDragging;
-        private GameObject _draggingTower;
-        private GridTileData _tile;
-        private Vector3Int _gridCoord;
+      private static readonly ProfilerMarker TowerPlacementRayCast = new ProfilerMarker("TowerPlacementRayCast");
+      private static readonly ProfilerMarker TowerPlacementPlacementSnapping =
+         new ProfilerMarker("TowerPlacementPlacementSnapping");
+      private static readonly ProfilerMarker TowerPlacementPlaceTower = new ProfilerMarker("TowerPlacementPlaceTower");
+      private static readonly ProfilerMarker TowerPlacementDestroyTower =
+         new ProfilerMarker("TowerPlacementDestroyTower");
 
-        private void Start()
-        {
-            cam = Camera.main;
-        }
+      private bool _isDragging;
+      private GameObject _draggingTower;
+      private GridTileData _tile;
+      private Vector3Int _gridCoord;
 
-        private void Update()
-        {
-            RayForTowerPosition();
+      private void Start() { cam = Camera.main; }
 
-            if (_tile == null) return;
+      private void Update()
+      {
+         RayForTowerPosition();
 
-            TowerPlacement();
+         if (_tile == null) return;
 
-            //TowerDestroy
+         TowerPlacement();
 
-            if (Mouse.current.rightButton.isPressed)
-            {
-                if (_isDragging) return;
-                DestroyTower(_gridCoord);
-            }
-        }
+         //TowerDestroy
 
-        private void RayForTowerPosition()
-        {
+         if (Mouse.current.rightButton.isPressed)
+         {
+            if (_isDragging) return;
+            DestroyTower(_gridCoord);
+         }
+      }
+
+      private void RayForTowerPosition()
+      {
+         using (TowerPlacementRayCast.Auto())
+         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             if (!cam) return;
 
@@ -50,59 +57,60 @@ namespace _01_Scripts._01_Tower.Placement
 
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerMask.GetMask("Grid")))
             {
-                Vector3 hitPoint = hit.point;
-                //int x = Mathf.RoundToInt(hitPoint.x);
-                //int z = Mathf.RoundToInt(hitPoint.z);
+               Vector3 hitPoint = hit.point;
+               //int x = Mathf.RoundToInt(hitPoint.x);
+               //int z = Mathf.RoundToInt(hitPoint.z);
 
-                GridToEnemyConnector.WorldToGrid(hitPoint, out _gridCoord);
+               GridToEnemyConnector.WorldToGrid(hitPoint, out _gridCoord);
 
-                //_gridCoord = new Vector3Int(x, 0, z);
+               //_gridCoord = new Vector3Int(x, 0, z);
 
-                if (gridData.placementCoords.ContainsKey(_gridCoord))
-                {
-                    _tile = gridData.placementCoords[_gridCoord];
-                }
+               if (gridData.placementCoords.ContainsKey(_gridCoord)) { _tile = gridData.placementCoords[_gridCoord]; }
             }
-        }
+         }
+      }
 
-        private void TowerPlacement()
-        {
+      private void TowerPlacement()
+      {
+         using (TowerPlacementPlacementSnapping.Auto())
+         {
             if (!_isDragging) return;
 
             if (Mouse.current.rightButton.isPressed)
             {
-                DespawnTower();
-                return;
+               DespawnTower();
+               return;
             }
 
             if (!_tile.isOccupied)
             {
-                GridToEnemyConnector.GridToWorld(_gridCoord, out Vector3 snapPosition);
-                _draggingTower.transform.position = snapPosition;
+               GridToEnemyConnector.GridToWorld(_gridCoord, out Vector3 snapPosition);
+               _draggingTower.transform.position = snapPosition;
 
-                if (Mouse.current.leftButton.isPressed)
-                {
-                    PlaceTower(_gridCoord, snapPosition);
-                }
+               if (Mouse.current.leftButton.isPressed) { PlaceTower(_gridCoord, snapPosition); }
             }
-        }
+         }
+      }
 
-        public void SpawnTower()
-        {
-            _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
-            _isDragging = true;
-        }
+      public void SpawnTower()
+      {
+         _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
+         _isDragging = true;
+      }
 
-        private void DespawnTower()
-        {
-            if (!_draggingTower) return;
-            Destroy(_draggingTower);
-            _draggingTower = null;
-            _isDragging = false;
-        }
+      private void DespawnTower()
+      {
+         if (!_draggingTower) return;
+         Destroy(_draggingTower);
+         _draggingTower = null;
+         _isDragging = false;
+      }
 
-        private void PlaceTower(Vector3Int gridCoord, Vector3 snapPosition)
-        {
+      private void PlaceTower(Vector3Int gridCoord, Vector3 snapPosition)
+      {
+         using (TowerPlacementPlaceTower.Auto())
+         {
+            if (!gridData.placementCoords.ContainsKey(gridCoord)) return;
             var placementCoords = gridData.PlacementCoords[gridCoord];
             _draggingTower.transform.position = snapPosition;
             placementCoords.isOccupied = true;
@@ -114,23 +122,28 @@ namespace _01_Scripts._01_Tower.Placement
             flowFieldBuilder.BuildFlowField();
 
             if (Keyboard.current.leftShiftKey.isPressed)
-                _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
+               _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
 
             if (!Keyboard.current.leftShiftKey.isPressed)
             {
-                _isDragging = false;
-                _draggingTower = null;
+               _isDragging = false;
+               _draggingTower = null;
             }
-        }
+         }
+      }
 
-        private void DestroyTower(Vector3Int gridCoord)
-        {
+      private void DestroyTower(Vector3Int gridCoord)
+      {
+         using (TowerPlacementDestroyTower.Auto())
+         {
+            if (!gridData.placementCoords.ContainsKey(gridCoord)) return;
             var placementCoords = gridData.PlacementCoords[gridCoord];
             if (!placementCoords.isOccupied) return;
             Destroy(placementCoords.occupant.gameObject);
             placementCoords.isOccupied = false;
             placementCoords.occupant = null;
             flowFieldBuilder.BuildFlowField();
-        }
-    }
+         }
+      }
+   }
 }
