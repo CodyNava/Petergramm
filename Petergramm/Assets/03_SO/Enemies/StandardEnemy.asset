@@ -18,13 +18,13 @@ MonoBehaviour:
   passives: []
   abilities: []
   stats:
-    maxHp: 10
+    maxHp: 1000
     damage: 10
     attacksPerSecond: 2
     range: 1
     movement:
       movementType: 0
-      moveSpeed: 3
+      moveSpeed: 2
     armor:
       armorType: 0
       armorValue: 30

@@ -1202,7 +1202,7 @@ GameObject:
   - component: {fileID: 4766884700732783505}
   - component: {fileID: 2108644018171017688}
   m_Layer: 0
-  m_Name: FatZombie_Enemy
+  m_Name: Fat_Zombie_Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1290,8 +1290,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyFlowMovement
   enemyRuntime: {fileID: 9002619419718941856}
-  gridData: {fileID: 0}
-  gridBase: {fileID: 0}
 --- !u!136 &4766884700732783505
 CapsuleCollider:
   m_ObjectHideFlags: 0

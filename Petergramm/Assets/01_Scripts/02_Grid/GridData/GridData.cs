@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridRendering;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using AYellowpaper.SerializedCollections;
 using NaughtyAttributes;
 using UnityEditor;
@@ -83,10 +84,10 @@ namespace _01_Scripts._02_Grid.GridData
         {
             foreach (var coord in placementCoords)
             {
-                
+                var startPos = GridToEnemyConnector.GridStartPos;
                 var coordFlow = coord.Value.costToGoal;
                 Handles.color = Color.Lerp(color1, color2, coordFlow / colorMultiply)  ;
-                Handles.DrawSolidDisc(coord.Key , Vector3.up, 0.33f);
+                Handles.DrawSolidDisc(startPos + coord.Key , Vector3.up, 0.33f);
                 
                 
             }

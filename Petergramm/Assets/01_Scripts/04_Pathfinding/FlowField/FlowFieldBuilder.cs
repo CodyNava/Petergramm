@@ -22,6 +22,11 @@ namespace _01_Scripts._04_Pathfinding.FlowField
             GridToEnemyConnector.SetGridPlacementCoords(gridData.PlacementCoords);
         }
 
+        public void Start()
+        {
+            BuildFlowField();
+        }
+
         public void GenerateTileCosts()
         {
             Queue<Vector3Int> flowFieldQueue = new();
