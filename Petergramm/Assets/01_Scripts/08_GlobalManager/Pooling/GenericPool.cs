@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace _01_Scripts._08_GlobalManager.Pooling
@@ -7,12 +8,13 @@ namespace _01_Scripts._08_GlobalManager.Pooling
    {
       private static readonly List<T> FreshPool = new();
       private static readonly HashSet<T> GravePool = new();
-
+      
       public static T GetFromPool(GameObject obj)
       {
          if (FreshPool.Count == 0)
          {
             var n = Object.Instantiate(obj).GetComponent<T>();
+
             GravePool.Add(n);
             FreshPool.Remove(n);
             return n;
@@ -30,6 +32,27 @@ namespace _01_Scripts._08_GlobalManager.Pooling
       {
          FreshPool.Add(obj);
          GravePool.Remove(obj);
+      }
+
+      //DEBUG
+      public static int ReturnPoolItemsDebug()
+      {
+         
+         var count = 0;
+         foreach (var item in FreshPool.ToList())
+         {
+            if (item == null)FreshPool.Remove(item);
+            count++;
+         }
+
+         foreach (var item in GravePool.ToList())
+         {
+            if (item == null)GravePool.Remove(item);
+            count++;
+         }
+
+         return count;
+
       }
    }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -586482627249378019}
   - component: {fileID: -6434152109131298552}
   m_Layer: 0
-  m_Name: _Volleyball
+  m_Name: Volleyball
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

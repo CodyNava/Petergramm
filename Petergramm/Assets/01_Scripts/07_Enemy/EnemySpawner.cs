@@ -1,6 +1,8 @@
-using System.Collections.Generic;
+using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._07_Enemy.Data;
+using _01_Scripts._07_Enemy.Runtime;
 using _01_Scripts._08_GlobalManager.EnemyList;
+using _01_Scripts._08_GlobalManager.Pooling;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -9,26 +11,47 @@ namespace _01_Scripts._07_Enemy
    public class EnemySpawner : MonoBehaviour
    {
       [SerializeField] private EnemySpawnDataSO esdso;
-
+      
+      //DEBUG
       [Dropdown("_dropDownInts")]
       public int dropDownInt;
-      
       private int[] _dropDownInts = new int[] { 0, 1 };
       [Button]
-      public void SpawnEnemy()
+      public void SpawnEnemyDebug()
       {
          var spawnPoint = esdso.spawnData.spawnPoint;
          var currentEnemy = esdso.spawnData.enemies[dropDownInt];
-         Instantiate(currentEnemy, spawnPoint, Quaternion.identity);
-         EnemyList.Enemies.Add(currentEnemy);
+         var newEnemy = GenericPool<EnemyRuntime>.GetFromPool(currentEnemy);
+         newEnemy.gameObject.transform.position = spawnPoint;
+         EnemyList.AddEnemyToList(newEnemy.gameObject);
+         
       }
-
       [Button]
-      public void DespawnEnemies()
+      public void SpawnRandomEnemyDebug()
       {
-         EnemyList.Enemies.Clear();
+         var spawnPoint = esdso.spawnData.spawnPoint;
+         var currentEnemy = esdso.spawnData.enemies[Random.Range(0, esdso.spawnData.enemies.Count)];
+         var newEnemy = GenericPool<EnemyRuntime>.GetFromPool(currentEnemy);
+         newEnemy.gameObject.transform.position = spawnPoint;
+         EnemyList.AddEnemyToList(newEnemy.gameObject);
+         
       }
       
+      [Button]
+      public void ShowCurrentEnemiesDebug()
+      {
+         //Debug.Log("CurrentEnemies IN LIST\n" + EnemyList.Enemies.Count);
+         Debug.Log("CurrentENEMIES IN POOL\n" + GenericPool<EnemyRuntime>.ReturnPoolItemsDebug());
+         Debug.Log("CurrentPROJECTILES IN POOL\n" + GenericPool<ProjectileRuntime>.ReturnPoolItemsDebug());;
+         
+      }
+      //DEBUG
+
+
+      private void SpawnEnemiesByInterval()
+      {
+         
+      }
       
    }
 }

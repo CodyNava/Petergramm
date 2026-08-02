@@ -24,7 +24,7 @@ MonoBehaviour:
     range: 1
     movement:
       movementType: 0
-      moveSpeed: 2
+      moveSpeed: 0.2
     armor:
       armorType: 0
       armorValue: 30

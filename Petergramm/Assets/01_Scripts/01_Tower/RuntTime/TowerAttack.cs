@@ -30,7 +30,8 @@ namespace _01_Scripts._01_Tower.RuntTime
       private void OnValidate()
       {
          towerRuntime = this.GetComponent<TowerRuntime>();
-         _projSpawnTransform = this.GetComponentInChildren<Transform>().GetChild(0).GetChild(0).transform;
+         if (_projSpawnTransform) return;
+            _projSpawnTransform = this.GetComponentInChildren<Transform>().GetChild(0).GetChild(0).transform;
       }
 
       // private void OnDrawGizmos()

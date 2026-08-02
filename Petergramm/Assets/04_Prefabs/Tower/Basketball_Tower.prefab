@@ -101,6 +101,8 @@ GameObject:
   - component: {fileID: 4036986342572012010}
   - component: {fileID: 962532198123685699}
   - component: {fileID: 3461027804782623097}
+  - component: {fileID: 7265205773375178146}
+  - component: {fileID: 5651487422264448015}
   m_Layer: 0
   m_Name: Basketball_Tower
   m_TagString: Untagged
@@ -116,7 +118,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 766438638701826621}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 87.979004, y: 87.979004, z: 87.979004}
   m_ConstrainProportionsScale: 0
@@ -127,7 +129,7 @@ Transform:
   - {fileID: 450129848022630158}
   - {fileID: 8436264175972174730}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
 --- !u!33 &962532198123685699
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -188,6 +190,46 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7265205773375178146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766438638701826621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fae365ec9dc90c40b0a39bdf06abec0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.RuntTime.TowerAttack
+  towerRuntime: {fileID: 5651487422264448015}
+  _projSpawnTransform: {fileID: 3215604354926178660}
+  _targets: []
+--- !u!114 &5651487422264448015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766438638701826621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1badb4846dc8a4240a185d10cfb19941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.RuntTime.TowerRuntime
+  towerBase: {fileID: 11400000, guid: 1990a07acb0b644428a50af6017720ad, type: 2}
+  currentStats:
+    maxHp: 0
+    damage: 0
+    range: 0
+    attacksPerSecond: 0
+    energy: 0
+    baseProjectileAmount: 0
+  currentEffects:
+    projectileAmount: 0
+    slowPercent: 0
+    bounceCount: 0
+  appliedUpgrades: []
 --- !u!1 &1399564215069316110
 GameObject:
   m_ObjectHideFlags: 0

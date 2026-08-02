@@ -7,24 +7,23 @@ namespace _01_Scripts._07_Enemy.Runtime
 {
    public class EnemyHealth : MonoBehaviour
    {
+      private static readonly int Died = Animator.StringToHash("Died");
       [SerializeField] private EnemyRuntime enemyRuntime;
       [SerializeField] private float currentHp, maxHp;
-      [SerializeField] private Animator  animator;
+      [SerializeField] private Animator animator;
+
       private void Start()
-      { 
+      {
          RefreshHp();
          RefreshRunAnimationBasedOnSpeed();
       }
 
-      private void OnValidate()
-      {
-         enemyRuntime = this.GetComponent<EnemyRuntime>();
-      }
+      private void OnValidate() { enemyRuntime = this.GetComponent<EnemyRuntime>(); }
 
       private void RefreshHp()
       {
          if (!this.enemyRuntime) return;
-         
+
          this.maxHp = enemyRuntime.CurrentStats.maxHp;
          this.currentHp = maxHp;
       }
@@ -34,6 +33,8 @@ namespace _01_Scripts._07_Enemy.Runtime
          if (!other.CompareTag("Projectile")) return;
          var projectileData = other.gameObject.GetComponent<ProjectileRuntime>();
          CalculateDamage(projectileData.Damage, (TowerDamageType)projectileData.DamageType);
+
+         if (projectileData.SlowPercent == 0) return;
          enemyRuntime.ApplySlow(projectileData.SlowPercent);
          RefreshRunAnimationBasedOnSpeed();
       }
@@ -45,7 +46,7 @@ namespace _01_Scripts._07_Enemy.Runtime
             damageType,
             enemyRuntime.CurrentStats.armor
          );
-         
+
          TakeDamage(finalDamage);
       }
 
@@ -57,16 +58,15 @@ namespace _01_Scripts._07_Enemy.Runtime
          this.currentHp = 0;
          this.Die();
       }
+
       private void Die()
       {
          EnemyList.RemoveEnemyFromList(this.gameObject);
-         animator.SetTrigger("Died");
-        // this.gameObject.SetActive(false);
+         animator.SetTrigger(Died);
+         // this.gameObject.SetActive(false);
       }
-      
-      private void RefreshRunAnimationBasedOnSpeed()
-      {
-            animator.SetFloat("Speed", enemyRuntime.CurrentStats.movement.moveSpeed / 5f);
-      }
+
+      private void RefreshRunAnimationBasedOnSpeed() =>
+         animator.SetFloat("Speed", enemyRuntime.CurrentStats.movement.moveSpeed / 1.5f);
    }
 }
