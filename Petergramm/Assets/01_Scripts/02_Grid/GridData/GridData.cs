@@ -30,7 +30,7 @@ namespace _01_Scripts._02_Grid.GridData
                 placementCoords.Add(t, new GridTileData());
         }
 
-        public bool IsValidCoord(Vector3Int coord)
+        private bool IsValidCoord(Vector3Int coord)
         {
             return placementCoords.ContainsKey(coord);
         }

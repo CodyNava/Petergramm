@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
 using _01_Scripts._02_Grid.GridRendering;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
@@ -9,11 +10,11 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
     {
         public static Vector3 GridStartPos;
         public static Dictionary<Vector3Int, GridTileData> GridPlacementCoords;
-        
+
         //GridBase Usage
         public static void SetGridStartPos(Vector3 gridStartPos)
             => GridStartPos = gridStartPos;
-        
+
         public static void WorldToGrid(Vector3 worldPos, out Vector3Int gridCoord)
         {
             var relativePos = worldPos - GridStartPos;
@@ -29,15 +30,38 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
         {
             worldPos = GridStartPos + gridCoord;
         }
-        
+
         //GridData Usage
-        public static void SetGridPlacementCoords(Dictionary<Vector3Int, GridTileData> gridPlacementCoords) 
+        public static void SetGridPlacementCoords(Dictionary<Vector3Int, GridTileData> gridPlacementCoords)
             => GridPlacementCoords = gridPlacementCoords;
-        
+
         public static bool TryGetTileData(Vector3Int coord, out GridTileData tileData)
         {
             return GridPlacementCoords.TryGetValue(coord, out tileData);
         }
 
+
+        public static Vector3Int LowestCostCoordToSpawn()
+        {
+            Vector3Int lowestCostCoord = Vector3Int.zero;
+            int lowestCost = int.MaxValue;
+            foreach (var (key, value) in GridPlacementCoords)
+            {
+                if (key.x < 1)
+                {
+                    continue;
+                }
+
+                Debug.Log(key);
+/*
+                if (value.costToGoal < lowestCost)
+                {
+                    lowestCostCoord = key;
+                }
+  */
+            }
+
+            return lowestCostCoord;
+        }
     }
 }

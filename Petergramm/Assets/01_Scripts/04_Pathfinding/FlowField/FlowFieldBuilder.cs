@@ -65,27 +65,27 @@ namespace _01_Scripts._04_Pathfinding.FlowField
 
         public void GenerateFlowDirection()
         {
-            foreach (var coord in gridData.placementCoords)
+            foreach (var (key,coord) in gridData.placementCoords)
             {
-                if (!gridData.IsWalkable(coord.Key)
-                    || coord.Value.costToGoal == 0
-                    || coord.Value.costToGoal == int.MaxValue) continue;
+                if (!gridData.IsWalkable(key)
+                    || coord.costToGoal == 0
+                    || coord.costToGoal == int.MaxValue) continue;
 
                 Vector3Int currentLowestCostNeighbor = Vector3Int.zero;
                 int currentLowestCost = int.MaxValue;
-                foreach (var neighbour in gridData.GetNeighbours(coord.Key))
+                foreach (var neighbour in gridData.GetNeighbours(key))
                 {
                     gridData.TryGetTileData(neighbour, out var neighbourTileData);
                     if (currentLowestCost > neighbourTileData.costToGoal
                         && neighbourTileData.costToGoal != int.MaxValue
-                        && coord.Value.costToGoal > neighbourTileData.costToGoal)
+                        && coord.costToGoal > neighbourTileData.costToGoal)
                     {
                         currentLowestCost = neighbourTileData.costToGoal;
                         currentLowestCostNeighbor = neighbour;
                     }
                 }
 
-                coord.Value.flowDirection = currentLowestCostNeighbor - coord.Key;
+                coord.flowDirection = currentLowestCostNeighbor - key;
             }
         }
     }
