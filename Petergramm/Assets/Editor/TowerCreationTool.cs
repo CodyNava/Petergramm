@@ -280,18 +280,17 @@ namespace Editor
         private void CreateTower()
         {
             _createdTowerBase = CreateInstance<TowerBaseSO>();
-
-            var tempTower = new GameObject();
+            
+            var tempTower = (GameObject)PrefabUtility.InstantiatePrefab(towerBaseDesign);
+            
             tempTower.AddComponent<TowerRuntime>();
             tempTower.AddComponent<TowerHealth>();
             tempTower.AddComponent<TowerAttack>();
-            Instantiate(towerBaseDesign,  tempTower.transform);
+            var prefabPath = $"{TowerPrefabPath}/{towerName}/{towerName}.prefab";
+            var towerPrefab = PrefabUtility.SaveAsPrefabAsset(tempTower, prefabPath);
             
-
-            var towerPrefab =
-                PrefabUtility.SaveAsPrefabAsset(tempTower, $"{TowerPrefabPath}/{towerName}/{towerName}.prefab");
             DestroyImmediate(tempTower);
-
+            
             AssetDatabase.CreateAsset(_createdTowerBase, $"{TowerSOPath}/{towerName}/{towerName}.asset");
             _createdTowerBase.towerName = towerName;
             _createdTowerBase.icon = icon;
@@ -323,6 +322,7 @@ namespace Editor
 
             AssetDatabase.CreateAsset(_createdProjectile,
                 $"{TowerSOPath}/{towerName}/{towerName}Projectile.asset");
+            Debug.Log(projectileType.ToString());
             _createdProjectile.projectilePrefab =
                 AssetDatabase.LoadAssetAtPath<GameObject>(
                     $"{ProjectilePath}/{projectileType.ToString()}.prefab");
