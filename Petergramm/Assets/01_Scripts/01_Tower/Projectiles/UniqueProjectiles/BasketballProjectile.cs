@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
 {
-   public class BasketballProjectile : ProjectileRuntime
+   public class BasketballProjectile : ProjectileRuntime<BasketballProjectile>
    {
       private void FixedUpdate()
       {
@@ -11,13 +11,7 @@ namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
          Detection();
          // if (!Target) ReturnToPool();
       }
-
-      private void ReturnToPool()
-      {
-         this.gameObject.SetActive(false);
-         GenericPool<BasketballProjectile>.ReturnToPool(this);
-      }
-
+      
       private void Detection()
       {
          if (!DetectCollisions()) return;

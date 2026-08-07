@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using _01_Scripts._07_Enemy.Data;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using _01_Scripts._08_GlobalManager.Pooling;
-using NaughtyAttributes;
 using Unity.Profiling;
 using UnityEngine;
 

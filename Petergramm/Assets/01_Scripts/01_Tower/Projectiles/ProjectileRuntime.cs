@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using _01_Scripts._08_GlobalManager.EnemyList;
+using _01_Scripts._08_GlobalManager.Pooling;
 using Unity.Profiling;
 using UnityEngine;
 
 namespace _01_Scripts._01_Tower.Projectiles
 {
-   public class ProjectileRuntime : MonoBehaviour
+   public abstract class ProjectileRuntime : MonoBehaviour
    {
       [SerializeField] private byte flySpeed;
       [SerializeField] private byte damageType;
@@ -113,6 +114,29 @@ namespace _01_Scripts._01_Tower.Projectiles
          this.transform.position = Vector3.MoveTowards(this.transform.position, _target.position, flySpeed / 100f);
 
          //TODO Tracking einbauen, am besten nicht jeden tick sondern eher sonder 10 mal pro sec o.ä
+      }
+
+      public abstract ProjectileRuntime Get();
+      public abstract ProjectileRuntime Get(Vector3 position);
+      
+   }
+
+   public class ProjectileRuntime<T> : ProjectileRuntime where T : ProjectileRuntime<T>
+   {
+      public override ProjectileRuntime Get()
+      {
+        return GenericPool<ProjectileRuntime<T>>.GetFromPool(this);
+      }
+      
+      public override ProjectileRuntime Get(Vector3 position)
+      {
+         return GenericPool<ProjectileRuntime<T>>.GetFromPool(this, position);
+      }
+      
+      protected void ReturnToPool()
+      {
+         this.gameObject.SetActive(false);
+         GenericPool<ProjectileRuntime<T>>.ReturnToPool(this);
       }
    }
 }

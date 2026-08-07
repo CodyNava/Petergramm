@@ -73,50 +73,7 @@ namespace _01_Scripts._01_Tower.RuntTime
          var slow = effectValues.slowPercent;
          projectileRuntime.ApplyStats(type, speed, damage, (byte)bounces, (byte)slow);
       }
-
-      private ProjectileRuntime SpawnProjectiles(TowerAttackSO attackData)
-      {
-         using (SpawnProjMarker.Auto())
-         {
-            ProjectileRuntime projectileObject;
-            switch (attackData.projectileType)
-            {
-               case TowerProjectileType.Basketball:
-                  projectileObject =
-                     GenericPool<BasketballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
-               break;
-               case TowerProjectileType.Baseball:
-                  projectileObject =
-                     GenericPool<BaseballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
-               break;
-               case TowerProjectileType.Football:
-                  projectileObject =
-                     GenericPool<FootballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
-               break;
-               case TowerProjectileType.Golfball:
-                  projectileObject =
-                     GenericPool<GolfballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
-               break;
-               case TowerProjectileType.Soccerball:
-                  projectileObject =
-                     GenericPool<SoccerballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
-                  break;
-               case TowerProjectileType.Tennisball:
-                  projectileObject =
-                     GenericPool<TennisballProjectile>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
-               break;
-               default:
-                  projectileObject =
-                     GenericPool<ProjectileRuntime>.GetFromPool(attackData.projectile.projectilePrefab.gameObject);
-               break;
-            }
-
-            projectileObject.gameObject.transform.position = _projSpawnTransform.position;
-            projectileObject.gameObject.SetActive(true);
-            return projectileObject;
-         }
-      }
-
+      
       private void GiveProjectileTarget(Transform target, ProjectileRuntime projectileRuntime) =>
          projectileRuntime.GetTarget(target);
 
@@ -161,10 +118,11 @@ namespace _01_Scripts._01_Tower.RuntTime
          }
       }
 
-      private void FireProjectiles
-         (TowerStats stats, TowerAttackSO attackData, TowerEffectValues effectValues, int target)
+      private void FireProjectiles(TowerStats stats, TowerAttackSO attackData, TowerEffectValues effectValues, int target)
       {
-         var projectileObject = SpawnProjectiles(attackData);
+         using var _ = SpawnProjMarker.Auto();
+         var projectileObject = 
+            attackData.projectile.projectileRuntime.Get(_projSpawnTransform.position);
 
          ApplyStatsToProjectiles(attackData, stats, projectileObject, effectValues);
          GiveProjectileTarget(_targets[target].transform, projectileObject);

@@ -323,8 +323,8 @@ namespace Editor
 
             AssetDatabase.CreateAsset(_createdProjectile,
                 $"{TowerSOPath}/{towerName}/{towerName}Projectile.asset");
-            _createdProjectile.projectilePrefab =
-                AssetDatabase.LoadAssetAtPath<GameObject>(
+            _createdProjectile.projectileRuntime =
+                AssetDatabase.LoadAssetAtPath<ProjectileRuntime>(
                     $"{ProjectilePath}/{projectileType.ToString()}.prefab");
             _createdProjectile.speed = (byte)projectileSpeed;
         }

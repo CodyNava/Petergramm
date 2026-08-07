@@ -67,7 +67,7 @@ namespace _01_Scripts._04_Pathfinding.FlowField
 
         private void GenerateFlowDirection()
         {
-            foreach (var (key,coord) in gridData.placementCoords)
+            foreach ((Vector3Int key, GridTileData coord) in gridData.PlacementCoords)
             {
                 if (!gridData.IsWalkable(key)
                     || coord.costToGoal == 0

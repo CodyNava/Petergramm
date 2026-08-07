@@ -62,10 +62,14 @@ namespace _01_Scripts._01_Tower.Placement
                //int z = Mathf.RoundToInt(hitPoint.z);
 
                GridToEnemyConnector.WorldToGrid(hitPoint, out _gridCoord);
+               var coord = hitPoint.ToGrid(); //extension method
 
                //_gridCoord = new Vector3Int(x, 0, z);
 
-               if (gridData.placementCoords.ContainsKey(_gridCoord)) { _tile = gridData.placementCoords[_gridCoord]; }
+               if (gridData.PlacementCoords.TryGetValue(_gridCoord, out GridTileData placementCoord))
+               {
+                  _tile = placementCoord;
+               }
             }
          }
       }
@@ -110,8 +114,7 @@ namespace _01_Scripts._01_Tower.Placement
       {
          using (TowerPlacementPlaceTower.Auto())
          {
-            if (!gridData.placementCoords.ContainsKey(gridCoord)) return;
-            var placementCoords = gridData.PlacementCoords[gridCoord];
+            if (!gridData.PlacementCoords.TryGetValue(gridCoord, out GridTileData placementCoords)) return;
             _draggingTower.transform.position = snapPosition;
             placementCoords.isOccupied = true;
             placementCoords.occupant = _draggingTower;
@@ -136,8 +139,7 @@ namespace _01_Scripts._01_Tower.Placement
       {
          using (TowerPlacementDestroyTower.Auto())
          {
-            if (!gridData.placementCoords.ContainsKey(gridCoord)) return;
-            var placementCoords = gridData.PlacementCoords[gridCoord];
+            if (!gridData.PlacementCoords.TryGetValue(gridCoord, out GridTileData placementCoords)) return;
             if (!placementCoords.isOccupied) return;
             Destroy(placementCoords.occupant.gameObject);
             placementCoords.isOccupied = false;
