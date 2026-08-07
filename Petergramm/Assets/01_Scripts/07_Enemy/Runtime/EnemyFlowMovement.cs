@@ -38,10 +38,7 @@ namespace _01_Scripts._07_Enemy.Runtime
          {
             if (!_reachedSpawnTarget)
             {
-               GridToEnemyConnector.GridToWorld(
-                  GridToEnemyConnector.LowestCostCoordToSpawn(),
-                  out _currentTargetWorldPosition
-               );
+               _currentTargetWorldPosition = GridToEnemyConnector.LowestCostCoordToSpawn().ToWorld();
                _currentTargetWorldPosition.y = transform.position.y;
                if (transform.position == _currentTargetWorldPosition) { _reachedSpawnTarget = true; }
             }

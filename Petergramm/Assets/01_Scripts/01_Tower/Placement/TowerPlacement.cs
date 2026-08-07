@@ -74,10 +74,9 @@ namespace _01_Scripts._01_Tower.Placement
                Vector3 hitPoint = hit.point;
                //int x = Mathf.RoundToInt(hitPoint.x);
                //int z = Mathf.RoundToInt(hitPoint.z);
-
-               GridToEnemyConnector.WorldToGrid(hitPoint, out _gridCoord);
-               var coord = hitPoint.ToGrid(); //extension method
-
+               
+               _gridCoord = hitPoint.ToGrid(); //extension method
+               
                //_gridCoord = new Vector3Int(x, 0, z);
 
                if (gridData.PlacementCoords.TryGetValue(_gridCoord, out GridTileData placementCoord))
@@ -103,6 +102,7 @@ namespace _01_Scripts._01_Tower.Placement
             if (!_tile.isOccupied)
             {
                GridToEnemyConnector.GridToWorld(_gridCoord, out Vector3 snapPosition);
+               
                _draggingTower.transform.position = snapPosition;
 
                if (Mouse.current.leftButton.isPressed) { PlaceTower(_gridCoord, snapPosition); }
@@ -112,6 +112,7 @@ namespace _01_Scripts._01_Tower.Placement
 
       public void SpawnTower(string tower)
       {
+         if (_draggingTower) DespawnTower();
          var towerToSpawn = towerPrefab.Find(t => t.name == tower);
          _draggingTower = Instantiate(towerToSpawn, Vector3.zero, Quaternion.identity);
          _isDragging = true;
