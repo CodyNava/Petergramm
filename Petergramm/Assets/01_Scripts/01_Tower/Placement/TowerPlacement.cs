@@ -10,6 +10,7 @@ namespace _01_Scripts._01_Tower.Placement
 {
    public class TestTowerPlacement : MonoBehaviour
    {
+      public static TestTowerPlacement Instance { get; private set; }
       [SerializeField] private List<GameObject> towerPrefab = new();
       [SerializeField] private GridData gridData;
       [SerializeField] private FlowFieldBuilder flowFieldBuilder;
@@ -26,6 +27,19 @@ namespace _01_Scripts._01_Tower.Placement
       private GameObject _draggingTower;
       private GridTileData _tile;
       private Vector3Int _gridCoord;
+
+      private void Awake()
+      {
+         if (Instance == null)
+         {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+         }
+         else
+         {
+            Destroy(gameObject);
+         }
+      }
 
       private void Start() { cam = Camera.main; }
 
@@ -96,9 +110,10 @@ namespace _01_Scripts._01_Tower.Placement
          }
       }
 
-      public void SpawnTower()
+      public void SpawnTower(string tower)
       {
-         _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
+         var towerToSpawn = towerPrefab.Find(t => t.name == tower);
+         _draggingTower = Instantiate(towerToSpawn, Vector3.zero, Quaternion.identity);
          _isDragging = true;
       }
 
