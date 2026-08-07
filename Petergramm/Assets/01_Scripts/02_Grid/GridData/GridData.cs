@@ -75,7 +75,7 @@ namespace _01_Scripts._02_Grid.GridData
          return neighbours;
       }
 
-      public void OnDrawGizmos()
+     /* public void OnDrawGizmos()
       {
          foreach (var coord in _placementCoords)
          {
@@ -84,7 +84,7 @@ namespace _01_Scripts._02_Grid.GridData
             Handles.color = Color.Lerp(color1, color2, coordFlow / colorMultiply);
             Handles.DrawSolidDisc(startPos + coord.Key, Vector3.up, 0.33f);
          }
-      }
+      }*/
    }
 
    [Serializable]
