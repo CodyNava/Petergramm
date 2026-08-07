@@ -14,7 +14,9 @@ namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
       
       private void Detection()
       {
+         if (ValidateEnemies()) { ReturnToPool(); return; }
          if (!DetectCollisions()) return;
+         CollisionCaller(this);
          if (FindTargetToBounce()) return;
          ReturnToPool();
       }

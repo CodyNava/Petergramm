@@ -5,15 +5,18 @@ using UnityEngine;
 
 namespace _01_Scripts._08_GlobalManager.EnemyList
 {
-    public static class EnemyList
-    {
-        public static readonly List<GameObject> Enemies = new List<GameObject>();
+   public static class EnemyList
+   {
+      public static readonly List<GameObject> EnemyGameObjects = new List<GameObject>();
+      public static readonly List<EnemyHealth> EnemyHealths = new List<EnemyHealth>();
 
-        public static void AddEnemyToList(GameObject enemy)
-            => Enemies.Add(enemy);
-        public static void RemoveEnemyFromList(GameObject enemy)
-            => Enemies.Remove(enemy);
+      public static void AddEnemyToList(GameObject enemy) => EnemyGameObjects.Add(enemy);
 
-        
-    }
+      public static void AddEnemyToList(EnemyHealth enemy) => EnemyHealths.Add(enemy);
+
+      public static void RemoveEnemyFromList(GameObject enemy) => EnemyGameObjects.Remove(enemy);
+
+      public static void RemoveEnemyFromList(EnemyHealth enemy) =>
+         EnemyHealths.Remove(enemy);
+   }
 }

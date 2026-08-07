@@ -28,6 +28,7 @@ namespace _01_Scripts._07_Enemy.Runtime
          RefreshHp();
          RefreshRunAnimationBasedOnSpeed();
          _hasDied = false;
+         EnemyList.AddEnemyToList(this);
       }
 
       private void OnValidate() { enemyRuntime = this.GetComponent<EnemyRuntime>(); }
@@ -40,23 +41,21 @@ namespace _01_Scripts._07_Enemy.Runtime
          this.currentHp = maxHp;
       }
 
-      private void OnTriggerEnter(Collider other)
+      public void Collision(ProjectileRuntime proj)
       {
-         using (EnemyHealthMarkerTrigger.Auto())
-         {
-            if (!other.CompareTag("Projectile")) return;
-            var projectileData = other.gameObject.GetComponent<ProjectileRuntime>();
-            CalculateDamage(projectileData.Damage, (TowerDamageType)projectileData.DamageType);
+         using ProfilerMarker.AutoScope _ = EnemyHealthMarkerTrigger.Auto();
 
-            if (projectileData.SlowPercent == 0 || _hasDied) return;
-            enemyRuntime.ApplySlow(projectileData.SlowPercent);
-            RefreshRunAnimationBasedOnSpeed();
-         }
+         CalculateDamage(proj.Damage, (TowerDamageType)proj.DamageType);
+
+         if (proj.SlowPercent == 0 || _hasDied) return;
+         enemyRuntime.ApplySlow(proj.SlowPercent);
+         RefreshRunAnimationBasedOnSpeed();
       }
 
       private void CalculateDamage(short damage, TowerDamageType damageType)
       {
-         using var _ = EnemyHealthCalculateDamage.Auto();
+         using ProfilerMarker.AutoScope _ = EnemyHealthCalculateDamage.Auto();
+         
          float finalDamage = enemyRuntime.EnemyBase.damageRules.GetFinalDamage(
             damage,
             damageType,
@@ -81,6 +80,7 @@ namespace _01_Scripts._07_Enemy.Runtime
       {
          enemyRuntime.ApplySlow(99); //stop target when ddeeed
          _hasDied = true;
+         EnemyList.RemoveEnemyFromList(this);
          EnemyList.RemoveEnemyFromList(this.gameObject);
          animator.SetTrigger(Died);
          enemyRuntime.ReturnToPoolOnDeath();

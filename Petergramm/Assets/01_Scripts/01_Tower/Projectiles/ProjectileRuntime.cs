@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _01_Scripts._07_Enemy.Runtime;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using _01_Scripts._08_GlobalManager.Pooling;
 using Unity.Profiling;
@@ -12,22 +13,27 @@ namespace _01_Scripts._01_Tower.Projectiles
       [SerializeField] private byte damageType;
       [SerializeField] private short damage;
       private float _refreshRate;
+      private float _refreshTime;
       private byte _bounceCount;
       private byte _slowPercent;
-      private Transform _target;
+      private EnemyHealth _target;
       // [SerializeField] private ProjectilePooling projectilePooling;
       private float _bounceRange = 5f;
-      private List<GameObject> _alreadyBouncedTo = new();
+      private List<EnemyHealth> _alreadyBouncedTo = new();
 
       public short Damage => damage;
       public byte DamageType => damageType;
       public byte SlowPercent => _slowPercent;
       public byte BounceCount => _bounceCount;
-      public Transform Target => _target;
+      public EnemyHealth Target => _target;
 
       //DEBUG//
 
       private static readonly ProfilerMarker BounceMarker = new ProfilerMarker("Proj_BounceMarker");
+      private static readonly ProfilerMarker MoveToTargetMarker = new ProfilerMarker("Proj_MoveToTarget");
+      private static readonly ProfilerMarker RefreshMarker = new ProfilerMarker("Proj_RefreshMarker");
+      private static readonly ProfilerMarker DetectCollisionMarker = new ProfilerMarker("Proj_DetectCollisionMarker");
+      private static readonly ProfilerMarker CollisionCallerMarker = new ProfilerMarker("Proj_CollisionCallerMarker");
 
       //DEBUG//
       private void OnValidate()
@@ -44,18 +50,21 @@ namespace _01_Scripts._01_Tower.Projectiles
          damage = dmg;
          _bounceCount = bounces;
          _slowPercent = slow;
+         _refreshRate = 0.02f;
       }
 
       protected void Refresh()
       {
-         _refreshRate -= Time.deltaTime;
-         if (_refreshRate > 0) return;
+         using var _ = RefreshMarker.Auto();
+         
+         _refreshTime -= Time.deltaTime;
+         if (_refreshTime > 0) return;
 
-         _refreshRate = 0.01f;
+         _refreshTime = _refreshRate;
          MoveToTarget();
       }
 
-      public void GetTarget(Transform target)
+      public void GetTarget(EnemyHealth target)
       {
          if (!target || target == _target) return;
          _target = target;
@@ -63,8 +72,17 @@ namespace _01_Scripts._01_Tower.Projectiles
 
       protected bool DetectCollisions()
       {
+         using var _ = DetectCollisionMarker.Auto();
          //var epsilon = new Vector3(0.1f, 0f, 0.1f);
-         return this.transform.position == _target.position;
+         return this.transform.position == _target.transform.position;
+      }
+
+      protected bool ValidateEnemies() => !_target || !_target.isActiveAndEnabled;
+      
+      protected void CollisionCaller(ProjectileRuntime proj)
+      {
+         using var _ = CollisionCallerMarker.Auto();
+         _target.Collision(proj);
       }
 
       protected bool FindTargetToBounce()
@@ -75,12 +93,12 @@ namespace _01_Scripts._01_Tower.Projectiles
 
             var currentClosestDistance = 1000f;
             var currentClosestEnemy = _target;
-            var allEnemies = EnemyList.Enemies;
+            var allEnemies = EnemyList.EnemyHealths;
             var possibleTargetFound = false;
 
             for (int i = 0; i < allEnemies.Count; i++)
             {
-               if (allEnemies[i] == _target.gameObject) continue;
+               if (allEnemies[i] == _target) continue;
                if (_alreadyBouncedTo.Contains(allEnemies[i])) continue;
 
                float dist = Distance(this.gameObject.transform.position, allEnemies[i].transform.position).magnitude;
@@ -89,7 +107,7 @@ namespace _01_Scripts._01_Tower.Projectiles
                if (dist < currentClosestDistance) //00000
                {
                   currentClosestDistance = dist;
-                  currentClosestEnemy = allEnemies[i].transform;
+                  currentClosestEnemy = allEnemies[i];
                   possibleTargetFound = true;
                }
             }
@@ -100,7 +118,7 @@ namespace _01_Scripts._01_Tower.Projectiles
                return false;
             }
 
-            _alreadyBouncedTo.Add(currentClosestEnemy.gameObject);
+            _alreadyBouncedTo.Add(currentClosestEnemy);
             _target = currentClosestEnemy;
             _bounceCount--;
             return true;
@@ -111,9 +129,9 @@ namespace _01_Scripts._01_Tower.Projectiles
 
       private void MoveToTarget()
       {
-         this.transform.position = Vector3.MoveTowards(this.transform.position, _target.position, flySpeed / 100f);
-
-         //TODO Tracking einbauen, am besten nicht jeden tick sondern eher sonder 10 mal pro sec o.ä
+         using var _ = MoveToTargetMarker.Auto();
+         this.transform.position = Vector3.MoveTowards(this.transform.position, _target.transform.position, flySpeed * _refreshRate);
+         
       }
 
       public abstract ProjectileRuntime Get();

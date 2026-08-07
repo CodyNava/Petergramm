@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using _01_Scripts._01_Tower.Data;
 using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._01_Tower.Projectiles.UniqueProjectiles;
+using _01_Scripts._07_Enemy.Runtime;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using _01_Scripts._08_GlobalManager.Pooling;
 using Unity.Profiling;
@@ -13,7 +14,7 @@ namespace _01_Scripts._01_Tower.RuntTime
    {
       [SerializeField] private TowerRuntime towerRuntime;
       [SerializeField] private Transform _projSpawnTransform;
-      [SerializeField] private List<GameObject> _targets;
+      [SerializeField] private List<EnemyHealth> _targets;
       private float _cd;
 
       //DEBUG//
@@ -74,7 +75,7 @@ namespace _01_Scripts._01_Tower.RuntTime
          projectileRuntime.ApplyStats(type, speed, damage, (byte)bounces, (byte)slow);
       }
       
-      private void GiveProjectileTarget(Transform target, ProjectileRuntime projectileRuntime) =>
+      private void GiveProjectileTarget(EnemyHealth target, ProjectileRuntime projectileRuntime) =>
          projectileRuntime.GetTarget(target);
 
       private void FindNextTarget()
@@ -82,7 +83,7 @@ namespace _01_Scripts._01_Tower.RuntTime
          _targets.Clear();
          var r = towerRuntime.CurrentStats.range;
          var pos = transform.position;
-         foreach (var enemy in EnemyList.Enemies)
+         foreach (var enemy in EnemyList.EnemyHealths)
          {
             if (!enemy) continue;
             if (Distance(pos, enemy.transform.position).magnitude > r) continue;
@@ -125,7 +126,7 @@ namespace _01_Scripts._01_Tower.RuntTime
             attackData.projectile.projectileRuntime.Get(_projSpawnTransform.position);
 
          ApplyStatsToProjectiles(attackData, stats, projectileObject, effectValues);
-         GiveProjectileTarget(_targets[target].transform, projectileObject);
+         GiveProjectileTarget(_targets[target], projectileObject);
       }
    }
 }

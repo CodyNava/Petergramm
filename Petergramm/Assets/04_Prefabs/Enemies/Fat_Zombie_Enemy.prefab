@@ -1154,7 +1154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5d392c6322ed84bbcd1343c297b993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._06_General.DestroyOnAnimationEnd
-  bodyToDisable: {fileID: 0}
+  bodyToDisable: {fileID: 8161681721683074215}
+  bodyToReset: {fileID: 7942607095643993238}
 --- !u!1 &7999536874265372124
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,8 +1201,6 @@ GameObject:
   - component: {fileID: 5513202076260965793}
   - component: {fileID: 234413328248550682}
   - component: {fileID: -2407610679815134313}
-  - component: {fileID: 4766884700732783505}
-  - component: {fileID: 2108644018171017688}
   m_Layer: 0
   m_Name: Fat_Zombie_Enemy
   m_TagString: Enemy
@@ -1291,56 +1290,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyFlowMovement
   enemyRuntime: {fileID: 9002619419718941856}
---- !u!136 &4766884700732783505
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8161681721683074215}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.27
-  m_Height: 1.2728162
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.36, z: 0}
---- !u!54 &2108644018171017688
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8161681721683074215}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1 &8252241812684010515
 GameObject:
   m_ObjectHideFlags: 0

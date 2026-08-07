@@ -40,7 +40,7 @@ namespace _01_Scripts._07_Enemy
       [Button]
       public void ShowCurrentEnemiesDebug()
       {
-         Debug.Log("CurrentEnemies IN LIST\n" + EnemyList.Enemies.Count);
+         Debug.Log("CurrentEnemies IN LIST\n" + EnemyList.EnemyGameObjects.Count);
          Debug.Log("CurrentENEMIES IN POOL\n" + GenericPool<EnemyRuntime>.ReturnPoolItemsDebug());
          Debug.Log("CurrentPROJECTILES IN POOL\n" + GenericPool<ProjectileRuntime>.ReturnPoolItemsDebug());;
          

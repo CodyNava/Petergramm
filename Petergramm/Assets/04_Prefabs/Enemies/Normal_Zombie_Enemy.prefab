@@ -1895,8 +1895,6 @@ GameObject:
   - component: {fileID: 5667754049060962061}
   - component: {fileID: 3578503850521065744}
   - component: {fileID: 2646100291583521471}
-  - component: {fileID: 8468207931468488166}
-  - component: {fileID: 2718021848974718266}
   - component: {fileID: 8075034926053472154}
   m_Layer: 0
   m_Name: Normal_Zombie_Enemy
@@ -1974,56 +1972,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyAttack
   enemyRuntime: {fileID: 5667754049060962061}
---- !u!54 &8468207931468488166
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7619439018793699494}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
---- !u!136 &2718021848974718266
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7619439018793699494}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.27
-  m_Height: 1.2728162
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.36, z: 0}
 --- !u!114 &8075034926053472154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2037,7 +1985,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyFlowMovement
   enemyRuntime: {fileID: 5667754049060962061}
-  _stopMovement: 0
 --- !u!1 &7673739775419941426
 GameObject:
   m_ObjectHideFlags: 0
