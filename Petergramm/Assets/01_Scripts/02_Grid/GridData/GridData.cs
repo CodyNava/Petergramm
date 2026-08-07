@@ -17,7 +17,7 @@ namespace _01_Scripts._02_Grid.GridData
       [SerializeField] private float colorMultiply;
 
       [SerializedDictionary("Coord", "TileData")]
-      private readonly SerializedDictionary<Vector3Int, GridTileData> _placementCoords = new();
+      public SerializedDictionary<Vector3Int, GridTileData> _placementCoords = new();
 
       public Dictionary<Vector3Int, GridTileData> PlacementCoords => _placementCoords;
 

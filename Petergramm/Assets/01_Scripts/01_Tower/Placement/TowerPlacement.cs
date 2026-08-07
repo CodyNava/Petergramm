@@ -140,7 +140,7 @@ namespace _01_Scripts._01_Tower.Placement
             flowFieldBuilder.BuildFlowField();
 
             if (Keyboard.current.leftShiftKey.isPressed)
-               _draggingTower = Instantiate(towerPrefab[0], Vector3.zero, Quaternion.identity);
+               _draggingTower = Instantiate(_draggingTower, Vector3.zero, Quaternion.identity);
 
             if (!Keyboard.current.leftShiftKey.isPressed)
             {
