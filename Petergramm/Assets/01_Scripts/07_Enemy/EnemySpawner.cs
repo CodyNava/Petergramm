@@ -29,7 +29,7 @@ namespace _01_Scripts._07_Enemy
       [Button]
       private void SpawnRandomEnemyDebug()
       {
-         var spawnPoint = esdso.spawnData.spawnPoint + new Vector3(Random.Range(-10f, 10f), 0f ,Random.Range(-10f, 10f));
+         var spawnPoint = esdso.spawnData.spawnPoint + new Vector3(Random.Range(-3f, 3f), 0f ,Random.Range(-7f, 7f));
          var currentEnemy = esdso.spawnData.enemies[Random.Range(0, esdso.spawnData.enemies.Count)];
          var newEnemy = GenericPool<EnemyRuntime>.GetFromPool(currentEnemy);
          newEnemy.gameObject.transform.position = spawnPoint;

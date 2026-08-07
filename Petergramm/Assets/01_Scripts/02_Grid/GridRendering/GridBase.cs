@@ -30,6 +30,13 @@ namespace _01_Scripts._02_Grid.GridRendering
         //these are the coords where tower and other placeable object are to be placed on
         public IReadOnlyList<Vector3Int> SquareCoords => _squareCoord;
 
+
+        private void Awake()
+        {
+            RenderGrid();
+            CalculateSquareCoords();
+            _gridStartPos.SetGridStartPos();
+        }
         private void OnValidate()
         {
             RenderGrid();
