@@ -2,19 +2,13 @@ using _01_Scripts._08_GlobalManager.Pooling;
 
 namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
 {
-   public class TennisballProjectile : ProjectileRuntime
+   public class TennisballProjectile : ProjectileRuntime<TennisballProjectile>
    {
       private void FixedUpdate()
       {
          Refresh();
          Detection();
          // if (!Target) ReturnToPool();
-      }
-
-      private void ReturnToPool()
-      {
-         this.gameObject.SetActive(false);
-         GenericPool<TennisballProjectile>.ReturnToPool(this);
       }
 
       private void Detection()

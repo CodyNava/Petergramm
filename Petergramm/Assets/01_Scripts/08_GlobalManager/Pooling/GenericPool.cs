@@ -9,31 +9,50 @@ namespace _01_Scripts._08_GlobalManager.Pooling
       private static readonly List<T> FreshPool = new();
       private static readonly HashSet<T> GravePool = new();
       
-      public static T GetFromPool(GameObject obj)
+      public static T GetFromPool(T obj)
       {
          if (FreshPool.Count == 0)
          {
-            var n = Object.Instantiate(obj).GetComponent<T>();
-
+            var n = Object.Instantiate(obj);
             GravePool.Add(n);
-            FreshPool.Remove(n);
             return n;
          }
 
          var m = FreshPool[^1];
-
          GravePool.Add(m);
-         FreshPool.Remove(m);
+         FreshPool.RemoveAt(FreshPool.Count - 1);
 
          return m;
       }
+      
+      public static T GetFromPool(T obj, Vector3 position)
+      {
+         var instance = GetFromPool(obj);
+         instance.transform.position = position;
+         instance.gameObject.SetActive(true);
+         return instance;
+      }
+      
 
       public static void ReturnToPool(T obj)
       {
+         obj.gameObject.SetActive(false);
          FreshPool.Add(obj);
          GravePool.Remove(obj);
       }
-
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       //DEBUG
       public static int ReturnPoolItemsDebug()
       {
@@ -50,9 +69,7 @@ namespace _01_Scripts._08_GlobalManager.Pooling
             if (item == null)GravePool.Remove(item);
             count++;
          }
-
          return count;
-
       }
    }
 }

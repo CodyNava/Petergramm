@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _01_Scripts._07_Enemy.Runtime;
 using UnityEngine;
 
 namespace _01_Scripts._07_Enemy.Data
@@ -15,7 +16,7 @@ namespace _01_Scripts._07_Enemy.Data
    public struct SpawnData
    {
       public Vector3 spawnPoint;
-      public List<GameObject> enemies;
+      public List<EnemyRuntime> enemies;
    }
    
    

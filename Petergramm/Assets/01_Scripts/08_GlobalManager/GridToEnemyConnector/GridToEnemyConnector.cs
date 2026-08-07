@@ -27,6 +27,22 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
         {
             worldPos = GridStartPos + gridCoord;
         }
+        
+        public static Vector3Int ToGrid(this Vector3 worldPos)//extension method
+        {
+            var relativePos = worldPos - GridStartPos;
+
+            return new Vector3Int(
+                Mathf.RoundToInt(relativePos.x),
+                0,
+                Mathf.RoundToInt(relativePos.z)
+            );
+        }
+
+        public static Vector3 ToWorld(this Vector3Int gridCoord)
+        {
+            return GridStartPos + gridCoord;
+        }
 
         private static bool IsValidCoord(Vector3Int coord)
         {

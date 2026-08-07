@@ -19,7 +19,8 @@ namespace _01_Scripts._07_Enemy.Runtime
       private bool _hasDied = false;
 
       private static readonly ProfilerMarker EnemyHealthMarkerTrigger = new ProfilerMarker("EnemyHealthOnTriggerEnter");
-      private static readonly ProfilerMarker EnemyHealthCalculateDamage = new ProfilerMarker("EnemyHealthCalculateDamage");
+      private static readonly ProfilerMarker EnemyHealthCalculateDamage =
+         new ProfilerMarker("EnemyHealthCalculateDamage");
       private static readonly ProfilerMarker EnemyHealthDie = new ProfilerMarker("EnemyHealthDie");
 
       private void OnEnable()
@@ -55,28 +56,24 @@ namespace _01_Scripts._07_Enemy.Runtime
 
       private void CalculateDamage(short damage, TowerDamageType damageType)
       {
-         using (EnemyHealthCalculateDamage.Auto())
-         {
-            float finalDamage = enemyRuntime.EnemyBase.damageRules.GetFinalDamage(
-               damage,
-               damageType,
-               enemyRuntime.CurrentStats.armor
-            );
+         using var _ = EnemyHealthCalculateDamage.Auto();
+         float finalDamage = enemyRuntime.EnemyBase.damageRules.GetFinalDamage(
+            damage,
+            damageType,
+            enemyRuntime.CurrentStats.armor
+         );
 
-            TakeDamage(finalDamage);
-         }
+         TakeDamage(finalDamage);
       }
 
       private void TakeDamage(float damage)
       {
-         using (EnemyHealthDie.Auto())
-         {
-            this.currentHp -= damage;
-            if (!(this.currentHp <= 0) || _hasDied) return;
+         using var _ = EnemyHealthDie.Auto();
+         this.currentHp -= damage;
+         if (!(this.currentHp <= 0) || _hasDied) return;
 
-            this.currentHp = 0;
-            this.Die();
-         }
+         this.currentHp = 0;
+         this.Die();
       }
 
       [Button]

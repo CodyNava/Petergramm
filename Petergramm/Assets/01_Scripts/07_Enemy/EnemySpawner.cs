@@ -27,7 +27,7 @@ namespace _01_Scripts._07_Enemy
          
       }
       [Button]
-      public void SpawnRandomEnemyDebug()
+      private void SpawnRandomEnemyDebug()
       {
          var spawnPoint = esdso.spawnData.spawnPoint + new Vector3(Random.Range(-10f, 10f), 0f ,Random.Range(-10f, 10f));
          var currentEnemy = esdso.spawnData.enemies[Random.Range(0, esdso.spawnData.enemies.Count)];
@@ -35,17 +35,6 @@ namespace _01_Scripts._07_Enemy
          newEnemy.gameObject.transform.position = spawnPoint;
          newEnemy.gameObject.SetActive(true);
          
-      }
-
-      public void SpawnRandomEnemyNormal()
-      {
-         SpawnRandomEnemyDebug();
-      }
-
-      public void SpawnRandomEnemyTenTimes()
-      {
-         for(var i = 0; i < 10; i++)
-            SpawnRandomEnemyDebug();
       }
       
       [Button]
@@ -58,7 +47,17 @@ namespace _01_Scripts._07_Enemy
       }
       //DEBUG
 
+      public void SpawnRandomEnemyNormal()
+      {
+         SpawnRandomEnemyDebug();
+      }
 
+      public void SpawnRandomEnemyTenTimes()
+      {
+         for(var i = 0; i < 10; i++)
+            SpawnRandomEnemyDebug();
+      }
+      
       private void SpawnEnemiesByInterval()
       {
          

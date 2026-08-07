@@ -2,7 +2,7 @@ using _01_Scripts._08_GlobalManager.Pooling;
 
 namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
 {
-   public class GolfballProjectile : ProjectileRuntime
+   public class GolfballProjectile : ProjectileRuntime<GolfballProjectile>
    {
       private void FixedUpdate()
       {
@@ -11,11 +11,6 @@ namespace _01_Scripts._01_Tower.Projectiles.UniqueProjectiles
          // if (!Target) ReturnToPool();
       }
 
-      private void ReturnToPool()
-      {
-         this.gameObject.SetActive(false);
-         GenericPool<GolfballProjectile>.ReturnToPool(this);
-      }
 
       private void Detection()
       {
