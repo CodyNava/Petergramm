@@ -19,7 +19,7 @@ namespace _01_Scripts._04_Pathfinding.FlowField
             gridData.ResetFlowData();
             GenerateTileCosts();
             GenerateFlowDirection();
-            GridToEnemyConnector.SetGridPlacementCoords(gridData.PlacementCoords);
+            gridData.PlacementCoords.SetGridPlacementCoords();
         }
 
         public void Start()

@@ -34,7 +34,7 @@ namespace _01_Scripts._02_Grid.GridRendering
         {
             RenderGrid();
             CalculateSquareCoords();
-            GridToEnemyConnector.SetGridStartPos(_gridStartPos);
+            _gridStartPos.SetGridStartPos();
         }
 
         public void OnDrawGizmos()
@@ -101,7 +101,7 @@ namespace _01_Scripts._02_Grid.GridRendering
             _squareCoord = new List<Vector3Int>();
             for (var y = 1; y < ySize; y++)
             {
-                for (var x = 1; x < xSize; x++)
+                for (var x = -19; x < xSize; x++)
                 {
                     Vector3Int center = new Vector3Int(x, 0, y);
                     _squareCoord.Add(center);
