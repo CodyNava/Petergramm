@@ -101,7 +101,7 @@ namespace _01_Scripts._01_Tower.Placement
 
             if (!_tile.isOccupied)
             {
-               GridToEnemyConnector.GridToWorld(_gridCoord, out Vector3 snapPosition);
+               var snapPosition = _gridCoord.ToWorld();
                
                _draggingTower.transform.position = snapPosition;
 
