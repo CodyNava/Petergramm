@@ -41,6 +41,9 @@ namespace Editor
 
         //Upgrade Settings
         [SerializeField] private TowerUpgradeSO upgrade;
+        private readonly List<TowerUpgradeSO> _upgrades = new();
+        private List<TowerUpgradeSO> _allUpgrades = new();
+        private TowerUpgradeSO _upgradeToAdd;
 
         private bool _showUpgrades;
         private bool _newUpgrades;
@@ -52,17 +55,17 @@ namespace Editor
         private TowerBaseSO _createdTowerBase;
         private TowerAttackSO _createdAttackData;
         private ProjectileSO _createdProjectile;
-        private readonly List<TowerUpgradeSO> _upgrades = new();
 
         //Warnings
         private readonly List<string> _warnings = new();
         private bool _hasErrors;
-        
+
         private const string TowerSOPath = "Assets/03_SO/Tower";
         private const string TowerPrefabPath = "Assets/04_Prefabs/Tower";
         private const string ProjectilePath = "Assets/04_Prefabs/Projectiles";
 
         #region Editor
+
         [MenuItem("Creation Tools/Tower Creation")]
         public static void ShowMyEditor()
         {
@@ -123,12 +126,13 @@ namespace Editor
                     {
                         AssetDatabase.CreateFolder(TowerSOPath, towerName);
                     }
+
                     var prefabPath = $"{TowerPrefabPath}/{towerName}";
                     if (!AssetDatabase.IsValidFolder(prefabPath))
                     {
                         AssetDatabase.CreateFolder(TowerPrefabPath, towerName);
                     }
-                    
+
                     CreateTower();
                     CreateAttackData();
                     CreateProjectile();
@@ -142,9 +146,11 @@ namespace Editor
                 ShowWarning(_warnings);
             }
         }
+
         #endregion
 
         #region Setup
+
         private void TowerSetup()
         {
             towerName = EditorGUILayout.TextField(new GUIContent("Tower Name",
@@ -164,7 +170,7 @@ namespace Editor
             damage = (short)EditorGUILayout.Slider(new GUIContent("Damage",
                     "The Damage amount this tower is supposed to deal per shot.\n" +
                     "<b>This value CANNOT be 0.</b>"),
-                damage, 0f, 20f);
+                damage, 0f, 50f);
             damageType = (TowerDamageType)EditorGUILayout.EnumPopup(new GUIContent("Damage Type",
                     "The type of damage this tower is supposed to deal.\n" +
                     "<b>Pierce:</b> .\n" +
@@ -174,7 +180,7 @@ namespace Editor
             range = EditorGUILayout.Slider(new GUIContent("Attack Range",
                     "The range in which the tower can attack the enemies.\n" +
                     "<b>This value CANNOT be 0.</b>"),
-                range, 0f, 5f);
+                range, 0f, 15f);
             attacksPerSecond = EditorGUILayout.Slider(new GUIContent("Attacks per Second",
                     "How many attacks this tower is supposed to do per second.\n" +
                     "<b>This value CANNOT be 0.</b>"),
@@ -191,7 +197,8 @@ namespace Editor
                 towerEffect);
             effectCount = EditorGUILayout.IntSlider(new GUIContent("Effect amount",
                     "How many times the effect can occur/How strong the effect is."),
-                effectCount, 0, 5);
+                //TODO: Make Dynamic or Add Recommended Ranges per Effect
+                effectCount, 0, 50);
         }
 
         private List<GameObject> FetchTowerDesigns()
@@ -205,6 +212,7 @@ namespace Editor
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
                 prefabs.Add(prefab);
             }
+
             return prefabs;
         }
 
@@ -225,54 +233,119 @@ namespace Editor
                 EditorGUILayout.Slider(
                     new GUIContent("Projectile Speed",
                         "The speed at which the projectile travels. \n<b>This value CANNOT be 0.</b>"),
-                    projectileSpeed, 0f, 3f);
+                    projectileSpeed, 0f, 25f);
         }
 
         private void TowerUpgradeSetup()
         {
-            _showUpgrades = EditorGUILayout.Foldout(_showUpgrades, "Upgrades");
+            _showUpgrades =
+                EditorGUILayout.Foldout(
+                    _showUpgrades,
+                    "Upgrades"
+                );
 
-            if (_showUpgrades)
+            if (!_showUpgrades)
+                return;
+
+            EditorGUILayout.LabelField(
+                "Selected Upgrades",
+                EditorStyles.boldLabel
+            );
+
+            DrawSelectedUpgrades();
+
+            EditorGUILayout.Space();
+
+            DrawAddUpgrade();
+        }
+
+        private void DrawSelectedUpgrades()
+        {
+            if (_upgrades.Count == 0)
             {
-                if (_upgrades.Count != 0)
-                {
-                    EditorGUILayout.BeginVertical();
-                    foreach (var item in _upgrades)
-                    {
-                        if (item == null)
-                        {
-                            continue;
-                        }
-                        EditorGUILayout.HelpBox(item.upgradeName, MessageType.None);
-                    }
+                EditorGUILayout.HelpBox(
+                    "No upgrades assigned.",
+                    MessageType.Info
+                );
 
-                    EditorGUILayout.EndVertical();
+                return;
+            }
+
+
+            for (int i = 0; i < _upgrades.Count; i++)
+            {
+                var currentUpgrade = _upgrades[i];
+
+
+                EditorGUILayout.BeginHorizontal("box");
+
+
+                EditorGUILayout.LabelField(
+                    currentUpgrade.upgradeName
+                );
+
+
+                if (GUILayout.Button(
+                        "Remove",
+                        GUILayout.Width(80)))
+                {
+                    _upgrades.RemoveAt(i);
+                    break;
                 }
 
-                if (!_newUpgrades)
-                {
-                    if (GUILayout.Button("Add Upgrade"))
-                    {
-                        _newUpgrades = true;
-                    }
-                }
 
-                if (_newUpgrades)
-                {
-                    upgrade = EditorGUILayout.ObjectField(new GUIContent("Upgrade Type",
-                            "Choose one of the upgrades to add it to your tower"),
-                        upgrade, typeof(TowerUpgradeSO), false) as TowerUpgradeSO;
-                    if (upgrade != null)
-                    {
-                        if (GUILayout.Button("Finish Upgrade"))
-                        {
-                            _upgrades.Add(upgrade);
-                            _newUpgrades = false;
-                        }
-                    }
-                }
+                EditorGUILayout.EndHorizontal();
             }
         }
+
+        private void DrawAddUpgrade()
+        {
+            EditorGUILayout.LabelField(
+                "Add Upgrade",
+                EditorStyles.boldLabel
+            );
+
+
+            if (_allUpgrades.Count == 0)
+            {
+                _allUpgrades = FetchUpgrades();
+            }
+
+
+            _upgradeToAdd =
+                (TowerUpgradeSO)EditorGUILayout.ObjectField(
+                    "Upgrade",
+                    _upgradeToAdd,
+                    typeof(TowerUpgradeSO),
+                    false
+                );
+
+
+            if (_upgradeToAdd == null)
+            {
+                return;
+            }
+
+
+            if (_upgrades.Contains(_upgradeToAdd))
+            {
+                EditorGUILayout.HelpBox(
+                    "Upgrade already added.",
+                    MessageType.Warning
+                );
+
+                return;
+            }
+
+
+            if (GUILayout.Button("Add Upgrade"))
+            {
+                _upgrades.Add(_upgradeToAdd);
+
+                _upgradeToAdd = null;
+            }
+        }
+
         #endregion
 
         #region Creation
@@ -280,17 +353,17 @@ namespace Editor
         private void CreateTower()
         {
             _createdTowerBase = CreateInstance<TowerBaseSO>();
-            
+
             var tempTower = (GameObject)PrefabUtility.InstantiatePrefab(towerBaseDesign);
-            
+
             tempTower.AddComponent<TowerRuntime>();
             tempTower.AddComponent<TowerHealth>();
             tempTower.AddComponent<TowerAttack>();
             var prefabPath = $"{TowerPrefabPath}/{towerName}/{towerName}.prefab";
             var towerPrefab = PrefabUtility.SaveAsPrefabAsset(tempTower, prefabPath);
-            
+
             DestroyImmediate(tempTower);
-            
+
             AssetDatabase.CreateAsset(_createdTowerBase, $"{TowerSOPath}/{towerName}/{towerName}.asset");
             _createdTowerBase.towerName = towerName;
             _createdTowerBase.icon = icon;
@@ -356,6 +429,7 @@ namespace Editor
             {
                 _warnings.Add("Tower already exists.");
             }
+
             if (string.IsNullOrWhiteSpace(towerName))
             {
                 _warnings.Add("Missing Tower Name");
@@ -413,7 +487,7 @@ namespace Editor
         }
 
         #endregion
-        
+
         #region Misc
 
         private void TowerDesignField()
@@ -429,7 +503,7 @@ namespace Editor
             {
                 ShowTowerMenu();
             }
-            
+
             EditorGUILayout.EndHorizontal();
         }
 
@@ -447,8 +521,33 @@ namespace Editor
                         Repaint();
                     });
             }
+
             menu.ShowAsContext();
         }
+
+        private List<TowerUpgradeSO> FetchUpgrades()
+        {
+            var guids = AssetDatabase.FindAssets(
+                "t:TowerUpgradeSO"
+            );
+
+            var upgrades = new List<TowerUpgradeSO>();
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+
+                var towerUpgrade =
+                    AssetDatabase.LoadAssetAtPath<TowerUpgradeSO>(path);
+
+                if (towerUpgrade != null)
+                {
+                    upgrades.Add(towerUpgrade);
+                }
+            }
+
+            return upgrades;
+        }
+
         #endregion
     }
 }
