@@ -683,27 +683,32 @@ namespace Editor
                     10f
                 );
 
-            summonPrefab =
-                EditorGUILayout.ObjectField(
-                    new GUIContent(
-                        "Summon Type",
-                        "What monster is summoned by the ability."
-                    ),
-                    summonPrefab,
-                    typeof(GameObject),
-                    false
-                ) as GameObject;
+            if (ability == EnemyAbilityTypes.Summoning)
+            {
+                summonPrefab = EditorGUILayout.ObjectField(
+                        new GUIContent(
+                            "Summon Type",
+                            "What monster is summoned by the ability."
+                        ),
+                        summonPrefab,
+                        typeof(GameObject),
+                        false
+                    ) as GameObject;
+            }
 
             if (GUILayout.Button("Add Ability"))
             {
-                var newAbility =
-                    new EnemyAbility
-                    {
-                        enemyAbility = ability,
-                        amount = amount,
-                        frequency = frequency,
-                        summonedMonster = summonPrefab
-                    };
+                var newAbility = new EnemyAbility
+                {
+                    enemyAbility = ability,
+                    amount = amount,
+                    frequency = frequency
+                };
+
+                if (ability != EnemyAbilityTypes.DeathRattle)
+                {
+                    newAbility.summonedMonster = summonPrefab;
+                }
 
                 selectedEnemy.abilities.Add(newAbility);
 
@@ -714,7 +719,6 @@ namespace Editor
                 summonPrefab = null;
             }
         }
-
         #endregion
 
         #region Input Validation
