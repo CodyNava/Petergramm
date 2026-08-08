@@ -1,5 +1,6 @@
 using _01_Scripts._07_Enemy.Data;
 using _01_Scripts._08_GlobalManager.EnemyList;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using _01_Scripts._08_GlobalManager.Pooling;
 using Unity.Profiling;
 using UnityEngine;
@@ -28,12 +29,16 @@ namespace _01_Scripts._07_Enemy.Runtime
       private void OnEnable()
       {
          ApplyStats();
-         EnemyList.AddEnemyToList(this.gameObject);
+         gameObject.AddEnemyToList();
       }
 
       private void Update()
       {
-         using (EnemyRuntimeUpdate.Auto()) { ResetSlow(); }
+         using (EnemyRuntimeUpdate.Auto())
+         {
+            ResetSlow();
+            
+         }
       }
 
       private void ApplyStats()
@@ -83,5 +88,8 @@ namespace _01_Scripts._07_Enemy.Runtime
       //todo
 
       public void ReturnToPoolOnDeath() => GenericPool<EnemyRuntime>.ReturnToPool(this);
+
+
+     
    }
 }

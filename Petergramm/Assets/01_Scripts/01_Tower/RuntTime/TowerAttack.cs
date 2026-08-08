@@ -4,7 +4,9 @@ using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._01_Tower.Projectiles.UniqueProjectiles;
 using _01_Scripts._07_Enemy.Runtime;
 using _01_Scripts._08_GlobalManager.EnemyList;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using _01_Scripts._08_GlobalManager.Pooling;
+using NaughtyAttributes;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -40,6 +42,7 @@ namespace _01_Scripts._01_Tower.RuntTime
       //         0.5f + towerRuntime.CurrentStats.range);
       // }
 
+      
       private void Update()
       {
          if (!towerRuntime || !towerRuntime.TowerBase || !towerRuntime.TowerBase.attackData) return;
@@ -83,7 +86,8 @@ namespace _01_Scripts._01_Tower.RuntTime
          _targets.Clear();
          var r = towerRuntime.CurrentStats.range;
          var pos = transform.position;
-         foreach (var enemy in EnemyList.EnemyHealths)
+         var enemiesInRange = pos.ToGrid().GetEnemiesInRange((int)r);
+         foreach (var enemy in enemiesInRange)
          {
             if (!enemy) continue;
             if (Distance(pos, enemy.transform.position).magnitude > r) continue;

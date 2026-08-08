@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cacd05f3854ae141bfaa8da39970930, type: 3}
+  m_Name: Nils_Penetrator
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.TowerBaseSO
+  towerName: Nils_Penetrator
+  icon: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  towerPrefab: {fileID: 8961816775888144865, guid: e977ccefe05e23b4da8fa90cc6e8f348, type: 3}
+  baseStats:
+    maxHp: 50
+    damage: 25
+    range: 10
+    attacksPerSecond: 0.25
+    energy: 5
+    baseProjectileAmount: 1
+  attackData: {fileID: 11400000, guid: 1c2ce687b06a2534dbe8d7ce14df343d, type: 2}
+  innateEffects:
+  - effectType: 1
+    value: 15
+  availableUpgrades:
+  - {fileID: 11400000, guid: 12376d313d24ae74194b96984d2791ff, type: 2}
+  - {fileID: 11400000, guid: 6623edae644b7d74e86194743e61147f, type: 2}
+  - {fileID: 11400000, guid: 760c75510d9bdaa4daa0be8186af922f, type: 2}

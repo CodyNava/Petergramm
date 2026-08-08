@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using _01_Scripts._02_Grid.GridData;
 using _01_Scripts._07_Enemy.Runtime;
-using _01_Scripts._08_GlobalManager.EnemyList;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using _01_Scripts._08_GlobalManager.Pooling;
+using NaughtyAttributes;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -18,18 +20,15 @@ namespace _01_Scripts._01_Tower.Projectiles
       private byte _slowPercent;
       private EnemyHealth _target;
       // [SerializeField] private ProjectilePooling projectilePooling;
-      private float _bounceRange = 5f;
-      private List<EnemyHealth> _alreadyBouncedTo = new();
+      private const int BounceRange = 2;
+      private readonly HashSet<EnemyHealth> _alreadyBouncedTo = new();
 
       public short Damage => damage;
       public byte DamageType => damageType;
       public byte SlowPercent => _slowPercent;
-      public byte BounceCount => _bounceCount;
-      public EnemyHealth Target => _target;
-
-      //DEBUG//
-
-      private static readonly ProfilerMarker BounceMarker = new ProfilerMarker("Proj_BounceMarker");
+      
+      private static readonly ProfilerMarker BounceDistMarker = new ProfilerMarker("Proj_BounceDistMarker");
+      private static readonly ProfilerMarker BounceContainsMarker = new ProfilerMarker("Proj_BounceContainsMarker");
       private static readonly ProfilerMarker MoveToTargetMarker = new ProfilerMarker("Proj_MoveToTarget");
       private static readonly ProfilerMarker RefreshMarker = new ProfilerMarker("Proj_RefreshMarker");
       private static readonly ProfilerMarker DetectCollisionMarker = new ProfilerMarker("Proj_DetectCollisionMarker");
@@ -56,7 +55,7 @@ namespace _01_Scripts._01_Tower.Projectiles
       protected void Refresh()
       {
          using var _ = RefreshMarker.Auto();
-         
+
          _refreshTime -= Time.deltaTime;
          if (_refreshTime > 0) return;
 
@@ -78,79 +77,83 @@ namespace _01_Scripts._01_Tower.Projectiles
       }
 
       protected bool ValidateEnemies() => !_target || !_target.isActiveAndEnabled;
-      
+
       protected void CollisionCaller(ProjectileRuntime proj)
       {
          using var _ = CollisionCallerMarker.Auto();
          _target.Collision(proj);
+         _alreadyBouncedTo.Add(_target);
       }
 
+      
       protected bool FindTargetToBounce()
       {
-         using (BounceMarker.Auto())
+         if (_bounceCount == 0) return false;
+
+         Vector3 currentPos = transform.position;
+         float closestSqrDistance = BounceRange * BounceRange;
+         EnemyHealth currentClosestEnemy = _target;
+         var allEnemiesInRange = currentPos.ToGrid().GetEnemiesInRange(BounceRange);
+
+         for (var i = 0; i < allEnemiesInRange.Count; i++)
          {
-            if (_bounceCount == 0) return false;
+            EnemyHealth enemy = allEnemiesInRange[i];
+            if (enemy == _target) continue;
 
-            var currentClosestDistance = 1000f;
-            var currentClosestEnemy = _target;
-            var allEnemies = EnemyList.EnemyHealths;
-            var possibleTargetFound = false;
+            using ProfilerMarker.AutoScope _ = BounceContainsMarker.Auto();
 
-            for (int i = 0; i < allEnemies.Count; i++)
             {
-               if (allEnemies[i] == _target) continue;
-               if (_alreadyBouncedTo.Contains(allEnemies[i])) continue;
-
-               float dist = Distance(this.gameObject.transform.position, allEnemies[i].transform.position).magnitude;
-               if (dist > _bounceRange) continue;
-
-               if (dist < currentClosestDistance) //00000
-               {
-                  currentClosestDistance = dist;
-                  currentClosestEnemy = allEnemies[i];
-                  possibleTargetFound = true;
-               }
+               if (_alreadyBouncedTo.Contains(enemy)) continue;
             }
 
-            if (!possibleTargetFound)
-            {
-               _bounceCount = 0;
-               return false;
-            }
+            using ProfilerMarker.AutoScope __ = BounceDistMarker.Auto();
 
-            _alreadyBouncedTo.Add(currentClosestEnemy);
-            _target = currentClosestEnemy;
-            _bounceCount--;
-            return true;
+            {
+               Vector3 delta = enemy.transform.position - currentPos;
+               float sqrDistance = delta.sqrMagnitude;
+
+               if (sqrDistance > closestSqrDistance) continue;
+
+               closestSqrDistance = sqrDistance;
+               currentClosestEnemy = enemy;
+            }
          }
-      }
 
-      private static Vector3 Distance(Vector3 a, Vector3 b) => b - a;
+         if (currentClosestEnemy == _target)
+         {
+            _bounceCount = 0;
+            return false;
+         }
+
+         _alreadyBouncedTo.Add(currentClosestEnemy);
+         _target = currentClosestEnemy;
+         _bounceCount--;
+         return true;
+      }
 
       private void MoveToTarget()
       {
          using var _ = MoveToTargetMarker.Auto();
-         this.transform.position = Vector3.MoveTowards(this.transform.position, _target.transform.position, flySpeed * _refreshRate);
-         
+         this.transform.position = Vector3.MoveTowards(
+            this.transform.position,
+            _target.transform.position,
+            flySpeed * _refreshRate
+         );
       }
 
       public abstract ProjectileRuntime Get();
       public abstract ProjectileRuntime Get(Vector3 position);
-      
    }
 
    public class ProjectileRuntime<T> : ProjectileRuntime where T : ProjectileRuntime<T>
    {
-      public override ProjectileRuntime Get()
-      {
-        return GenericPool<ProjectileRuntime<T>>.GetFromPool(this);
-      }
-      
+      public override ProjectileRuntime Get() { return GenericPool<ProjectileRuntime<T>>.GetFromPool(this); }
+
       public override ProjectileRuntime Get(Vector3 position)
       {
          return GenericPool<ProjectileRuntime<T>>.GetFromPool(this, position);
       }
-      
+
       protected void ReturnToPool()
       {
          this.gameObject.SetActive(false);

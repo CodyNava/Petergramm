@@ -1,10 +1,12 @@
 using _01_Scripts._01_Tower.Data;
 using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._08_GlobalManager.EnemyList;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using _01_Scripts._08_GlobalManager.Pooling;
 using NaughtyAttributes;
 using Unity.Profiling;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace _01_Scripts._07_Enemy.Runtime
 {
@@ -28,7 +30,6 @@ namespace _01_Scripts._07_Enemy.Runtime
          RefreshHp();
          RefreshRunAnimationBasedOnSpeed();
          _hasDied = false;
-         EnemyList.AddEnemyToList(this);
       }
 
       private void OnValidate() { enemyRuntime = this.GetComponent<EnemyRuntime>(); }
@@ -80,13 +81,15 @@ namespace _01_Scripts._07_Enemy.Runtime
       {
          enemyRuntime.ApplySlow(99); //stop target when ddeeed
          _hasDied = true;
-         EnemyList.RemoveEnemyFromList(this);
-         EnemyList.RemoveEnemyFromList(this.gameObject);
+         gameObject.RemoveEnemyFromList();
          animator.SetTrigger(Died);
+         transform.position = new Vector3(-90f, 0f, 0f);
          enemyRuntime.ReturnToPoolOnDeath();
+         
       }
 
       private void RefreshRunAnimationBasedOnSpeed() =>
          animator.SetFloat(Speed, enemyRuntime.CurrentStats.movement.moveSpeed / 1.5f);
+      
    }
 }

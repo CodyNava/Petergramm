@@ -108,7 +108,7 @@ namespace _01_Scripts._01_Tower.Placement
 
                 if (!_tile.isOccupied)
                 {
-                    if (_gridCoord.x < 1) return;
+                    if (_gridCoord.x < 0) return;
                     
                     var snapPosition = _gridCoord.ToWorld();
 

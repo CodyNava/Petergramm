@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridRendering;
+using _01_Scripts._07_Enemy.Runtime;
 using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using AYellowpaper.SerializedCollections;
 using NaughtyAttributes;
@@ -96,6 +97,7 @@ namespace _01_Scripts._02_Grid.GridData
    {
       public bool isOccupied;
       public GameObject occupant;
+      public List<EnemyHealth> enemy = new List<EnemyHealth>();
 
       public int costToGoal = int.MaxValue;
       public Vector3Int flowDirection = Vector3Int.zero;

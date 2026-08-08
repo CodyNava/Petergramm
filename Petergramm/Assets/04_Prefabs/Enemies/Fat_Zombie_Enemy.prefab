@@ -1290,6 +1290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyFlowMovement
   enemyRuntime: {fileID: 9002619419718941856}
+  enemyHealth: {fileID: 5513202076260965793}
 --- !u!1 &8252241812684010515
 GameObject:
   m_ObjectHideFlags: 0
