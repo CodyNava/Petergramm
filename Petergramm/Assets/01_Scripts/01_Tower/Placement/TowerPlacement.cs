@@ -2,15 +2,16 @@ using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
 using _01_Scripts._04_Pathfinding.FlowField;
 using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
+using _01_Scripts._09_Debugging;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace _01_Scripts._01_Tower.Placement
 {
-    public class TestTowerPlacement : MonoBehaviour
+    public class TowerPlacement : MonoBehaviour
     {
-        public static TestTowerPlacement Instance { get; private set; }
+        private static TowerPlacement Instance { get; set; }
         [SerializeField] private List<GameObject> towerPrefab = new();
         [SerializeField] private GridData gridData;
         [SerializeField] private FlowFieldBuilder flowFieldBuilder;
@@ -31,6 +32,11 @@ namespace _01_Scripts._01_Tower.Placement
         private GameObject _draggingTower;
         private GridTileData _tile;
         private Vector3Int _gridCoord;
+        
+        
+        //DEBUG
+        [SerializeField] private DebugButtons debugButtons;
+        //DEBUG
 
         private void Awake()
         {
@@ -56,7 +62,7 @@ namespace _01_Scripts._01_Tower.Placement
 
             if (_tile == null) return;
 
-            TowerPlacement();
+            PlaceTower();
 
             //TowerDestroy
 
@@ -76,25 +82,24 @@ namespace _01_Scripts._01_Tower.Placement
 
                 Ray ray = cam.ScreenPointToRay(mousePosition);
 
+                if (Physics.Raycast(ray, out RaycastHit hitDebug, 100f))
+                   debugButtons.TestLightFollowMouse(hitDebug.point);
                 if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerMask.GetMask("Grid")))
                 {
+                    
                     Vector3 hitPoint = hit.point;
-                    //int x = Mathf.RoundToInt(hitPoint.x);
-                    //int z = Mathf.RoundToInt(hitPoint.z);
-
                     _gridCoord = hitPoint.ToGrid(); //extension method
-
-                    //_gridCoord = new Vector3Int(x, 0, z);
 
                     if (gridData.PlacementCoords.TryGetValue(_gridCoord, out GridTileData placementCoord))
                     {
+                        //debugButtons.TestLightFollowMouseSnap(_gridCoord.ToWorld());
                         _tile = placementCoord;
                     }
                 }
             }
         }
 
-        private void TowerPlacement()
+        private void PlaceTower()
         {
             using (TowerPlacementPlacementSnapping.Auto())
             {
@@ -108,7 +113,7 @@ namespace _01_Scripts._01_Tower.Placement
 
                 if (!_tile.isOccupied)
                 {
-                    if (_gridCoord.x < 0) return;
+                    if (_gridCoord.x < 1) return;
                     
                     var snapPosition = _gridCoord.ToWorld();
 
