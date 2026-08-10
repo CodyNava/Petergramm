@@ -1256,6 +1256,10 @@ PrefabInstance:
       value: _01_Scripts._06_General.MenuBehaviour, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1964671472481678654, guid: 963b8f56fb4919d46bf11056984a2f80, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Miko_Prototype
+      objectReference: {fileID: 0}
+    - target: {fileID: 1964671472481678654, guid: 963b8f56fb4919d46bf11056984a2f80, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
