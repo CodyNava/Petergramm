@@ -43,19 +43,13 @@ namespace _01_Scripts._08_GlobalManager.Pooling
       //DEBUG
       public static int ReturnPoolItemsDebug()
       {
-         var count = 0;
          foreach (var item in FreshPool.ToList())
          {
            
             
          }
 
-         foreach (var item in GravePool.ToList())
-         {
-           count++;
-         }
-
-         return count;
+         return GravePool.ToList().Count();
       }
    }
 }
