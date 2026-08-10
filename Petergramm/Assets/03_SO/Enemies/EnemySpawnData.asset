@@ -31,6 +31,78 @@ MonoBehaviour:
       enemyCount: 15
     - spawnableEnemies: 1
       enemyCount: 50
+  - waveTime: 100
+    enemyCount: 0
+    moneyMult: 3
+    hpMult: 2
+    enemyTypes:
+    - spawnableEnemies: 0
+      enemyCount: 15
+    - spawnableEnemies: 1
+      enemyCount: 60
+  - waveTime: 100
+    enemyCount: 0
+    moneyMult: 4
+    hpMult: 3
+    enemyTypes:
+    - spawnableEnemies: 0
+      enemyCount: 20
+    - spawnableEnemies: 1
+      enemyCount: 65
+  - waveTime: 100
+    enemyCount: 0
+    moneyMult: 5
+    hpMult: 5
+    enemyTypes:
+    - spawnableEnemies: 0
+      enemyCount: 20
+    - spawnableEnemies: 1
+      enemyCount: 70
+  - waveTime: 100
+    enemyCount: 0
+    moneyMult: 6
+    hpMult: 7
+    enemyTypes:
+    - spawnableEnemies: 0
+      enemyCount: 50
+    - spawnableEnemies: 1
+      enemyCount: 10
+  - waveTime: 100
+    enemyCount: 0
+    moneyMult: 7
+    hpMult: 8
+    enemyTypes:
+    - spawnableEnemies: 0
+      enemyCount: 30
+    - spawnableEnemies: 1
+      enemyCount: 80
+  - waveTime: 100
+    enemyCount: 0
+    moneyMult: 8
+    hpMult: 10
+    enemyTypes:
+    - spawnableEnemies: 0
+      enemyCount: 50
+    - spawnableEnemies: 1
+      enemyCount: 100
+  - waveTime: 100
+    enemyCount: 0
+    moneyMult: 9
+    hpMult: 12
+    enemyTypes:
+    - spawnableEnemies: 0
+      enemyCount: 5
+    - spawnableEnemies: 1
+      enemyCount: 300
+  - waveTime: 120
+    enemyCount: 15
+    moneyMult: 10
+    hpMult: 20
+    enemyTypes:
+    - spawnableEnemies: 0
+      enemyCount: 250
+    - spawnableEnemies: 1
+      enemyCount: 500
   spawnData:
     spawnPoint: {x: -10, y: 0, z: 10}
     enemies:

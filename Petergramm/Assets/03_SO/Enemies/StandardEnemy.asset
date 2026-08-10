@@ -18,7 +18,7 @@ MonoBehaviour:
   passives: []
   abilities: []
   stats:
-    maxHp: 550
+    maxHp: 100
     damage: 10
     attacksPerSecond: 2
     range: 1

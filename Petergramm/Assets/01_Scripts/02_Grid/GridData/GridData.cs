@@ -22,7 +22,7 @@ namespace _01_Scripts._02_Grid.GridData
 
       public Dictionary<Vector3Int, GridTileData> PlacementCoords => _placementCoords;
 
-      private void Start()
+      private void Awake()
       {
          InitializeCoords();
       }
