@@ -11,7 +11,6 @@ namespace _01_Scripts._05_InputSystem
             if (Input == null)
             {
                 Input ??= new MainInput();
-                DontDestroyOnLoad(gameObject);
             }
             else
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _01_Scripts._02_Grid.GridData;
 using _01_Scripts._07_Enemy.Runtime;
@@ -9,24 +10,30 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
    {
       public static Vector3 GridStartPos;
       public static Dictionary<Vector3Int, GridTileData> GridPlacementCoords;
+      public static Vector3Int GoalCoord;
+      public static int currentWave;
 
+
+     
+      public static event Action GoalReached;
+      public static event Action<float> DropGoldAfterDeathEvent;
+      
       public static void SetGridStartPos(this Vector3 gridStartPos) => GridStartPos = gridStartPos;
+      private static bool IsValidCoord(this Vector3Int coord) => GridPlacementCoords.ContainsKey(coord);
 
       public static Vector3Int ToGrid(this Vector3 worldPos) //extension method
       {
          var relativePos = worldPos - GridStartPos;
-
          return new Vector3Int(Mathf.RoundToInt(relativePos.x), 0, Mathf.RoundToInt(relativePos.z));
       }
-      
+
       public static Vector3 ToWorld(this Vector3Int gridCoord) => GridStartPos + gridCoord;
 
-      private static bool IsValidCoord(this Vector3Int coord) => GridPlacementCoords.ContainsKey(coord);
       private static bool IsUnreachableForEnemies(this Vector3Int coord)
       {
          if (GridPlacementCoords.TryGetValue(coord, out GridTileData tileData))
             return tileData.costToGoal == int.MaxValue;
-         
+
          return true;
       }
 
@@ -40,6 +47,7 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
          {
             if (a.IsValidCoord() && !a.IsUnreachableForEnemies()) neighbors.Add(a);
          }
+
          AddIfValid(coord);
 
          for (var i = 1; i < range + 1; i++)
@@ -73,7 +81,7 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
 
          return enemiesInProximity;
       }
-      
+
       //GridData Usage
       public static void SetGridPlacementCoords
          (this Dictionary<Vector3Int, GridTileData> gridPlacementCoords) =>
@@ -84,24 +92,35 @@ namespace _01_Scripts._08_GlobalManager.GridToEnemyConnector
          return GridPlacementCoords.TryGetValue(coord, out tileData);
       }
 
-      public static Vector3Int LowestCostCoordToSpawn()
+      //public static Vector3Int LowestCostCoordToSpawn()
+      //{
+      //   Vector3Int lowestCostCoord = Vector3Int.zero;
+      //   int lowestCost = int.MaxValue;
+      //   foreach (var (key, value) in GridPlacementCoords)
+      //   {
+      //      if (key.x > 1 || !IsValidCoord(key)) { continue; }
+      //
+      //      if (lowestCost > value.costToGoal)
+      //      {
+      //         // Debug.Log($"New Lowest Cost Coord: {key}");
+      //         // Debug.Log($"New Lowest Cost: {value.costToGoal}");
+      //         lowestCost = value.costToGoal;
+      //         lowestCostCoord = key;
+      //      }
+      //   }
+      //
+      //   return lowestCostCoord;
+      //}
+
+      public static void EnemyReachedGoal()
       {
-         Vector3Int lowestCostCoord = Vector3Int.zero;
-         int lowestCost = int.MaxValue;
-         foreach (var (key, value) in GridPlacementCoords)
-         {
-            if (key.x > 1 || !IsValidCoord(key)) { continue; }
-
-            if (lowestCost > value.costToGoal)
-            {
-               // Debug.Log($"New Lowest Cost Coord: {key}");
-               // Debug.Log($"New Lowest Cost: {value.costToGoal}");
-               lowestCost = value.costToGoal;
-               lowestCostCoord = key;
-            }
-         }
-
-         return lowestCostCoord;
+         GoalReached?.Invoke();
       }
+
+      public static void EnemyDroppedGold(float gold)
+      {
+         DropGoldAfterDeathEvent?.Invoke(gold);
+      }
+      
    }
 }

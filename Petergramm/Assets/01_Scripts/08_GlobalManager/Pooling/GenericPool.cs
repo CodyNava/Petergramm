@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using _01_Scripts._07_Enemy.Runtime;
 using UnityEngine;
 
 namespace _01_Scripts._08_GlobalManager.Pooling
@@ -32,24 +33,29 @@ namespace _01_Scripts._08_GlobalManager.Pooling
          instance.gameObject.SetActive(true);
          return instance;
       }
-
+      
       public static void ReturnToPool(T obj)
       {
          obj.gameObject.SetActive(false);
          FreshPool.Add(obj);
          GravePool.Remove(obj);
       }
+      
+
+      public static void ClearPools()
+      {
+         FreshPool.Clear();
+         GravePool.Clear();
+      }
 
       //DEBUG
-      public static int ReturnPoolItemsDebug()
+      public static int ReturnPoolItemsGraveDebug()
       {
-         foreach (var item in FreshPool.ToList())
-         {
-           
-            
-         }
-
          return GravePool.ToList().Count();
+      }
+      public static int ReturnPoolItemsFreshDebugs()
+      {
+         return FreshPool.ToList().Count();
       }
    }
 }

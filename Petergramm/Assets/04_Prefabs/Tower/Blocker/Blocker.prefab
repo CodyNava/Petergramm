@@ -10,8 +10,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1134481634533660387, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
       propertyPath: m_Name
-      value: Nils_Penetrator
+      value: Blocker
       objectReference: {fileID: 0}
+    - target: {fileID: 2819455149188501452, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 5885984472894428755, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7bbb6349256a5e545b62a498145ad7db, type: 2}
     - target: {fileID: 7017302195343904728, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -53,7 +61,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9108634441919829613, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1134481634533660387, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
@@ -66,9 +75,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7692884142090494833}
   m_SourcePrefab: {fileID: 100100000, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
---- !u!4 &2284329292528002087 stripped
+--- !u!4 &1333855779948368090 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7805627154166774565, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7017302195343904728, guid: 4551269bd7f7b724d8ec1eb12356e380, type: 3}
   m_PrefabInstance: {fileID: 8349878119832116994}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &8961816775888144865 stripped
@@ -95,6 +104,7 @@ MonoBehaviour:
     range: 0
     attacksPerSecond: 0
     energy: 0
+    costs: 0
     baseProjectileAmount: 0
   currentEffects:
     projectileAmount: 0
@@ -129,5 +139,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.RuntTime.TowerAttack
   towerRuntime: {fileID: 4767144469884314301}
-  _projSpawnTransform: {fileID: 2284329292528002087}
+  _projSpawnTransform: {fileID: 1333855779948368090}
   _targets: []

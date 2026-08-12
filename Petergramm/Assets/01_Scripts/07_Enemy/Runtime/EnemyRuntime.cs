@@ -1,3 +1,4 @@
+using System;
 using _01_Scripts._07_Enemy.Data;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace _01_Scripts._07_Enemy.Runtime
 {
-   public class EnemyRuntime : MonoBehaviour
+   public abstract class EnemyRuntime : MonoBehaviour
    {
       [SerializeField] private EnemyBaseSO enemyBase;
       [SerializeField] private EnemyStats currentStats;
@@ -15,6 +16,8 @@ namespace _01_Scripts._07_Enemy.Runtime
       private bool _slowed;
       private int _lastSlowValue;
       private float _slowDuration = 1f;
+
+      public bool Dead = false;
 
       private static readonly ProfilerMarker EnemyRuntimeApplyStats = new ProfilerMarker("EnemyRuntimeApplyStats");
       private static readonly ProfilerMarker EnemyRuntimeUpdate = new ProfilerMarker("EnemyRuntimeUpdate");
@@ -24,33 +27,31 @@ namespace _01_Scripts._07_Enemy.Runtime
       public EnemyStats CurrentStats => currentStats;
       public EnemyBaseSO EnemyBase { get => enemyBase; set => enemyBase = value; }
 
-      private void Awake() { ApplyStats(); }
-
-      private void OnEnable()
+      protected void Initialize()
       {
          ApplyStats();
-         gameObject.AddEnemyToList();
       }
 
-      private void Update()
+      protected void OnReenter()
       {
-         using (EnemyRuntimeUpdate.Auto())
-         {
-            ResetSlow();
-            
-         }
+         Dead = false;
+         ApplyStats();
+         gameObject.AddEnemyToList();
       }
 
       private void ApplyStats()
       {
          using (EnemyRuntimeApplyStats.Auto())
          {
-            currentStats.maxHp = enemyBase.stats.maxHp;
+            currentStats.maxHp = enemyBase.stats.maxHp *
+                                 enemyBase.waveData.waveData[GridToEnemyConnector.currentWave].hpMult;
             currentStats.armor = enemyBase.stats.armor;
             currentStats.damage = enemyBase.stats.damage;
             currentStats.attacksPerSecond = enemyBase.stats.attacksPerSecond;
             currentStats.movement = enemyBase.stats.movement;
             currentStats.range = enemyBase.stats.range;
+            currentStats.goldDrop = enemyBase.stats.goldDrop *
+                                    enemyBase.waveData.waveData[GridToEnemyConnector.currentWave].moneyMult;
          }
       }
 
@@ -66,7 +67,7 @@ namespace _01_Scripts._07_Enemy.Runtime
          _lastSlowValue = slow;
       }
 
-      private void ResetSlow()
+      protected void ResetSlow()
       {
          if (!_slowed) return;
          const float duration = 1f;
@@ -80,16 +81,41 @@ namespace _01_Scripts._07_Enemy.Runtime
 
       private int RefreshSlow(byte slow)
       {
-         using (EnemyRuntimeRefreshSlow.Auto())
-         {
-           return _lastSlowValue >= slow ? _lastSlowValue : slow;
-         }
+         using (EnemyRuntimeRefreshSlow.Auto()) { return _lastSlowValue >= slow ? _lastSlowValue : slow; }
       }
       //todo
 
-      public void ReturnToPoolOnDeath() => GenericPool<EnemyRuntime>.ReturnToPool(this);
 
-
-     
+      
+      
+      protected bool CheckIfDead()
+      {
+         return Dead;
+      }
+      
+      
+      public abstract EnemyRuntime Get();
+      public abstract EnemyRuntime Get(Vector3 position);
+      
+      
    }
+
+   
+   public class EnemyRuntime<T> : EnemyRuntime where T : EnemyRuntime<T>
+   {
+      
+      public override EnemyRuntime Get() { return GenericPool<EnemyRuntime<T>>.GetFromPool(this); }
+
+      public override EnemyRuntime Get(Vector3 position)
+      {
+         return GenericPool<EnemyRuntime<T>>.GetFromPool(this, position);
+      }
+      
+      protected void ReturnToPool()
+      {
+         this.gameObject.SetActive(false);
+         GenericPool<EnemyRuntime<T>>.ReturnToPool(this);
+      }
+   }
+   
 }

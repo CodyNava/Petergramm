@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _01_Scripts._01_Tower.RuntTime;
 using _01_Scripts._02_Grid.GridRendering;
 using _01_Scripts._07_Enemy.Runtime;
 using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
@@ -96,7 +97,7 @@ namespace _01_Scripts._02_Grid.GridData
    public class GridTileData
    {
       public bool isOccupied;
-      public GameObject occupant;
+      public TowerRuntime occupant;
       public List<EnemyHealth> enemy = new List<EnemyHealth>();
 
       public int costToGoal = int.MaxValue;

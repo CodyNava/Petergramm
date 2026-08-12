@@ -21,6 +21,7 @@ MonoBehaviour:
     range: 8
     attacksPerSecond: 1
     energy: 2
+    costs: 150
     baseProjectileAmount: 1
   attackData: {fileID: 11400000, guid: 5b9efcd74f46389478ad733a92fc0d01, type: 2}
   innateEffects:

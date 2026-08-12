@@ -1,12 +1,12 @@
+using System;
+using System.Collections;
 using _01_Scripts._01_Tower.Data;
 using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
-using _01_Scripts._08_GlobalManager.Pooling;
-using NaughtyAttributes;
 using Unity.Profiling;
 using UnityEngine;
-using UnityEngine.TestTools;
+using Random = UnityEngine.Random;
 
 namespace _01_Scripts._07_Enemy.Runtime
 {
@@ -20,19 +20,36 @@ namespace _01_Scripts._07_Enemy.Runtime
 
       private bool _hasDied = false;
 
+      private int _id;
+      public int ID => _id;
+
       private static readonly ProfilerMarker EnemyHealthMarkerTrigger = new ProfilerMarker("EnemyHealthOnTriggerEnter");
       private static readonly ProfilerMarker EnemyHealthCalculateDamage =
          new ProfilerMarker("EnemyHealthCalculateDamage");
       private static readonly ProfilerMarker EnemyHealthDie = new ProfilerMarker("EnemyHealthDie");
 
-      private void OnEnable()
+      private void Start()
       {
          RefreshHp();
-         RefreshRunAnimationBasedOnSpeed();
+         _id = Random.Range(int.MinValue, int.MaxValue);
          _hasDied = false;
+         RefreshRunAnimationBasedOnSpeed();
       }
 
-      private void OnValidate() { enemyRuntime = this.GetComponent<EnemyRuntime>(); }
+      private void OnEnable()
+      {
+         StartCoroutine(RefreshOnEnableWithDelay());
+      }
+
+      private IEnumerator RefreshOnEnableWithDelay()
+      {
+         yield return new WaitForSeconds(0.05f);
+         RefreshHp();
+         _id = Random.Range(int.MinValue, int.MaxValue);
+         _hasDied = false;
+         RefreshRunAnimationBasedOnSpeed();
+      }
+      
 
       private void RefreshHp()
       {
@@ -48,8 +65,8 @@ namespace _01_Scripts._07_Enemy.Runtime
 
          CalculateDamage(proj.Damage, (TowerDamageType)proj.DamageType);
 
-         if (proj.SlowPercent == 0 || _hasDied) return;
-         enemyRuntime.ApplySlow(proj.SlowPercent);
+         if (proj.SlowPercentage == 0 || _hasDied) return;
+         enemyRuntime.ApplySlow(proj.SlowPercentage);
          RefreshRunAnimationBasedOnSpeed();
       }
 
@@ -75,8 +92,7 @@ namespace _01_Scripts._07_Enemy.Runtime
          this.currentHp = 0;
          this.Die();
       }
-
-      [Button]
+      
       private void Die()
       {
          enemyRuntime.ApplySlow(99); //stop target when ddeeed
@@ -84,9 +100,11 @@ namespace _01_Scripts._07_Enemy.Runtime
          gameObject.RemoveEnemyFromList();
          animator.SetTrigger(Died);
          transform.position = new Vector3(-90f, 0f, 0f);
-         enemyRuntime.ReturnToPoolOnDeath();
-         
+         GridToEnemyConnector.EnemyDroppedGold(enemyRuntime.CurrentStats.goldDrop);
+         enemyRuntime.Dead = true;
       }
+
+     
 
       private void RefreshRunAnimationBasedOnSpeed() =>
          animator.SetFloat(Speed, enemyRuntime.CurrentStats.movement.moveSpeed / 1.5f);

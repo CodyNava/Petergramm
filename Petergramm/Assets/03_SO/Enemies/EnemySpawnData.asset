@@ -106,5 +106,5 @@ MonoBehaviour:
   spawnData:
     spawnPoint: {x: -10, y: 0, z: 10}
     enemies:
-    - {fileID: 9002619419718941856, guid: af3be0eddb581a348ad82509e90dd57e, type: 3}
-    - {fileID: 5667754049060962061, guid: 9ec195e51c06c404b985d3736b330eda, type: 3}
+    - {fileID: 5307174357140167207, guid: 38d96b91c59d0ef44a84ade28f9e86c4, type: 3}
+    - {fileID: 4200007780759889985, guid: 790e0a70e216c524cbc2b64a4201d4b9, type: 3}

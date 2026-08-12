@@ -99,7 +99,7 @@ namespace _01_Scripts._01_Tower.RuntTime
       {
          if (_targets.Count <= 0) return;
          
-         this.transform.LookAt(_targets[0].transform.position);
+         this.gameObject.transform.LookAt(_targets[0].transform.position);
       }
 
       private static Vector3 Distance(Vector3 a, Vector3 b) => b - a;

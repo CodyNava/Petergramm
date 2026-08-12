@@ -17,28 +17,25 @@ namespace _01_Scripts._01_Tower.Projectiles
       private float _refreshRate;
       private float _refreshTime;
       private byte _bounceCount;
-      private byte _slowPercent;
+      private byte _slowPercentage;
       private EnemyHealth _target;
       // [SerializeField] private ProjectilePooling projectilePooling;
-      private const int BounceRange = 2;
+      private const int BounceRange = 3;
       private readonly HashSet<EnemyHealth> _alreadyBouncedTo = new();
+
+      private int _currentEnemyID;
 
       public short Damage => damage;
       public byte DamageType => damageType;
-      public byte SlowPercent => _slowPercent;
-      
+      public byte SlowPercentage => _slowPercentage;
+
       private static readonly ProfilerMarker BounceDistMarker = new ProfilerMarker("Proj_BounceDistMarker");
       private static readonly ProfilerMarker BounceContainsMarker = new ProfilerMarker("Proj_BounceContainsMarker");
       private static readonly ProfilerMarker MoveToTargetMarker = new ProfilerMarker("Proj_MoveToTarget");
       private static readonly ProfilerMarker RefreshMarker = new ProfilerMarker("Proj_RefreshMarker");
       private static readonly ProfilerMarker DetectCollisionMarker = new ProfilerMarker("Proj_DetectCollisionMarker");
       private static readonly ProfilerMarker CollisionCallerMarker = new ProfilerMarker("Proj_CollisionCallerMarker");
-
-      //DEBUG//
-      private void OnValidate()
-      {
-         // projectilePooling = GetComponentInParent<ProjectilePooling>();
-      }
+      
 
       private void OnEnable() { _alreadyBouncedTo.Clear(); }
 
@@ -48,8 +45,8 @@ namespace _01_Scripts._01_Tower.Projectiles
          flySpeed = speed;
          damage = dmg;
          _bounceCount = bounces;
-         _slowPercent = slow;
-         _refreshRate = 0.02f;
+         _slowPercentage = slow;
+         _refreshRate = 0.01f;
       }
 
       protected void Refresh()
@@ -63,10 +60,12 @@ namespace _01_Scripts._01_Tower.Projectiles
          MoveToTarget();
       }
 
-      public void GetTarget(EnemyHealth target)
+      public EnemyHealth GetTarget(EnemyHealth target)
       {
-         if (!target || target == _target) return;
+         if (!target || target == _target) return null;
          _target = target;
+         _currentEnemyID = _target.ID;
+         return _target;
       }
 
       protected bool DetectCollisions()
@@ -85,7 +84,6 @@ namespace _01_Scripts._01_Tower.Projectiles
          _alreadyBouncedTo.Add(_target);
       }
 
-      
       protected bool FindTargetToBounce()
       {
          if (_bounceCount == 0) return false;
@@ -126,7 +124,7 @@ namespace _01_Scripts._01_Tower.Projectiles
          }
 
          _alreadyBouncedTo.Add(currentClosestEnemy);
-         _target = currentClosestEnemy;
+         _target = GetTarget(currentClosestEnemy);
          _bounceCount--;
          return true;
       }
@@ -134,6 +132,13 @@ namespace _01_Scripts._01_Tower.Projectiles
       private void MoveToTarget()
       {
          using var _ = MoveToTargetMarker.Auto();
+
+         if (_target.ID != _currentEnemyID)
+         {
+            _target = null;
+            return;
+         }
+         
          this.transform.position = Vector3.MoveTowards(
             this.transform.position,
             _target.transform.position,

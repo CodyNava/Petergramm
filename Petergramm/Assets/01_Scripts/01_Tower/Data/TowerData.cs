@@ -10,6 +10,7 @@ namespace _01_Scripts._01_Tower.Data
       Range,
       AttacksPerSecond,
       Energy,
+      Costs,
       BaseProjectileAmount
    }
 
@@ -47,6 +48,7 @@ namespace _01_Scripts._01_Tower.Data
       public float range;
       public float attacksPerSecond;
       public int energy;
+      public int costs;
       public int baseProjectileAmount;
    }
 

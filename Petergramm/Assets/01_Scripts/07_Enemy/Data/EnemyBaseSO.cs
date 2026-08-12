@@ -8,8 +8,10 @@ namespace _01_Scripts._07_Enemy.Data
    public class EnemyBaseSO : ScriptableObject
    {
       public DamageEquationDataSO damageRules;
+      public EnemySpawnDataSO  waveData;
       public GameObject prefab;
       public string enemyName;
+      public int enemyId;
       
       public List<EnemyPassive> passives = new();
       public List<EnemyAbility> abilities = new();

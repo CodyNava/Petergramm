@@ -1892,10 +1892,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9215425326411534471}
-  - component: {fileID: 5667754049060962061}
   - component: {fileID: 3578503850521065744}
   - component: {fileID: 2646100291583521471}
   - component: {fileID: 8075034926053472154}
+  - component: {fileID: 411392120173245715}
   m_Layer: 0
   m_Name: Normal_Zombie_Enemy
   m_TagString: Enemy
@@ -1919,30 +1919,6 @@ Transform:
   - {fileID: 7648675511731453697}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5667754049060962061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7619439018793699494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e18613450875b545b1c33dfe78f03c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyRuntime
-  enemyBase: {fileID: 11400000, guid: 45ea1372ff3046a4aa08aac300ed461b, type: 2}
-  currentStats:
-    maxHp: 0
-    damage: 0
-    attacksPerSecond: 0
-    range: 0
-    movement:
-      movementType: 0
-      moveSpeed: 0
-    armor:
-      armorType: 0
-      armorValue: 0
 --- !u!114 &3578503850521065744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1955,7 +1931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d15c950a5c3de4981840f77176c093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyHealth
-  enemyRuntime: {fileID: 5667754049060962061}
+  enemyRuntime: {fileID: 411392120173245715}
   currentHp: 0
   maxHp: 0
   animator: {fileID: 8864355994344836023}
@@ -1971,7 +1947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cdb3e64014b51b45aa6f41d84487a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyAttack
-  enemyRuntime: {fileID: 5667754049060962061}
+  enemyRuntime: {fileID: 411392120173245715}
 --- !u!114 &8075034926053472154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1984,8 +1960,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ac944636c2e5a4d8348867d460b152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.EnemyFlowMovement
-  enemyRuntime: {fileID: 5667754049060962061}
+  enemyRuntime: {fileID: 411392120173245715}
   enemyHealth: {fileID: 3578503850521065744}
+--- !u!114 &411392120173245715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7619439018793699494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e893cea1e75c4f849229a2ee0fd9949a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._07_Enemy.Runtime.UniqueEnemies.NormalZombie
+  enemyBase: {fileID: 11400000, guid: a50d69128b5d97b479495470650084fa, type: 2}
+  currentStats:
+    maxHp: 0
+    damage: 0
+    attacksPerSecond: 0
+    range: 0
+    movement:
+      movementType: 0
+      moveSpeed: 0
+    armor:
+      armorType: 0
+      armorValue: 0
+    goldDrop: 0
+  Dead: 0
 --- !u!1 &7673739775419941426
 GameObject:
   m_ObjectHideFlags: 0

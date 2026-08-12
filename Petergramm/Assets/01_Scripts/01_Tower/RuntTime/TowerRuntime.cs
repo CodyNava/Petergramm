@@ -15,15 +15,20 @@ namespace _01_Scripts._01_Tower.RuntTime
       [SerializeField] private TowerStats currentStats;
       [SerializeField] private TowerEffectValues currentEffects = new();
       [SerializeField] private List<TowerUpgradeSO> appliedUpgrades = new();
-
-      //Getter
+      
+      
+      //Gette
       public TowerBaseSO TowerBase { get => this.towerBase; set => this.towerBase = value; }
       public TowerStats CurrentStats => this.currentStats;
       public TowerEffectValues CurrentEffects => this.currentEffects;
       public List<TowerUpgradeSO> AppliedUpgrades => this.appliedUpgrades;
 
-      private void Awake() { this.ReApplyRuntimeValues(); }
+      private void Awake()
+      {
+         this.ReApplyRuntimeValues();
+      }
       
+
       public void Initialize(TowerBaseSO newTowerBase)
       {
          this.towerBase = newTowerBase;
@@ -52,7 +57,7 @@ namespace _01_Scripts._01_Tower.RuntTime
          return count;
       }
 
-      public void ReApplyRuntimeValues()
+      private void ReApplyRuntimeValues()
       {
          if (!this.towerBase) return;
 
@@ -85,9 +90,8 @@ namespace _01_Scripts._01_Tower.RuntTime
                this.ApplyStatValue(modifer.statType, totalBonus);
             }
 
-            for (var i = 0; i < upgrade.effectModifiers.Count; i++)
+            foreach (UpgradeEffectModifier modifier in upgrade.effectModifiers)
             {
-               UpgradeEffectModifier modifier = upgrade.effectModifiers[i];
                float totalBonus = modifier.addPerStack * stacks;
                totalBonus = Mathf.Clamp(totalBonus, -modifier.maxBonus, modifier.maxBonus);
                this.ApplyEffectValue(modifier.effectType, totalBonus);
@@ -109,6 +113,8 @@ namespace _01_Scripts._01_Tower.RuntTime
             
             case TowerStatType.Energy: this.currentStats.energy -= (int)totalBonus; break;
             
+            case TowerStatType.Costs: this.currentStats.costs += (int)totalBonus; break;
+            
             case TowerStatType.BaseProjectileAmount: this.currentStats.baseProjectileAmount += (int)totalBonus; break;
          }
       }
@@ -128,13 +134,10 @@ namespace _01_Scripts._01_Tower.RuntTime
 
       private void ApplyInnateEffects()
       {
-
-         for (int i = 0; i < this.towerBase.innateEffects.Count; i++)
+         foreach (TowerEffectModifier modifier in this.towerBase.innateEffects)
          {
-            TowerEffectModifier modifier = this.towerBase.innateEffects[i];
             this.ApplyEffectValue(modifier.effectType, modifier.value);
          }
-         
       }
    }
 }

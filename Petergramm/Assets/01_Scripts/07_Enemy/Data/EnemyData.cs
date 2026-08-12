@@ -10,7 +10,8 @@ namespace _01_Scripts._07_Enemy.Data
       Damage,
       AttacksPerSecond,
       Range,
-      Armor
+      Armor,
+      GoldDrop
    }
 
    public enum EnemyArmorTypes
@@ -43,12 +44,13 @@ namespace _01_Scripts._07_Enemy.Data
    [Serializable]
    public struct EnemyStats
    {
-      public int maxHp;
+      public float maxHp;
       public float damage;
       public float attacksPerSecond;
       public float range;
       public EnemyMovement movement;
       public EnemyArmor armor;
+      public float goldDrop;
    }
 
    [Serializable]

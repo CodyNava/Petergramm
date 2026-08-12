@@ -13,20 +13,20 @@ namespace _01_Scripts._07_Enemy.Runtime
             enemyRuntime = this.GetComponent<EnemyRuntime>();
         }
 
-        private void Update()
-        {
-            this._cd -= Time.deltaTime;
-            float attacksPerSecond = this.enemyRuntime.CurrentStats.attacksPerSecond;
-
-            if (attacksPerSecond <= 0f) return;
-
-            float attackInterval = 1f / attacksPerSecond;
-            if (this._cd <= 0f)
-            {
-                this._cd = attackInterval;
-                this.Attack();
-            }
-        }
+        //private void Update()
+        //{
+        //    this._cd -= Time.deltaTime;
+        //    float attacksPerSecond = this.enemyRuntime.CurrentStats.attacksPerSecond;
+        //
+        //    if (attacksPerSecond <= 0f) return;
+        //
+        //    float attackInterval = 1f / attacksPerSecond;
+        //    if (this._cd <= 0f)
+        //    {
+        //        this._cd = attackInterval;
+        //        this.Attack();
+        //    }
+        //}
 
         private void Attack()
         {

@@ -11,11 +11,11 @@ namespace _01_Scripts._04_Pathfinding.FlowField
         [SerializeField] private GridData gridData;
 
         [SerializeField] private Vector3Int goalCoord;
-
-
+        
         [Button]
         public void BuildFlowField()
         {
+            GridToEnemyConnector.GoalCoord = goalCoord;
             gridData.ResetFlowData();
             GenerateTileCosts();
             GenerateFlowDirection();

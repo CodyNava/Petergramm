@@ -1,8 +1,10 @@
 using System;
 using _01_Scripts._01_Tower.Projectiles;
+using _01_Scripts._01_Tower.Projectiles.UniqueProjectiles;
 using _01_Scripts._07_Enemy.Data;
 using _01_Scripts._07_Enemy.Runtime;
 using _01_Scripts._08_GlobalManager.EnemyList;
+using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
 using _01_Scripts._08_GlobalManager.Pooling;
 using NaughtyAttributes;
 using UnityEngine;
@@ -14,6 +16,8 @@ namespace _01_Scripts._07_Enemy
    {
       [SerializeField] private EnemySpawnDataSO esdso;
 
+      
+      //serialized for debugging reasons
       [SerializeField] private float _timer = 1f;
       [SerializeField] private bool _gameStarted = false;
       [SerializeField] private bool _gameEnded = false;
@@ -43,7 +47,7 @@ namespace _01_Scripts._07_Enemy
       {
          var spawnPoint = esdso.spawnData.spawnPoint;
          var currentEnemy = esdso.spawnData.enemies[dropDownInt];
-         var newEnemy = GenericPool<EnemyRuntime>.GetFromPool(currentEnemy);
+         var newEnemy = currentEnemy.Get();
          newEnemy.gameObject.transform.position = spawnPoint;
          newEnemy.gameObject.SetActive(true);
       }
@@ -53,7 +57,7 @@ namespace _01_Scripts._07_Enemy
       {
          var spawnPoint = esdso.spawnData.spawnPoint + new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-7f, 7f));
          var currentEnemy = esdso.spawnData.enemies[Random.Range(0, esdso.spawnData.enemies.Count)];
-         var newEnemy = GenericPool<EnemyRuntime>.GetFromPool(currentEnemy);
+         var newEnemy = currentEnemy.Get();
          newEnemy.gameObject.transform.position = spawnPoint;
          newEnemy.gameObject.SetActive(true);
       }
@@ -62,8 +66,11 @@ namespace _01_Scripts._07_Enemy
       public void ShowCurrentEnemiesDebug()
       {
          Debug.Log("CurrentEnemies IN LIST\n" + EnemyList.EnemyGameObjects.Count);
-         Debug.Log("CurrentENEMIES IN POOL\n" + GenericPool<EnemyRuntime>.ReturnPoolItemsDebug());
-         Debug.Log("CurrentPROJECTILES IN POOL\n" + GenericPool<ProjectileRuntime>.ReturnPoolItemsDebug());
+         //Debug.Log("CurrentENEMIES IN POOL\n" + GenericPool<EnemyRuntime>.ReturnPoolItemsGraveDebug());
+         Debug.Log("CurrentPROJECTILES IN Fresh POOL\n" + GenericPool<BasketballProjectile>.ReturnPoolItemsFreshDebugs());
+         Debug.Log("CurrentPROJECTILES IN Grave POOL\n" + GenericPool<BasketballProjectile>.ReturnPoolItemsGraveDebug());
+         Debug.Log("CurrentPROJECTILES IN Fresh2 POOL\n" + GenericPool<ProjectileRuntime<BasketballProjectile>>.ReturnPoolItemsFreshDebugs());
+         Debug.Log("CurrentPROJECTILES IN Grave2 POOL\n" + GenericPool<ProjectileRuntime<BasketballProjectile>>.ReturnPoolItemsGraveDebug());
          ;
       }
       //DEBUG
@@ -114,6 +121,7 @@ namespace _01_Scripts._07_Enemy
 
          if (!allEnemiesSpawned) return; //todo: and all enemies ded
          _currentWave++;
+         GridToEnemyConnector.currentWave = _currentWave;
          _spawnIndexOne = 0;
          _spawnIndexTwo = 0;
          if (_currentWave >= waveData.Length) EndGame();
@@ -121,6 +129,8 @@ namespace _01_Scripts._07_Enemy
 
       private void SpawnEnemy(EnemyRuntime enemyRuntime, int index)
       {
+         
+         if (!enemyRuntime)  return;
          switch (index)
          {
             case 0: _spawnIndexOne++; break;
@@ -128,7 +138,7 @@ namespace _01_Scripts._07_Enemy
          }
 
          Vector3 spawnPoint = esdso.spawnData.spawnPoint;
-         EnemyRuntime newEnemy = GenericPool<EnemyRuntime>.GetFromPool(enemyRuntime);
+         EnemyRuntime newEnemy = enemyRuntime.Get();
          newEnemy.gameObject.transform.position = spawnPoint;
          newEnemy.gameObject.SetActive(true);
       }

@@ -354,7 +354,7 @@ namespace Editor
             enemyName = selectedEnemy.enemyName;
             enemyPrefab = selectedEnemy.prefab;
 
-            hitpoints = selectedEnemy.stats.maxHp;
+            hitpoints = (int)selectedEnemy.stats.maxHp;
             damage = selectedEnemy.stats.damage;
             range = selectedEnemy.stats.range;
             attacksPerSecond = selectedEnemy.stats.attacksPerSecond;

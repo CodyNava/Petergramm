@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82c924a384011684cb4dc92d2f8a167d, type: 3}
-  m_Name: Nils_PenetratorAttackData
+  m_Name: BlockerAttackData
   m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.TowerAttackSO
   projectile: {fileID: 11400000, guid: 2889315223dbaff49b7f2aa756e92767, type: 2}
   damageType: 0

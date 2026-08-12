@@ -58,8 +58,17 @@ namespace _01_Scripts._07_Enemy.Runtime
          {
             var currentCoord = transform.position.ToGrid();
             RefreshEnemyTilePos(currentCoord);
+            
+            if (GridToEnemyConnector.GoalCoord == currentCoord)
+            {
+               GoalReached();
+               return;
+            }
+            
             if (GridToEnemyConnector.TryGetTileData(currentCoord, out var tileData))
             {
+              
+               
                var flowDirection = tileData.flowDirection;
                if (flowDirection != Vector3Int.zero)
                {
@@ -81,6 +90,12 @@ namespace _01_Scripts._07_Enemy.Runtime
             if (Vector3.Distance(transform.position, _currentTargetWorldPosition) < 0.1f) { SetNextTarget(); }
             //if (transform.position == _currentTargetWorldPosition) { SetNextTarget(); }
          }
+      }
+
+      private void GoalReached()
+      {
+         GridToEnemyConnector.EnemyReachedGoal();
+         enemyRuntime.Dead = true;
       }
    }
 }
