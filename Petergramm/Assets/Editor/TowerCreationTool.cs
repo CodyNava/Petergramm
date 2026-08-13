@@ -29,6 +29,7 @@ namespace Editor
         [SerializeField] private float range;
         [SerializeField] private float attacksPerSecond;
         [SerializeField] private int energyUsage;
+        [SerializeField] private int cost;
         [SerializeField] private TowerEffectType towerEffect;
         [SerializeField] private int effectCount;
 
@@ -189,6 +190,10 @@ namespace Editor
                     "How much energy does this tower require to keep running.\n" +
                     "<b>This value CANNOT be 0.</b>"),
                 energyUsage, 0, 10);
+            cost = EditorGUILayout.IntSlider(new GUIContent("Cost",
+                    "How much does this tower cost.\n" +
+                    "<b>This value CANNOT be null.</b>"),
+                cost, 0, 500);
             towerEffect = (TowerEffectType)EditorGUILayout.EnumPopup(new GUIContent("Tower Effect",
                     "The Initial effect this tower is supposed to have.\n" +
                     "<b>Additional Targets:</b> This tower can attack multiple enemies at once.\n" +
@@ -373,6 +378,7 @@ namespace Editor
             _createdTowerBase.baseStats.range = range;
             _createdTowerBase.baseStats.attacksPerSecond = attacksPerSecond;
             _createdTowerBase.baseStats.energy = energyUsage;
+            _createdTowerBase.baseStats.costs = cost;
             _createdTowerBase.baseStats.baseProjectileAmount = projectileAmount;
             _createdTowerBase.innateEffects.Add(new TowerEffectModifier()
                 { effectType = towerEffect, value = effectCount });
