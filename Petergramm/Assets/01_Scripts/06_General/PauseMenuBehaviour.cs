@@ -45,6 +45,14 @@ namespace _01_Scripts._06_General
             _paused = true;
         }
 
+        public void Restart()
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1f;
+            _paused = false;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         public void SaveGame()
         {
             
@@ -54,6 +62,11 @@ namespace _01_Scripts._06_General
         {
             Resume();
             SceneManager.LoadScene(sceneName);
+        }
+        
+        public void QuitGame()
+        {
+            Application.Quit();
         }
     }
 }

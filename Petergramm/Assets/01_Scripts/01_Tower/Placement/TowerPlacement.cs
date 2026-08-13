@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.Collections.Generic;
 using _01_Scripts._01_Tower.RuntTime;
 using _01_Scripts._02_Grid.GridData;
@@ -20,6 +20,8 @@ namespace _01_Scripts._01_Tower.Placement
       [SerializeField] private FlowFieldBuilder flowFieldBuilder;
       [SerializeField] private Camera cam;
       [SerializeField] private CurrencyManager currencyManager;
+      [SerializeField] private GameObject mapTex;
+      
       public event Action<float> TowerPlacedOrRemoved;
 
       
@@ -55,6 +57,7 @@ namespace _01_Scripts._01_Tower.Placement
 
       private void Update()
       {
+         mapTex.SetActive(_isDragging);
          RayForTowerPosition();
 
          if (_tile == null) return;
