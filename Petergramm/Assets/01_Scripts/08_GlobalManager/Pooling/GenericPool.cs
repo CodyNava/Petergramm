@@ -28,10 +28,23 @@ namespace _01_Scripts._08_GlobalManager.Pooling
 
       public static T GetFromPool(T obj, Vector3 position)
       {
-         var instance = GetFromPool(obj);
-         instance.transform.position = position;
-         instance.gameObject.SetActive(true);
-         return instance;
+         
+         if (FreshPool.Count == 0)
+         {
+            T n = Object.Instantiate(obj, position, Quaternion.identity);
+            GravePool.Add(n);
+            n.gameObject.SetActive(true);
+            return n;
+         }
+
+         var m = FreshPool[^1];
+         GravePool.Add(m);
+         FreshPool.RemoveAt(FreshPool.Count - 1);
+         m.transform.position = position;
+         m.gameObject.SetActive(true);
+         return m;
+         
+         
       }
       
       public static void ReturnToPool(T obj)
