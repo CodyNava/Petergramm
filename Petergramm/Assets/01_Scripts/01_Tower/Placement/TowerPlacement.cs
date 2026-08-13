@@ -4,6 +4,7 @@ using _01_Scripts._01_Tower.RuntTime;
 using _01_Scripts._02_Grid.GridData;
 using _01_Scripts._04_Pathfinding.FlowField;
 using _01_Scripts._08_GlobalManager.GridToEnemyConnector;
+using _01_Scripts._08_GlobalManager.HealthAndCurrency;
 using _01_Scripts._09_Debugging;
 using Unity.Profiling;
 using UnityEngine;
@@ -18,19 +19,20 @@ namespace _01_Scripts._01_Tower.Placement
       [SerializeField] private GridData gridData;
       [SerializeField] private FlowFieldBuilder flowFieldBuilder;
       [SerializeField] private Camera cam;
-
+      [SerializeField] private CurrencyManager currencyManager;
       public event Action<float> TowerPlacedOrRemoved;
 
+      
+      
       private static readonly ProfilerMarker TowerPlacementRayCast = new ProfilerMarker("TowerPlacementRayCast");
-
       private static readonly ProfilerMarker TowerPlacementPlacementSnapping =
          new ProfilerMarker("TowerPlacementPlacementSnapping");
-
       private static readonly ProfilerMarker TowerPlacementPlaceTower = new ProfilerMarker("TowerPlacementPlaceTower");
-
       private static readonly ProfilerMarker TowerPlacementDestroyTower =
          new ProfilerMarker("TowerPlacementDestroyTower");
 
+      
+      
       private bool _isDragging;
       private TowerRuntime _draggingTower;
       private GridTileData _tile;
@@ -122,6 +124,12 @@ namespace _01_Scripts._01_Tower.Placement
          if (_draggingTower) DespawnTower();
          var towerToSpawn = towerPrefab.Find(t => t.name == tower);
          _draggingTower = Instantiate(towerToSpawn, new Vector3(-100, 0f, 300f), Quaternion.identity);
+         if (_draggingTower.CurrentStats.costs > currencyManager.Gold)
+         {
+            TowerPrice(-_draggingTower.CurrentStats.costs);
+            DespawnTower();
+            return;
+         }
          TowerPrice(-_draggingTower.CurrentStats.costs);
          _isDragging = true;
       }
@@ -141,6 +149,7 @@ namespace _01_Scripts._01_Tower.Placement
          {
             if (!gridData.PlacementCoords.TryGetValue(gridCoord, out GridTileData placementCoords) ||
                 placementCoords.costToGoal == 0) return;
+            
             _draggingTower.transform.position = snapPosition;
             placementCoords.isOccupied = true;
             placementCoords.occupant = _draggingTower;
@@ -152,8 +161,14 @@ namespace _01_Scripts._01_Tower.Placement
 
             if (Keyboard.current.leftShiftKey.isPressed)
             {
-               TowerPrice(-_draggingTower.CurrentStats.costs);
                _draggingTower = Instantiate(_draggingTower, new Vector3(-100, 0f, 300f), Quaternion.identity);
+               if (_draggingTower.CurrentStats.costs > currencyManager.Gold)
+               {
+                  TowerPrice(-_draggingTower.CurrentStats.costs);
+                  DespawnTower();
+                  return;
+               }
+               TowerPrice(-_draggingTower.CurrentStats.costs);
             }
 
             if (!Keyboard.current.leftShiftKey.isPressed)

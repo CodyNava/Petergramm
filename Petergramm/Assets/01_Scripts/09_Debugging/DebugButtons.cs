@@ -3,6 +3,7 @@ using _01_Scripts._01_Tower.Placement;
 using _01_Scripts._01_Tower.Projectiles;
 using _01_Scripts._01_Tower.Projectiles.UniqueProjectiles;
 using _01_Scripts._07_Enemy.Runtime;
+using _01_Scripts._07_Enemy.Runtime.UniqueEnemies;
 using _01_Scripts._08_GlobalManager.EnemyList;
 using _01_Scripts._08_GlobalManager.Pooling;
 using NaughtyAttributes;
@@ -41,7 +42,8 @@ namespace _01_Scripts._09_Debugging
 
       private void Start()
       {
-         GenericPool<EnemyRuntime>.ClearPools();
+         GenericPool<EnemyRuntime<FatZombie>>.ClearPools();
+         GenericPool<EnemyRuntime<NormalZombie>>.ClearPools();
          GenericPool<ProjectileRuntime<BasketballProjectile>>.ClearPools();
          GenericPool<ProjectileRuntime<FootballProjectile>>.ClearPools();
          GenericPool<ProjectileRuntime<BaseballProjectile>>.ClearPools();

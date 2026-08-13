@@ -17,20 +17,16 @@ MonoBehaviour:
   towerPrefab: {fileID: 2549582001120558232, guid: 309a44090c67f2b4093333abfd2dc1fa, type: 3}
   baseStats:
     maxHp: 100
-    damage: 3
+    damage: 2
     range: 10
     attacksPerSecond: 1
     energy: 1
-    costs: 100
+    costs: 200
     baseProjectileAmount: 1
   attackData: {fileID: 11400000, guid: c526ab00e5c6f354cb9db1359268b5af, type: 2}
   innateEffects:
   - effectType: 0
-    value: 3
-  - effectType: 2
-    value: 2
-  - effectType: 1
-    value: 10
+    value: 5
   availableUpgrades:
   - {fileID: 11400000, guid: 12376d313d24ae74194b96984d2791ff, type: 2}
   - {fileID: 11400000, guid: 760c75510d9bdaa4daa0be8186af922f, type: 2}

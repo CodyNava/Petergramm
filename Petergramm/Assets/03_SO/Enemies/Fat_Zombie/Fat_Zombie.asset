@@ -16,10 +16,11 @@ MonoBehaviour:
   waveData: {fileID: 11400000, guid: 9f97f925ec2a23a43a1b7140eeae36ab, type: 2}
   prefab: {fileID: 8161681721683074215, guid: af3be0eddb581a348ad82509e90dd57e, type: 3}
   enemyName: Fat_Zombie
+  enemyId: 0
   passives: []
   abilities: []
   stats:
-    maxHp: 200
+    maxHp: 100
     damage: 1
     attacksPerSecond: 1
     range: 1
