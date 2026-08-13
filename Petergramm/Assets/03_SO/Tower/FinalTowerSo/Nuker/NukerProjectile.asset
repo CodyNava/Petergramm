@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0dc609779c5cca4d82e4f9b01d7843b, type: 3}
-  m_Name: MultiProjectile
-  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Data.ProjectileSO
-  projectileRuntime: {fileID: 1922981269807341824, guid: 052f0d9a551166b458c44593c6566808, type: 3}
-  speed: 15
+  m_Name: NukerProjectile
+  m_EditorClassIdentifier: Assembly-CSharp::_01_Scripts._01_Tower.Projectiles.ProjectileSO
+  projectileRuntime: {fileID: 1002234009359407301, guid: a8b1655a90145094bbbfdb3ddd350367, type: 3}
+  speed: 10

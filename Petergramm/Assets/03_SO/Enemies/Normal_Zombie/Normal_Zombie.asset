@@ -16,10 +16,11 @@ MonoBehaviour:
   waveData: {fileID: 11400000, guid: 9f97f925ec2a23a43a1b7140eeae36ab, type: 2}
   prefab: {fileID: 7619439018793699494, guid: 9ec195e51c06c404b985d3736b330eda, type: 3}
   enemyName: Normal_Zombie
+  enemyId: 0
   passives: []
   abilities: []
   stats:
-    maxHp: 100
+    maxHp: 50
     damage: 1
     attacksPerSecond: 1
     range: 1

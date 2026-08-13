@@ -24,7 +24,7 @@ MonoBehaviour:
       enemyCount: 26
   - waveTime: 100
     enemyCount: 0
-    moneyMult: 1.5
+    moneyMult: 2
     hpMult: 1.5
     enemyTypes:
     - spawnableEnemies: 0

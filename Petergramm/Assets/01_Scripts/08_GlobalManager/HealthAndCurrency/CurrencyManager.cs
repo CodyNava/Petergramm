@@ -10,6 +10,8 @@ namespace _01_Scripts._08_GlobalManager.HealthAndCurrency
         [SerializeField] private HealthAndCurrencyDisplay healthAndCurrencyDisplay;
         [SerializeField] private TowerPlacement towerPlacement;
         [SerializeField] private int startingGold;
+        
+        public int Gold => gold;
 
 
 
